@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import logo from '../../assets/img/logo.png';
+import logo from '../../assets/img/classroom.jpeg';
 import auth from '../../models/auth.js';
 
 class Header extends Component {
@@ -14,7 +14,7 @@ class Header extends Component {
             orders: "",
             profile: "",
             register: "",
-            logstatus: "Login"
+            logstatus: "Logga in"
         };
     }
 
@@ -33,7 +33,7 @@ class Header extends Component {
 
     adminNav() {
         this.setState({
-            logstatus: "Logoff",
+            logstatus: "Logga ut",
             wallet: <NavLink to="/wallet" className="admin" activeClassName="selected">My Wallet</NavLink >,
             orders: <NavLink to="/orders" activeClassName="selected">My Orders</NavLink >,
             profile: <NavLink to="/profile" activeClassName="selected">My Profile</NavLink >
@@ -64,7 +64,7 @@ class Header extends Component {
                 </div>
                 <nav className="navbar">
                     <NavLink to="/" activeClassName="selected" isActive={checkActive}>Hem</NavLink >
-                    <NavLink to="/about" activeClassName="selected">About</NavLink >
+                    <NavLink to="/about" activeClassName="selected">Om</NavLink >
                     { this.state.register }
                     { this.state.wallet }
                     { this.state.orders }

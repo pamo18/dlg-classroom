@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Header from '../page/Header.js';
-// import Trade from '../page/Trade.js';
+import Home from '../page/Home.js';
 import Login from '../auth/Login.js';
 import Register from '../auth/Register.js';
 // import Wallet from '../page/Wallet.js';
@@ -66,6 +66,7 @@ class App extends Component {
                     <Header />
                     <div className="page-wrapper">
                         <Switch>
+                            <Route exact path="/" component={Home} />
                             <Route exact path="/login" component={Login} />
 ª                            { this.state.register }
                             { this.state.activeUser }
