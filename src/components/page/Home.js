@@ -1,14 +1,11 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
-import auth from '../../models/auth.js';
+// import auth from '../../models/auth.js';
 import base from '../../config/api.js';
-import io from 'socket.io-client';
 import utils from '../../models/utils.js';
-import Rickshaw from 'rickshaw';
-import 'rickshaw/rickshaw.min.css';
+import db from '../../models/database.js';
 
-const socket = io(base.stocks());
 const api = base.api();
 
 class Home extends Component {
@@ -16,22 +13,16 @@ class Home extends Component {
         super(props);
         this.state = {
             title: "Hem",
-            classroom: "",
+            classrooms: "",
             myClassrooms: "",
             options: []
         };
     }
 
     componentDidMount() {
-        // this.state.options.push(
-        //     <button
-        //         key=1
-        //         id="graph-button-1"
-        //         className="toggle-button"
-        //         name="graph-button"
-        //         value=1
-        //     </button>
-        // );
+        this.setState({
+            classrooms: db.getClassrooms()
+        });
     }
 
     render() {

@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import auth from '../../models/auth.js';
+// import auth from '../../models/auth.js';
 
 class Footer extends Component {
     constructor(props) {
@@ -16,33 +16,33 @@ class Footer extends Component {
         };
     }
 
-    componentDidMount() {
-        let that = this;
+    // componentDidMount() {
+    //     let that = this;
+    //
+    //     auth.isactive()
+    //         .then(function(res) {
+    //             if (res.data.active) {
+    //                 that.adminNav();
+    //             } else {
+    //                 that.registerNav();
+    //             }
+    //         });
+    // }
 
-        auth.isactive()
-            .then(function(res) {
-                if (res.data.active) {
-                    that.adminNav();
-                } else {
-                    that.registerNav();
-                }
-            });
-    }
+    // adminNav() {
+    //     this.setState({
+    //         logstatus: "Logga ut",
+    //         wallet: <NavLink to="/wallet" activeClassName="selected">Wallet</NavLink >,
+    //         orders: <NavLink to="/orders" activeClassName="selected">Orders</NavLink >,
+    //         profile: <NavLink to="/profile" activeClassName="selected">Profile</NavLink >
+    //     });
+    // }
 
-    adminNav() {
-        this.setState({
-            logstatus: "Logga ut",
-            wallet: <NavLink to="/wallet" activeClassName="selected">Wallet</NavLink >,
-            orders: <NavLink to="/orders" activeClassName="selected">Orders</NavLink >,
-            profile: <NavLink to="/profile" activeClassName="selected">Profile</NavLink >
-        });
-    }
-
-    registerNav() {
-        this.setState({
-            register: <NavLink to="/register" activeClassName="selected">Register</NavLink >
-        });
-    }
+    // registerNav() {
+    //     this.setState({
+    //         register: <NavLink to="/register" activeClassName="selected">Register</NavLink >
+    //     });
+    // }
 
     render() {
         const checkActive = (match, location) => {
@@ -60,11 +60,6 @@ class Footer extends Component {
                 <nav className="navbar navbar-small">
                     <NavLink to="/" activeClassName="selected" isActive={checkActive}>Hem</NavLink >
                     <NavLink to="/about" activeClassName="selected">Om</NavLink >
-                    { this.state.register }
-                    { this.state.wallet }
-                    { this.state.orders }
-                    { this.state.profile }
-                    <NavLink to="/login" activeClassName="selected">{ this.state.logstatus }</NavLink >
                 </nav>
             </footer>
         );

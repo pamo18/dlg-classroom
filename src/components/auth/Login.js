@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import base from '../../config/api.js';
 import io from 'socket.io-client';
 let api = base.api();
-const socket = io(base.stocks());
 
 class Login extends Component {
     static propTypes = {
@@ -67,7 +66,6 @@ class Login extends Component {
     }
     logoff() {
         localStorage.clear();
-        socket.emit('user left', this.state.username);
         this.setState({
             user: ""
         });

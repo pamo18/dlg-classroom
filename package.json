@@ -20,7 +20,8 @@
     "eject": "react-scripts eject",
     "deploy": "npm run build && rsync -av build/* pamo18@pamo18.me:/var/www/pamocoin.pamo18.me/html/build/",
     "deployall": "npm run build && rsync -av . pamo18@pamo18.me:/var/www/pamocoin.pamo18.me/html/",
-    "eslint": "eslint ./src/"
+    "eslint": "eslint ./src/",
+    "send": "rsync -av . pamo80@pamoserver:dlg-classroom/"
   },
   "eslintConfig": {
     "extends": "react-app"
