@@ -1,0 +1,23 @@
+.site-footer {
+    background-color: #060d13;
+}
+
+.copyright {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    padding: 5px;
+    background-color: #060d13;
+    font-weight: bold;
+}
+
+@media (max-width: 930px) {
+    .footer-column {
+        display: none;
+    }
+}

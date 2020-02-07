@@ -1,0 +1,64 @@
+.form-register.small .form-input,
+.form-register.small .form-label {
+    width: 20rem;
+}
+
+.form-input {
+    width: 24rem;
+    margin: 0 auto;
+    font-size: 1.25rem;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 0.2rem;
+    padding: 0.6rem 0.6rem;
+    box-sizing: border-box;
+    margin-bottom: 1.4rem;
+}
+
+.form-input.password {
+    margin-bottom: 0.25rem;
+}
+
+.form-input:focus {
+    box-shadow: 0 0 0 3px blue;
+}
+
+.form-input:valid:focus {
+    outline: 3px solid green;
+}
+
+.form-input:valid {
+    box-shadow: 0 0 0 3px green;
+}
+
+.form-input:first-of-type {
+    margin-top: 1rem;
+}
+
+.form-label {
+    width: 24rem;
+    margin: 0 auto;
+    font-weight: bold;
+    margin-top: 2rem;
+    display: block;
+}
+
+.form-meter {
+    font-size: 1.75rem;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 5px;
+    display: block;
+}
+
+.check-input {
+    margin-right: 5px;
+}
+
+@media (max-width: 930px) {
+    .form-label,
+    .form-input,
+    .date-picker {
+        width: 100%;
+    }
+}

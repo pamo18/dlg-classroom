@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Header from '../page/Header.js';
-import Home from '../page/Home.js';
-import About from '../page/About.js';
-import Footer from '../page/Footer.js';
-// import Login from '../auth/Login.js';
-// import Register from '../auth/Register.js';
-// import Profile from '../page/Profile.js';
-// import auth from '../../models/auth.js';
-
+import Header from '../header/Header.js';
+import Footer from '../footer/Footer.js';
+import About from '../about/About.js';
+import Classroom from '../classroom/Classroom.js';
+import Admin from '../admin/Admin.js';
 import './App.css';
 
 class App extends Component {
@@ -64,8 +60,9 @@ class App extends Component {
                     <Header />
                     <div className="page-wrapper">
                         <Switch>
-                            <Route exact path="/" component={Home} />
+                            <Route exact path="/" component={Classroom} />
                             <Route exact path="/about" component={About} />
+                            <Route exact path="/admin" component={Admin} />
                         </Switch>
                     </div>
                     <Footer />

@@ -1,0 +1,64 @@
+.site-header {
+    background-color: #060d13;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    position: relative;
+    height: 80px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(38, 45, 52);
+    color: white;
+}
+
+.sitle-heading {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    flex-direction: row;
+    width: 280px;
+    padding-top: 0px;
+    padding-right: 28px;
+    font-size: 1.4rem;
+    text-decoration: none;
+}
+
+.sitle-heading a {
+    text-decoration: none;
+}
+
+.sitle-heading a:visited {
+    color: inherit;
+}
+
+.site-logo {
+    width: 80px;
+    height: 80px;
+    padding: 1em;
+}
+
+.page-heading {
+    width: 100%;
+    background-color: #060d13;
+}
+
+.page-heading h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 5px;
+}
+
+@media (max-width: 930px) {
+    .logo {
+        width: 80px;
+    }
+
+    .site-title {
+        padding-left: 10px;
+        font-size: 1.5em;
+    }
+
+    .title {
+        text-align: left;
+    }
+}

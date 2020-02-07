@@ -1,0 +1,80 @@
+table.results {
+    box-sizing: border-box;
+    border-collapse: collapse;
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+    background: rgba(60, 60, 60, 0.4);
+    margin-bottom: 2em;
+}
+
+table.results tr:hover:not(:first-child) {
+    background-color: rgb(46, 174, 52, 0.7);
+}
+
+table.results tr:nth-of-type(2n) {
+    background: rgba(60, 60, 60, 0.6);
+}
+
+table.results th {
+    border-bottom: 2px solid black;
+    background-color: black;
+    color: white;
+    font-size: 1.1em;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+table.results td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    word-wrap: break-word;
+    font-size: 1em;
+}
+
+@media only screen and (max-width: 930px) {
+    table.results {
+        display: block;
+    }
+
+    table.results tr {
+        display: block;
+    }
+
+    table.results tbody {
+        display: block;
+    }
+
+    table.results tr:not(:last-child) {
+        border-bottom: 2px dashed black;
+    }
+
+    table.results thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    table.results td {
+        display: block;
+        border: none;
+        border-top: 1px solid rgb(38, 45, 52, 0.5);
+        border-bottom: 1px solid rgb(38, 45, 52, 1);
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+        text-align: right;
+    }
+
+    table.results td::before {
+        content: attr(data-title);
+        position: absolute;
+        top: 0.33rem;
+        left: 0.33rem;
+        width: 45%;
+        padding-right: 0.55rem;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+    }
+}
