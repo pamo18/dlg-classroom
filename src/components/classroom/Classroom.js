@@ -29,7 +29,7 @@ class Classroom extends Component {
 
     loadClassrooms() {
         let that = this;
-        let res = db.getClassrooms();
+        let res = db.fetchAll("classroom");
 
         res.then(function(data) {
             let allData = {};
@@ -72,11 +72,7 @@ class Classroom extends Component {
 
     loadDevices(name) {
         let that = this;
-        let classroom = {
-            name: name
-        };
-
-        let res = db.classroomDevices(classroom);
+        let res = db.fetchAllWhere("classroom/device", name);
 
         res.then(function(data) {
             that.setState({

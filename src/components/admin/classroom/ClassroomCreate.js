@@ -7,6 +7,7 @@ import '../Admin.css';
 class ClassroomCreate extends Component {
     constructor(props) {
         super(props);
+        this.classroomCreate = this.classroomCreate.bind(this);
         this.state = {
             title: "Skapa Klassrum",
             buildings: []
@@ -18,7 +19,7 @@ class ClassroomCreate extends Component {
     }
 
     buildings() {
-        let res = db.getBuildnings();
+        let res = db.fetchAll("building");
         let that = this;
 
         res.then(function(data) {
@@ -28,11 +29,28 @@ class ClassroomCreate extends Component {
         });
     }
 
+    classroomCreate(e) {
+        e.preventDefault();
+        const data = new FormData(e.target);
+
+        let classroom = {
+            name: data.get("name"),
+            type: data.get("type"),
+            location: data.get("location"),
+            level: data.get("level"),
+            image: data.get("image")
+        };
+
+        let res = db.insert("classroom", classroom);
+
+        res.then(this.props.history.push('/'));
+    }
+
     render() {
         return (
             <div className="form-wrapper">
-                <h2 class="center">{ this.state.title }</h2>
-                <form action="/login" className="form-register" onSubmit={this.registerSubmit}>
+                <h2 className="center">{ this.state.title }</h2>
+                <form action="/create" className="form-register" onSubmit={this.classroomCreate}>
                     <label className="form-label">Namn
                         <input className="form-input" type="text" name="name" required placeholder="A-2057" />
                     </label>
@@ -42,7 +60,7 @@ class ClassroomCreate extends Component {
                     </label>
 
                     <label className="form-label">Hus
-                        <select className="form-input" type="text" name="building" required>
+                        <select className="form-input" type="text" name="location" required>
                             {
                                 this.state.buildings.map(function(building) {
                                     let name = building.name;

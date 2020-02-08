@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 import ClassroomCreate from './classroom/ClassroomCreate.js';
+import ClassroomUpdate from './classroom/ClassroomUpdate.js';
+import ClassroomDelete from './classroom/ClassroomDelete.js';
 import DeviceCreate from './device/DeviceCreate.js';
 // import auth from '../../models/auth.js';
 import utils from '../../models/utils.js';
@@ -52,9 +54,13 @@ class Admin extends Component {
             console.log(choice);
             switch(true) {
                 case (choice.admin == "classroom" && choice.type == "create"):
-                    return <ClassroomCreate />;
+                    return <ClassroomCreate history={this.props.history}/>;
+                case (choice.admin == "classroom" && choice.type == "update"):
+                    return <ClassroomUpdate history={this.props.history}/>;
+                case (choice.admin == "classroom" && choice.type == "delete"):
+                    return <ClassroomDelete history={this.props.history}/>;
                 case (choice.admin == "device" && choice.type == "create"):
-                    return <DeviceCreate />;
+                    return <DeviceCreate history={this.props.history}/>;
             }
         }
     }
@@ -78,7 +84,7 @@ class Admin extends Component {
                             <h2 className="center">Typ</h2>
                             <div className="admin-control">
                                 <button className={this.state.type === "create" ? "toggle-button on" : "toggle-button"} type="button" value="create" onClick={ this.changeType }>Skapa</button>
-                                <button className={this.state.type === "edit" ? "toggle-button on" : "toggle-button"} type="button" value="edit" onClick={ this.changeType }>Redigera</button>
+                                <button className={this.state.type === "update" ? "toggle-button on" : "toggle-button"} type="button" value="update" onClick={ this.changeType }>Redigera</button>
                                 <button className={this.state.type === "delete" ? "toggle-button on" : "toggle-button"} type="button" value="delete" onClick={ this.changeType }>Radera</button>
                             </div>
                         </div>

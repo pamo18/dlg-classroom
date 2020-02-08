@@ -7,6 +7,7 @@ import '../Admin.css';
 class DeviceCreate extends Component {
     constructor(props) {
         super(props);
+        this.deviceCreate = this.deviceCreate.bind(this);
         this.state = {
             title: "Skapa Enhet",
             categories: []
@@ -18,7 +19,7 @@ class DeviceCreate extends Component {
     }
 
     categories() {
-        let res = db.getDeviceCategories();
+        let res = db.fetchAll("device/category");
         let that = this;
 
         res.then(function(data) {
@@ -28,11 +29,30 @@ class DeviceCreate extends Component {
         });
     }
 
+    deviceCreate(e) {
+        e.preventDefault();
+        const data = new FormData(e.target);
+
+        let device = {
+            category: data.get("category"),
+            brand: data.get("brand"),
+            model: data.get("model"),
+            serialnum: data.get("serialnum"),
+            url: data.get("url"),
+            message: data.get("message"),
+            price: data.get("price")
+        };
+
+        let res = db.insert("device", device);
+
+        res.then(this.props.history.push('/'));
+    }
+
     render() {
         return (
             <div className="form-wrapper">
                 <h2 class="center">{ this.state.title }</h2>
-                <form action="/login" className="form-register" onSubmit={this.registerSubmit}>
+                <form action="/login" className="form-register" onSubmit={this.deviceCreate}>
                     <label className="form-label">Kategori
                         <select className="form-input" type="text" name="category" required>
                             {
@@ -55,7 +75,11 @@ class DeviceCreate extends Component {
                     </label>
 
                     <label className="form-label">Serial Nummer
-                        <input className="form-input" type="number" name="serialnum" />
+                        <input className="form-input" type="text" name="serialnum" />
+                    </label>
+
+                    <label className="form-label">Pris
+                        <input className="form-input" type="text" name="price" placeholder="990,90"/>
                     </label>
 
                     <label className="form-label">Länk URL
