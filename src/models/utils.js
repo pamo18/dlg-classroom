@@ -1,4 +1,8 @@
 const utils = {
+    reload: function(that, url) {
+        that.props.history.push(url);
+        window.location.reload(false);
+    },
     slugify: function(text) {
         return text.toString().toLowerCase()
             .replace(/\s+/g, '-')           // Replace spaces with -

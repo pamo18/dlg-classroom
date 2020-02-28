@@ -63,6 +63,7 @@ class App extends Component {
                             <Route exact path="/" component={Classroom} />
                             <Route exact path="/about" component={About} />
                             <Route exact path="/admin" component={Admin} />
+                            <Route exact path="/admin/:type/:admin" component={Admin} />
                         </Switch>
                     </div>
                     <Footer />

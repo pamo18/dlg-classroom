@@ -1,8 +1,17 @@
-.classroom-image {
-    
-}
-
 .classroom-image img {
     width: 500px;
     margin: 0 auto;
+}
+
+.admin-control-bar {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+@media only screen and (max-width: 980px) {
+    .classroom-image img {
+        width: 100%;
+    }
 }

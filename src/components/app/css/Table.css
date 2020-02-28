@@ -8,10 +8,6 @@ table.results {
     margin-bottom: 2em;
 }
 
-table.results tr:hover:not(:first-child) {
-    background-color: rgb(46, 174, 52, 0.7);
-}
-
 table.results tr:nth-of-type(2n) {
     background: rgba(60, 60, 60, 0.6);
 }
@@ -25,6 +21,10 @@ table.results th {
     padding-bottom: 8px;
 }
 
+table.results tr:hover {
+    background-color: rgb(46, 174, 52, 0.7);
+}
+
 table.results td {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -32,7 +32,7 @@ table.results td {
     font-size: 1em;
 }
 
-@media only screen and (max-width: 930px) {
+@media only screen and (max-width: 980px) {
     table.results {
         display: block;
     }

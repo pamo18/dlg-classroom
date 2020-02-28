@@ -1,15 +1,9 @@
 const base = {
     api: function() {
-        let api = "http://localhost:8333";
-        // let api = "https://pamocoin-api.pamo18.me";
+        // let api = "http://localhost:8333";
+        let api = "https://dlg-api.klassrum.online";
 
         return api;
-    },
-    stocks: function() {
-        let url = "http://localhost:8336";
-        // let url = "https://stocks-server.pamo18.me";
-
-        return url;
     }
 };
 

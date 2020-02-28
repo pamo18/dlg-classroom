@@ -52,7 +52,7 @@ footer .navbar a {
     width: 100%;
 }
 
-@media (max-width: 930px) {
+@media (max-width: 980px) {
     header .navbar {
         display: none;
     }

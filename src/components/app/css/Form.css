@@ -3,6 +3,10 @@
     width: 20rem;
 }
 
+.form {
+
+}
+
 .form-input {
     width: 24rem;
     margin: 0 auto;
@@ -55,7 +59,7 @@
     margin-right: 5px;
 }
 
-@media (max-width: 930px) {
+@media (max-width: 980px) {
     .form-label,
     .form-input,
     .date-picker {

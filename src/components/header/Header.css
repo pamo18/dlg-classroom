@@ -48,7 +48,7 @@
     padding: 5px;
 }
 
-@media (max-width: 930px) {
+@media (max-width: 980px) {
     .logo {
         width: 80px;
     }
