@@ -4,12 +4,12 @@ import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
+import form from '../../../models/form.js';
 import '../Admin.css';
 
 class DeviceUpdate extends Component {
     constructor(props) {
         super(props);
-        this.getOptions = this.getOptions.bind(this);
         this.getDevice = this.getDevice.bind(this);
         this.updateDevice = this.updateDevice.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
@@ -17,8 +17,8 @@ class DeviceUpdate extends Component {
             title: "Uppdatera Apparat",
             categories: [],
             data: {},
-            groups: {},
-            groupOptions: null,
+            groups: [],
+            nameTemplate: "brand,model,(serialnum)",
             device: null
         };
     }
@@ -45,52 +45,12 @@ class DeviceUpdate extends Component {
         let res = db.fetchAll("device");
 
         res.then(function(data) {
-            data.forEach(function(row) {
-                let id = row.id;
-                let category = row.category;
-
-                allData[id] = row;
-
-                if (!groups.hasOwnProperty(category)) {
-                    groups[category] = [];
-                }
-
-                groups[category].push(row);
-            });
+            let formData = form.group(data, "category", "id", that.state.nameTemplate);
 
             that.setState({
-                data: allData,
-                groups: groups
-            }, () => that.getOptions());
-        });
-    }
-
-    getOptions() {
-        let that = this;
-        let groups = this.state.groups;
-        let groupOptions = [];
-
-        Object.keys(groups).forEach((key) => {
-            let options = [];
-
-            groups[key].forEach(function(option) {
-                let id = option.id;
-                let name = `${option.brand} ${option.model} (${option.serialnum})`;
-
-                options.push(
-                    <option key={ id } value={ id }>{ name }</option>
-                );
-            })
-
-            groupOptions.unshift(
-                <optgroup label={ key }>
-                    { options }
-                </optgroup>
-            );
-        });
-
-        that.setState({
-            groupOptions: groupOptions
+                data: formData.data,
+                groups: formData.groups
+            });
         });
     }
 
@@ -173,7 +133,7 @@ class DeviceUpdate extends Component {
                         <form action="/create" className="form-register">
                             <select className="form-input" type="text" name="name" required onChange={ this.getDevice }>
                                 <option disabled selected>Klicka för att välja</option>
-                                    { this.state.groupOptions }
+                                    { this.state.groups }
                             </select>
                         </form>
                     </div>

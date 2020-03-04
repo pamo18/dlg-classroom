@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
+import form from '../../../models/form.js';
 import '../Admin.css';
 
 class ClassroomUpdate extends Component {
@@ -16,7 +17,8 @@ class ClassroomUpdate extends Component {
             title: "Uppdatera Klassrum",
             buildings: [],
             data: [],
-            options: [],
+            groups: [],
+            nameTemplate: "name",
             classroom: null
         };
     }
@@ -42,22 +44,11 @@ class ClassroomUpdate extends Component {
         let res = db.fetchAll("classroom");
 
         res.then(function(data) {
-            let allData = {};
-            let options = [];
-
-            data.forEach(function(row) {
-                let id = row.id;
-                let name = row.name;
-
-                allData[id] = row;
-                options.push(
-                    <option key={ id } value={ id }>{ name }</option>
-                );
-            });
+            let formData = form.group(data, "location", "id", that.state.nameTemplate);
 
             that.setState({
-                options: options,
-                data: allData
+                data: formData.data,
+                groups: formData.groups
             });
         });
     }
@@ -120,7 +111,7 @@ class ClassroomUpdate extends Component {
                         <form action="/" className="form-register">
                             <select className="form-input" type="text" name="name" required onChange={ this.getClassroom }>
                                 <option disabled selected value>Klicka här för att välja Klassrum</option>
-                                { this.state.options }
+                                { this.state.groups }
                             </select>
                         </form>
                     </div>

@@ -4,19 +4,19 @@ import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
+import form from '../../../models/form.js';
 import '../Admin.css';
 
 class DeviceDelete extends Component {
     constructor(props) {
         super(props);
-        this.getOptions = this.getOptions.bind(this);
         this.getDevice = this.getDevice.bind(this);
         this.deleteDevice = this.deleteDevice.bind(this);
         this.state = {
             title: "Radera Apparat",
             data: {},
-            groups: {},
-            groupOptions: null,
+            groups: [],
+            nameTemplate: "brand,model,(serialnum)",
             device: null
         };
     }
@@ -33,61 +33,22 @@ class DeviceDelete extends Component {
 
         res.then(function(data) {
             data.forEach(function(row) {
-                let id = row.id;
-                let category = row.category;
+                let formData = form.group(data, "category", "id", that.state.nameTemplate);
 
-                allData[id] = row;
-
-                if (!groups.hasOwnProperty(category)) {
-                    groups[category] = [];
-                }
-
-                groups[category].push(row);
+                that.setState({
+                    data: formData.data,
+                    groups: formData.groups
+                });
             });
-
-            that.setState({
-                data: allData,
-                groups: groups
-            }, () => that.getOptions());
-        });
-    }
-
-    getOptions() {
-        let that = this;
-        let groups = this.state.groups;
-        let groupOptions = [];
-
-        Object.keys(groups).forEach((key) => {
-            let options = [];
-
-            groups[key].forEach(function(option) {
-                let id = option.id;
-                let name = `${option.brand} ${option.model} (${option.serialnum})`;
-
-                options.push(
-                    <option key={ id } value={ id }>{ name }</option>
-                );
-            })
-
-            groupOptions.unshift(
-                <optgroup label={ key }>
-                    { options }
-                </optgroup>
-            );
-        });
-
-        that.setState({
-            groupOptions: groupOptions
         });
     }
 
     getDevice(e) {
-        let that = this;
         let id = e.target.value;
 
         try {
             let res = this.state.data[id];
-            let name = `${res.brand} ${res.model} (${res.serialnum})`;
+            let name = form.optionName(res, this.state.nameTemplate);
 
             this.setState({
                 device: {
@@ -120,7 +81,7 @@ class DeviceDelete extends Component {
                         <form action="/delete" className="form-register">
                             <select className="form-input" type="text" name="name" required onChange={ this.getDevice }>
                                 <option disabled selected>Klicka för att välja</option>
-                                    { this.state.groupOptions }
+                                    { this.state.groups }
                             </select>
                         </form>
                     </div>

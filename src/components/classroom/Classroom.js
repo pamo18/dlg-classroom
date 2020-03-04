@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import  { Redirect, Link } from 'react-router-dom';
 // import auth from '../../models/auth.js';
 import utils from '../../models/utils.js';
+import form from '../../models/form.js';
 import db from '../../models/db.js';
 import './Classroom.css';
 import image from "../../assets/classroom/default.jpg";
@@ -17,11 +18,12 @@ class Classroom extends Component {
         this.state = {
             title: "Klassrum vy",
             data: [],
-            options: [],
+            groups: [],
             myOptions: [],
-            classroom: null,
+            nameTemplate: "name",
             name: null,
             image: image,
+            classroom: null,
             devices: []
         };
     }
@@ -35,22 +37,11 @@ class Classroom extends Component {
         let res = db.fetchAll("classroom");
 
         res.then(function(data) {
-            let allData = {};
-            let options = [];
-
-            data.forEach(function(row) {
-                let id = row.id;
-                let name = row.name;
-
-                allData[id] = row;
-                options.push(
-                    <option key={ id } value={ id }>{ name }</option>
-                );
-            });
+            let formData = form.group(data, "location", "id", that.state.nameTemplate);
 
             that.setState({
-                data: allData,
-                options: options
+                data: formData.data,
+                groups: formData.groups
             });
         });
     }
@@ -60,6 +51,7 @@ class Classroom extends Component {
 
         try {
             let res = this.state.data[id];
+            let name = form.optionName(res, this.state.nameTemplate);
 
             try {
                 this.setState({
@@ -70,7 +62,7 @@ class Classroom extends Component {
             }
 
             this.setState({
-                name: res.name,
+                name: name,
                 classroom: {
                     id: res.id,
                     name: res.name,
@@ -138,9 +130,7 @@ class Classroom extends Component {
                                         <optgroup label="Mina klassrum">
                                             { this.state.myClassrooms }
                                         </optgroup>
-                                        <optgroup label="Alla klassrum">
-                                            { this.state.options }
-                                        </optgroup>
+                                        { this.state.groups }
                                     </select>
                                 </label>
                             </form>

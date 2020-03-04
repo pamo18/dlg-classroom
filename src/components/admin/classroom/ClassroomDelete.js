@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
+import form from '../../../models/form.js';
 import '../Admin.css';
 
 class ClassroomDelete extends Component {
@@ -14,7 +15,8 @@ class ClassroomDelete extends Component {
         this.state = {
             title: "Radera Klassrum",
             data: [],
-            options: [],
+            groups: [],
+            nameTemplate: "name",
             classroom: null,
         };
     }
@@ -28,22 +30,11 @@ class ClassroomDelete extends Component {
         let res = db.fetchAll("classroom");
 
         res.then(function(data) {
-            let allData = {};
-            let options = [];
-
-            data.forEach(function(row) {
-                let id = row.id;
-                let name = row.name;
-
-                allData[id] = row;
-                options.push(
-                    <option key={ id } value={ id }>{ name }</option>
-                );
-            });
+            let formData = form.group(data, "location", "id", that.state.nameTemplate);
 
             that.setState({
-                data: allData,
-                options: options
+                data: formData.data,
+                groups: formData.groups
             });
         });
     }
@@ -53,11 +44,12 @@ class ClassroomDelete extends Component {
 
         try {
             let res = this.state.data[id];
+            let name = form.optionName(res, this.state.nameTemplate);
 
             this.setState({
                 classroom: {
                     id: res.id,
-                    name: res.name
+                    name: name
                 }
             });
         } catch(err) {
@@ -85,7 +77,7 @@ class ClassroomDelete extends Component {
                         <form action="/delete" className="form-register">
                             <select className="form-input" type="text" name="name" required onChange={ this.getClassroom }>
                                 <option disabled selected>Klicka här för att välja Klassrum</option>
-                                { this.state.options }
+                                { this.state.groups }
                             </select>
                         </form>
                     </div>

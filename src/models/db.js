@@ -1,7 +1,7 @@
-/** global: localStorage */
 import base from '../config/api.js';
 const api = base.api();
 
+// Database helper
 const db = {
     fetchAll: async function(table) {
         try {

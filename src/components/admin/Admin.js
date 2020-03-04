@@ -12,6 +12,7 @@ import ClassroomDelete from './classroom/ClassroomDelete.js';
 import DeviceCreate from './device/DeviceCreate.js';
 import DeviceUpdate from './device/DeviceUpdate.js';
 import DeviceDelete from './device/DeviceDelete.js';
+import ClassroomDeviceCreate from './classroom/device/ClassroomDeviceCreate.js';
 
 class Admin extends Component {
     constructor(props) {
@@ -77,6 +78,8 @@ class Admin extends Component {
                 return <DeviceUpdate />;
             case (admin == "device" && type === "delete"):
                 return <DeviceDelete />;
+            case (admin == "classroom-device" && type === "create"):
+                return <ClassroomDeviceCreate />;
         }
     }
 
@@ -101,6 +104,7 @@ class Admin extends Component {
                             <div className="admin-control">
                                 <button className={this.state.admin === "classroom" ? "toggle-button on" : "toggle-button"} type="button" value="classroom" onClick={ this.changeAdmin }>Klassrum</button>
                                 <button className={this.state.admin === "device" ? "toggle-button on" : "toggle-button"} type="button" value="device" onClick={ this.changeAdmin }>Apparat</button>
+                                <button className={this.state.admin === "classroom-device" ? "toggle-button on" : "toggle-button"} type="button" value="classroom-device" onClick={ this.changeAdmin }>Klassrum Apparat</button>
                             </div>
                         </div>
                     </div>
