@@ -28,12 +28,12 @@ const form = {
                 let name = form.optionName(option, template);
 
                 options.push(
-                    <option key={ optionid } value={ optionid }>{ name }</option>
+                    <option key={ `option-${name}` } value={ optionid }>{ name }</option>
                 );
             })
 
             groups.unshift(
-                <optgroup label={ key }>
+                <optgroup key={ `group-${key}` } label={ key }>
                     { options }
                 </optgroup>
             );

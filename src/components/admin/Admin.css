@@ -11,6 +11,22 @@
     width: 80%;
 }
 
+.delete-icon:hover {
+    color: red;
+}
+
+.type-control-bar {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.type-control-bar button {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
 @media (max-width: 930px) {
 
 }
