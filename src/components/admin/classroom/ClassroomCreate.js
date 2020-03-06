@@ -50,44 +50,40 @@ class ClassroomCreate extends Component {
 
     render() {
         return (
-            <div className="double-column">
-                <div className="column-2">
-                    <div className="form-wrapper">
-                        <h2 className="center">{ this.state.title }</h2>
-                        <form action="/create" className="form-register" onSubmit={this.classroomCreate}>
-                            <label className="form-label">Namn
-                                <input className="form-input" type="text" name="name" required placeholder="A-2057" />
-                            </label>
+            <div className="form-wrapper">
+                <h2 className="center">{ this.state.title }</h2>
+                <form action="/create" className="form-register" onSubmit={this.classroomCreate}>
+                    <label className="form-label">Namn
+                        <input className="form-input" type="text" name="name" required placeholder="A-2057" />
+                    </label>
 
-                            <label className="form-label">Typ
-                                <input className="form-input" type="text" name="type" required placeholder="Standard" />
-                            </label>
+                    <label className="form-label">Typ
+                        <input className="form-input" type="text" name="type" required placeholder="Standard" />
+                    </label>
 
-                            <label className="form-label">Hus
-                                <select className="form-input" type="text" name="location" required>
-                                    {
-                                        this.state.buildings.map(function(building) {
-                                            let name = building.name;
-                                            return [
-                                                <option key={ name } value={ name }>{ name }</option>
-                                            ]
-                                        })
-                                    }
-                                </select>
-                            </label>
+                    <label className="form-label">Hus
+                        <select className="form-input" type="text" name="location" required>
+                            {
+                                this.state.buildings.map(function(building) {
+                                    let name = building.name;
+                                    return [
+                                        <option key={ name } value={ name }>{ name }</option>
+                                    ]
+                                })
+                            }
+                        </select>
+                    </label>
 
-                            <label className="form-label">Våning
-                                <input className="form-input" type="number" name="level" required placeholder="1" />
-                            </label>
+                    <label className="form-label">Våning
+                        <input className="form-input" type="number" name="level" required placeholder="1" />
+                    </label>
 
-                            <label className="form-label">Bild länk
-                                <input className="form-input" type="text" name="image" required placeholder="classroom/A-2057" />
-                            </label>
+                    <label className="form-label">Bild länk
+                        <input className="form-input" type="text" name="image" required placeholder="classroom/A-2057" />
+                    </label>
 
-                            <input className="button center-margin" type="submit" name="create" value="Skapa" />
-                        </form>
-                    </div>
-                </div>
+                    <input className="button center-margin" type="submit" name="create" value="Skapa" />
+                </form>
             </div>
         );
     }

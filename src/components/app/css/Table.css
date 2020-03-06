@@ -4,8 +4,12 @@ table.results {
     text-align: center;
     margin: 0 auto;
     width: 100%;
-    background: rgba(60, 60, 60, 0.4);
+    border: 2px solid black;
     margin-bottom: 2em;
+}
+
+table.results tr:nth-of-type(1n) {
+    background: rgba(60, 60, 60, 0.4);
 }
 
 table.results tr:nth-of-type(2n) {
@@ -34,19 +38,12 @@ table.results td {
 
 @media only screen and (max-width: 980px) {
     table.results {
-        display: block;
-    }
-
-    table.results tr {
-        display: block;
+        border: none;
     }
 
     table.results tbody {
         display: block;
-    }
-
-    table.results tr:not(:last-child) {
-        border-bottom: 2px dashed black;
+        background-color: #121d26;
     }
 
     table.results thead tr {
@@ -55,15 +52,26 @@ table.results td {
         left: -9999px;
     }
 
+    table.results tr {
+        display: block;
+        border: 2px solid black;
+        border-radius: 10px;
+        padding: 5px;
+    }
+
+    table.results tr:not(:last-child) {
+        margin-bottom: 1rem;
+    }
+
     table.results td {
         display: block;
-        border: none;
-        border-top: 1px solid rgb(38, 45, 52, 0.5);
-        border-bottom: 1px solid rgb(38, 45, 52, 1);
         position: relative;
-        padding-left: 50%;
         white-space: normal;
-        text-align: right;
+        text-align: center;
+    }
+
+    table.results td:not(:last-child) {
+        border-bottom: 1px solid rgb(38, 45, 52, 1);
     }
 
     table.results td::before {
@@ -76,5 +84,11 @@ table.results td {
         white-space: nowrap;
         text-align: left;
         font-weight: bold;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    table.results td {
+        text-align: right;
     }
 }

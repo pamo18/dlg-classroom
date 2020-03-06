@@ -22,7 +22,16 @@ h1 {
 }
 
 a {
-    color: rgb(14, 125, 255)
+    color: rgb(120, 160, 255);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+tr:hover a {
+    color: rgb(0, 33, 107)
 }
 
 article {
@@ -38,7 +47,7 @@ article {
     margin-bottom: 84px;
 }
 
-.column {
+.left-column {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -46,7 +55,7 @@ article {
     flex: 1;
 }
 
-.double-column {
+.main-column {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -149,15 +158,16 @@ article {
     article {
         display: block;
         min-height: 53.6em;
+        padding: 1rem;
     }
 
-    .column {
+    .left-column {
         display: block;
         width: 100%;
         padding-bottom: 1rem;
     }
 
-    .double-column {
+    .main-column {
         display: block;
         width: 100%;
         padding-top: 1rem;

@@ -104,58 +104,55 @@ class ClassroomUpdate extends Component {
 
     render() {
         return (
-            <div className="double-column">
-                <div className="column-2">
-                    <div className="form-wrapper">
-                        <h2 className="center">Välj klassrum att uppdatera</h2>
-                        <form action="/" className="form-register">
-                            <select className="form-input" type="text" name="name" required onChange={ this.getClassroom }>
-                                <option disabled selected value>Klicka här för att välja Klassrum</option>
-                                { this.state.groups }
-                            </select>
-                        </form>
-                    </div>
-                    { this.state.classroom ?
-                        <div className="form-wrapper">
+            <div className="form-wrapper">
+                <h2 className="center">Välj klassrum att uppdatera</h2>
+                <form action="/update" className="form-register" onSubmit={this.updateClassroom}>
+                    <select className="form-input" type="text" name="fullname" required onChange={ this.getClassroom }>
+                        <option disabled selected value>Klicka här för att välja Klassrum</option>
+                        { this.state.groups }
+                    </select>
+                    { this.state.classroom
+                        ?
+                        <div>
                             <h2 className="center">{ this.state.title }</h2>
-                            <form action="/update" className="form-register" onSubmit={this.updateClassroom}>
-                                <input className="form-input" type="hidden" name="id" required value={ this.state.classroom.id } />
 
-                                <label className="form-label">Namn
-                                    <input className="form-input" type="text" name="name" required placeholder="A-2057" value={ this.state.classroom.name } onChange={ this.inputHandler } />
-                                </label>
+                            <input className="form-input" type="hidden" name="id" required value={ this.state.classroom.id } />
 
-                                <label className="form-label">Typ
-                                    <input className="form-input" type="text" name="type" required placeholder="Standard" value={ this.state.classroom.type } onChange={ this.inputHandler } />
-                                </label>
+                            <label className="form-label">Namn
+                                <input className="form-input" type="text" name="name" required placeholder="A-2057" value={ this.state.classroom.name } onChange={ this.inputHandler } />
+                            </label>
 
-                                <label className="form-label">Hus
-                                    <select className="form-input" type="text" name="location" required value={ this.state.classroom.location } onChange={ this.inputHandler } >
-                                        {
-                                            this.state.buildings.map(function(building) {
-                                                let name = building.name;
-                                                return [
-                                                    <option key={ name } value={ name }>{ name }</option>
-                                                ]
-                                            })
-                                        }
-                                    </select>
-                                </label>
+                            <label className="form-label">Typ
+                                <input className="form-input" type="text" name="type" required placeholder="Standard" value={ this.state.classroom.type } onChange={ this.inputHandler } />
+                            </label>
 
-                                <label className="form-label">Våning
-                                    <input className="form-input" type="number" name="level" required placeholder="1" value={ this.state.classroom.level } onChange={ this.inputHandler } />
-                                </label>
+                            <label className="form-label">Hus
+                                <select className="form-input" type="text" name="location" required value={ this.state.classroom.location } onChange={ this.inputHandler } >
+                                    {
+                                        this.state.buildings.map(function(building) {
+                                            let name = building.name;
+                                            return [
+                                                <option key={ name } value={ name }>{ name }</option>
+                                            ]
+                                        })
+                                    }
+                                </select>
+                            </label>
 
-                                <label className="form-label">Bild länk
-                                    <input className="form-input" type="text" name="image" required placeholder="classroom/A-2057" value={ this.state.classroom.image } onChange={ this.inputHandler } />
-                                </label>
+                            <label className="form-label">Våning
+                                <input className="form-input" type="number" name="level" required placeholder="1" value={ this.state.classroom.level } onChange={ this.inputHandler } />
+                            </label>
 
-                                <input className="button center-margin" type="submit" name="create" value="Uppdatera" />
-                            </form>
+                            <label className="form-label">Bild länk
+                                <input className="form-input" type="text" name="image" required placeholder="classroom/A-2057" value={ this.state.classroom.image } onChange={ this.inputHandler } />
+                            </label>
+
+                            <input className="button center-margin" type="submit" name="create" value="Uppdatera" />
                         </div>
-                        : null
+                        :
+                        null
                     }
-                </div>
+                </form>
             </div>
         );
     }

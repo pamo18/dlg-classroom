@@ -1,6 +1,19 @@
-.classroom-image img {
+/* Left column */
+.classroom-control {
+    width: 100%;
+}
+/* Main column */
+.classroom-view {
+    width: 100%;
+}
+
+.classroom-image {
     width: 500px;
     margin: 0 auto;
+}
+
+.classroom-image img {
+    width: 100%;
 }
 
 .admin-control-bar {

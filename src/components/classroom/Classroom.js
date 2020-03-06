@@ -3,9 +3,10 @@
 import React, { Component } from 'react';
 import  { Redirect, Link } from 'react-router-dom';
 // import auth from '../../models/auth.js';
+import db from '../../models/db.js';
 import utils from '../../models/utils.js';
 import form from '../../models/form.js';
-import db from '../../models/db.js';
+import icon from '../../models/icon.js';
 import './Classroom.css';
 import image from "../../assets/classroom/default.jpg";
 
@@ -14,7 +15,7 @@ class Classroom extends Component {
         super(props);
         this.showClassroom = this.showClassroom.bind(this);
         this.loadDevices = this.loadDevices.bind(this);
-        this.adminControls = this.adminControls.bind(this);
+        this.getDevices = this.getDevices.bind(this);
         this.state = {
             title: "Klassrum vy",
             data: [],
@@ -24,7 +25,9 @@ class Classroom extends Component {
             name: null,
             image: image,
             classroom: null,
-            devices: []
+            devices: [],
+            classroomDevicesRows: [],
+            classroomDevicesCount: null
         };
     }
 
@@ -85,34 +88,56 @@ class Classroom extends Component {
         res.then(function(data) {
             that.setState({
                 devices: data
-            });
+            }, () => that.getDevices());
         });
     }
 
-    adminControls() {
-        return [
-            <div className="admin-control-bar">
-                <Link className="button" to={{
-                    pathname: "/admin",
-                    state: {
-                        admin: "classroom",
-                        type: "update"
-                    }
-                }}>Uppdatera</Link>
+    getDevices() {
+        let count = 0;
+        let classroomDevicesRows = this.state.devices.map(function(device) {
+            count++;
 
-                <Link className="button" to={{
-                    pathname: "/admin",
-                    state: {
-                        admin: "classroom",
-                        type: "delete"
-                    }
-                }}>Radera</Link>
-            </div>
-        ]
+            return [
+                <tr key={`classroomDevice-${device.id}`}>
+                    <td data-title="Kategori">{ icon.get(device.category)}</td>
+                    <td data-title="Märke">{ device.brand }</td>
+                    <td data-title="Modell">{ device.model }</td>
+                    <td data-title="Serial">{ device.serialnum }</td>
+                    <td data-title="Pris">{ device.price }:-</td>
+                    <td data-title="Länk"><a href={ device.url } target="_blank">Till produktsida</a></td>
+                </tr>
+            ]});
+
+        this.setState({
+            classroomDevicesRows: classroomDevicesRows,
+            classroomDevicesCount: count
+        });
+
     }
 
+    // adminControls() {
+    //     return [
+    //         <div className="admin-control-bar">
+    //             <Link className="button" to={{
+    //                 pathname: "/admin",
+    //                 state: {
+    //                     admin: "classroom",
+    //                     type: "update"
+    //                 }
+    //             }}>Uppdatera</Link>
+    //
+    //             <Link className="button" to={{
+    //                 pathname: "/admin",
+    //                 state: {
+    //                     admin: "classroom",
+    //                     type: "delete"
+    //                 }
+    //             }}>Radera</Link>
+    //         </div>
+    //     ]
+    // }
+
     render() {
-        let count = 0;
         return (
             <main>
                 <div className="page-heading">
@@ -121,8 +146,8 @@ class Classroom extends Component {
                     </h1>
                 </div>
                 <article>
-                    <div className="column">
-                        <div className="column-1">
+                    <div className="left-column">
+                        <div className="classroom-control">
                             <form action="/profile" className="form" onSubmit={this.registerSubmit}>
                                 <label className="form-label">Välj Klassrum
                                     <select className="form-input" type="text" name="classroom" required onChange={ this.showClassroom }>
@@ -136,44 +161,48 @@ class Classroom extends Component {
                             </form>
                         </div>
                     </div>
-                    <div className="double-column">
-                        <div className="column-2">
-                            <h2 className="center margin">
-                                De La Gardiegymnasiet
-                                { this.state.name
-                                ? " " + this.state.name
-                                : null
-                                }
-                            </h2>
-                            <div className="classroom-image">
-                                <img src={ this.state.image } alt="Classroom image"/>
-                            </div>
-                            { this.adminControls() }
-                            <table className="results">
-                                <thead>
-                                    <tr>
-                                        <th>Apparat</th>
-                                        <th>Katagori</th>
-                                        <th>Märke</th>
-                                        <th>Model</th>
-                                        <th>Info</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        this.state.devices.map(function(device) {
-                                        return [
-                                            <tr key={device.id}>
-                                                <td>{ ++count }</td>
-                                                <td>{ device.category }</td>
-                                                <td>{ device.brand }</td>
-                                                <td>{ device.model }</td>
-                                                <td>{ device.message }</td>
-                                            </tr>
-                                        ]})
+                    <div className="main-column">
+                        <div className="classroom-view">
+                            <div>
+                                <h2 className="center margin">
+                                    De La Gardiegymnasiet
+                                    { this.state.name
+                                    ? " " + this.state.name
+                                    : null
                                     }
-                                </tbody>
-                            </table>
+                                </h2>
+                                <div className="classroom-image">
+                                    <img src={ this.state.image } alt="Classroom image"/>
+                                </div>
+                            </div>
+
+                            { this.state.classroomDevicesCount != null
+                                ?
+                                <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevicesCount}` }</h3>
+                                :
+                                null
+                            }
+
+                            { this.state.classroomDevicesRows.length > 0
+                                ?
+                                <table className="results">
+                                    <thead>
+                                        <tr>
+                                            <th>Kategori</th>
+                                            <th>Märke</th>
+                                            <th>Modell</th>
+                                            <th>Serial Nummer</th>
+                                            <th>Pris</th>
+                                            <th>Länk URL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        { this.state.classroomDevicesRows }
+                                    </tbody>
+                                </table>
+                                :
+                                null
+                            }
                         </div>
                     </div>
                 </article>

@@ -1,17 +1,18 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
-import  { withRouter } from 'react-router-dom';
+import  { withRouter, Link } from 'react-router-dom';
 import db from '../../../../models/db.js';
 import utils from '../../../../models/utils.js';
 import form from '../../../../models/form.js';
+import icon from '../../../../models/icon.js';
 import '../../Admin.css';
+import Clone from "lodash";
 import DeleteIcon from "@material-ui/icons/DeleteForever";
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import Clone from "lodash";
 
-class ClassroomDeviceCreate extends Component {
+class ClassroomManager extends Component {
     constructor(props) {
         super(props);
         this.getClassroom = this.getClassroom.bind(this);
@@ -23,6 +24,9 @@ class ClassroomDeviceCreate extends Component {
         this.addDevice = this.addDevice.bind(this);
         this.removeDevice = this.removeDevice.bind(this);
         this.reload = this.reload.bind(this);
+        this.deviceHandler = this.deviceHandler.bind(this);
+        this.classroom1Handler = this.classroom1Handler.bind(this);
+        this.classroom2Handler = this.classroom2Handler.bind(this);
         this.changeType = this.changeType.bind(this);
         this.classroom2Groups = this.classroom2Groups.bind(this);
         this.state = {
@@ -36,9 +40,11 @@ class ClassroomDeviceCreate extends Component {
             classroom1: {},
             classroom1Devices: [],
             classroom1DevicesRows: [],
+            classroom1DevicesCount: null,
             classroom2: {},
             classroom2Devices: [],
             classroom2DevicesRows: [],
+            classroom2DevicesCount: null,
             deviceNameTemplate: "brand,model,(serialnum)",
             device: {},
             type: "Lägg till"
@@ -135,6 +141,8 @@ class ClassroomDeviceCreate extends Component {
         let classroomDevicesRows = this.state[classroomDevices].map(function(device) {
             let swap;
 
+            count++;
+
             if (that.state.type === "Byta" && classroom === "classroom1") {
                 swap = [
                     <ArrowDownwardIcon
@@ -153,12 +161,13 @@ class ClassroomDeviceCreate extends Component {
 
             return [
                 <tr key={ `${classroom}Device-${device.id}` }>
-                    <td>{ ++count }</td>
-                    <td>{ device.category }</td>
-                    <td>{ device.brand }</td>
-                    <td>{ device.model }</td>
-                    <td>{ device.message }</td>
-                    <td>
+                    <td data-title="Kategori">{ icon.get(device.category)}</td>
+                    <td data-title="Märke">{ device.brand }</td>
+                    <td data-title="Modell">{ device.model }</td>
+                    <td data-title="Serial">{ device.serialnum }</td>
+                    <td data-title="Pris">{ device.price }:-</td>
+                    <td data-title="Länk"><a href={ device.url } target="_blank">Till produktsida</a></td>
+                    <td data-title="Admin">
                         <DeleteIcon
                             onClick={ () => that.removeDevice(classroomid, device.id) }
                             className="delete-icon"
@@ -170,7 +179,8 @@ class ClassroomDeviceCreate extends Component {
         });
 
         this.setState({
-            [`${classroom}DevicesRows`]: classroomDevicesRows
+            [`${classroom}DevicesRows`]: classroomDevicesRows,
+            [`${classroom}DevicesCount`]: count
         });
     }
 
@@ -249,22 +259,45 @@ class ClassroomDeviceCreate extends Component {
 
     reload() {
         let classroom1 = this.state.classroom1.id;
-        let classroom2 = this.state.classroom2.id;
 
         this.loadClassrooms();
         this.loadDevices();
         this.getClassroom(classroom1, "classroom1");
-        this.getClassroom(classroom2, "classroom2");
 
-        this.setState({
-            deviceData: {}
-        });
+        if (this.state.type === "Byta") {
+            let classroom2 = this.state.classroom2.id;
+
+            this.getClassroom(classroom2, "classroom2");
+        }
     }
 
+    // Change type, reset bottom options/table then update classroom1 options to include/exclude swap function
     changeType(e) {
-        this.setState({
-            type: e.target.value
-        }, () => this.getClassroomDevice("classroom1"));
+        let type = e.target.value;
+
+        if (type === "Lägg till") {
+            this.setState({
+                type: type,
+                classroom2: {}
+            }, () => this.getClassroomDevice("classroom1"));
+        } else if (type === "Byta") {
+            this.setState({
+                type: type,
+                device: {}
+            }, () => this.getClassroomDevice("classroom1"));
+        }
+    }
+
+    deviceHandler(e) {
+        this.getDevice(e.target.value);
+    }
+
+    classroom1Handler(e) {
+        this.getClassroom(e.target.value, "classroom1");
+    }
+
+    classroom2Handler(e) {
+        this.getClassroom(e.target.value, "classroom2");
     }
 
     classroom2Groups() {
@@ -288,126 +321,128 @@ class ClassroomDeviceCreate extends Component {
 
     render() {
         return (
-            <div className="double-column">
-                <div className="admin-column">
-                    <div className="form-wrapper">
-                        <h2 className="center">{ this.state.type + this.state.title }</h2>
-                        <div className="type-control-bar">
-                            <button className={this.state.type === "Lägg till" ? "toggle-button on" : "toggle-button"} type="button" value="Lägg till" onClick={ this.changeType }>Lägg till</button>
-                            <button className={this.state.type === "Byta" ? "toggle-button on" : "toggle-button"} type="button" value="Byta" onClick={ this.changeType }>Byta</button>
+            <div className="manager-wrapper">
+                <h2 className="center">{ this.state.type + this.state.title }</h2>
+                <div className="type-control-bar">
+                    <button className={this.state.type === "Lägg till" ? "toggle-button add on" : "toggle-button"} type="button" value="Lägg till" onClick={ this.changeType }>Lägg till</button>
+                    <button className={this.state.type === "Byta" ? "toggle-button swap on" : "toggle-button"} type="button" value="Byta" onClick={ this.changeType }>Byta</button>
+                </div>
+                <form action="/admin" className="form-register" onSubmit={ this.addDevice }>
+                    <input className="form-input" type="hidden" name="classroomid" required value={ this.state.classroom1.id } />
+                    <input className="form-input" type="hidden" name="deviceid" required value={ this.state.device.id } />
+
+                    <label className="form-label">{this.state.type === "Lägg till" ? "Välj klassrum" : "Välj klassrum 1"}
+                        <select className="form-input" type="text" name="classroom" required onChange={ this.classroom1Handler }>
+                            <option disabled selected>Klicka här för att välja Klassrum</option>
+                            { this.state.classroomGroups }
+                        </select>
+                    </label>
+
+                    { Object.entries(this.state.classroom1).length > 0
+                        ?
+                        <div>
+                            <h3 class="center">{ `Antal apparater: ${this.state.classroom1DevicesCount}` }</h3>
+                            <table className={ this.state.type === "Lägg till" ? "results" : "results swap" }>
+                                <thead>
+                                    <tr>
+                                        <th>Kategori</th>
+                                        <th>Märke</th>
+                                        <th>Modell</th>
+                                        <th>Serial Nummer</th>
+                                        <th>Pris</th>
+                                        <th>Länk URL</th>
+                                        <th>Admin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    { this.state.classroom1DevicesRows }
+                                </tbody>
+                            </table>
                         </div>
-                        <form action="/admin" className="form-register" onSubmit={ this.addDevice }>
-                            <input className="form-input" type="hidden" name="classroomid" required value={ this.state.classroom1.id } />
-                            <input className="form-input" type="hidden" name="deviceid" required value={ this.state.device.id } />
+                        : null
+                    }
 
-                            <label className="form-label">Välj klassrum
-                                <select className="form-input" type="text" name="classroom" required onChange={ e => this.getClassroom(e.target.value, "classroom1") }>
-                                    <option disabled selected>Klicka här för att välja Klassrum</option>
-                                    { this.state.classroomGroups }
-                                </select>
-                            </label>
+                    { this.state.type === "Lägg till"
+                        ?
+                        <label className="form-label">Välj apparat
+                            <select className="form-input" type="text" name="default" required onChange={ this.deviceHandler }>
+                                <option disabled selected>Klicka här för att välja apparat</option>
+                                { this.state.deviceGroups }
+                            </select>
+                        </label>
+                        :
+                        <label className="form-label">Välj klassrum 2
+                            <select className="form-input" type="text" name="classroom" required onChange={ this.classroom2Handler }>
+                                <option disabled selected>Klicka här för att välja Klassrum</option>
+                                { this.classroom2Groups() }
+                            </select>
+                        </label>
+                    }
 
-                            { Object.entries(this.state.classroom1).length > 0
-                                ?
-                                <table className="results">
+                    { this.state.type === "Lägg till"
+                        ?
+                            Object.entries(this.state.device).length > 0
+                            ?
+                            <table className="results add">
+                                <thead>
+                                    <tr>
+                                        <th>Kategori</th>
+                                        <th>Märke</th>
+                                        <th>Modell</th>
+                                        <th>Serial Nummer</th>
+                                        <th>Pris</th>
+                                        <th>Länk URL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr key={ `availableDevice-${this.state.device.id}` }>
+                                        <td data-title="Kategori">{ icon.get(this.state.device.category)}</td>
+                                        <td data-title="Märke">{ this.state.device.brand }</td>
+                                        <td data-title="Modell">{ this.state.device.model }</td>
+                                        <td data-title="Serial Nummer">{ this.state.device.serialnum }</td>
+                                        <td data-title="Pris">{ this.state.device.price }:-</td>
+                                        <td data-title="Länk URL"><a href={ this.state.device.url } target="_blank">Till produktsida</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            :
+                            null
+                        :
+                            Object.entries(this.state.classroom2).length > 0
+                            ?
+                            <div>
+                                <h3 class="center">{ `Antal apparater: ${this.state.classroom2DevicesCount}` }</h3>
+                                <table className="results swap">
                                     <thead>
                                         <tr>
-                                            <th>Apparat</th>
-                                            <th>Katagori</th>
+                                            <th>Kategori</th>
                                             <th>Märke</th>
-                                            <th>Model</th>
-                                            <th>Info</th>
+                                            <th>Modell</th>
+                                            <th>Serial Nummer</th>
+                                            <th>Pris</th>
+                                            <th>Länk URL</th>
                                             <th>Admin</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        { this.state.classroom1DevicesRows }
+                                        { this.state.classroom2DevicesRows }
                                     </tbody>
                                 </table>
-                                : null
-                            }
+                            </div>
+                            :
+                            null
+                    }
 
-                            { this.state.type === "Lägg till"
-                                ?
-                                <label className="form-label">Välj apparat
-                                    <select className="form-input" type="text" name="device" required onChange={ e => this.getDevice(e.target.value) }>
-                                        <option disabled selected>Klicka här för att välja apparat</option>
-                                        { this.state.deviceGroups }
-                                    </select>
-                                </label>
-                                :
-                                <label className="form-label">Välj klassrum
-                                    <select className="form-input" type="text" name="classroom" required onChange={ e => this.getClassroom(e.target.value, "classroom2") }>
-                                        <option disabled selected>Klicka här för att välja Klassrum</option>
-                                        { this.classroom2Groups() }
-                                    </select>
-                                </label>
-                            }
-
-                            { this.state.type === "Lägg till"
-                                ?
-                                    Object.entries(this.state.device).length > 0
-                                    ?
-                                    <table className="results">
-                                        <thead>
-                                            <tr>
-                                                <th>Kategori</th>
-                                                <th>Märke</th>
-                                                <th>Model</th>
-                                                <th>Serial Nummer</th>
-                                                <th>Pris</th>
-                                                <th>Länk URL</th>
-                                                <th>Info</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr key={ `availableDevice-${this.state.device.id}` }>
-                                                <td>{ this.state.device.category }</td>
-                                                <td>{ this.state.device.brand }</td>
-                                                <td>{ this.state.device.model }</td>
-                                                <td>{ this.state.device.serialnum }</td>
-                                                <td>{ this.state.device.price }</td>
-                                                <td>{ this.state.device.url }</td>
-                                                <td>{ this.state.device.message }</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    :
-                                    null
-                                :
-                                    Object.entries(this.state.classroom2).length > 0
-                                    ?
-                                    <table className="results">
-                                        <thead>
-                                            <tr>
-                                                <th>Apparat</th>
-                                                <th>Katagori</th>
-                                                <th>Märke</th>
-                                                <th>Model</th>
-                                                <th>Info</th>
-                                                <th>Admin</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            { this.state.classroom2DevicesRows }
-                                        </tbody>
-                                    </table>
-                                    :
-                                    null
-                            }
-
-                            { this.state.type === "Lägg till" && Object.entries(this.state.classroom1).length > 0 && Object.entries(this.state.device).length > 0
-                                ?
-                                <input className="button center-margin" type="submit" name="add" value="Lägg till" />
-                                :
-                                null
-                            }
-                        </form>
-                    </div>
-                </div>
+                    { this.state.type === "Lägg till" && Object.entries(this.state.classroom1).length > 0 && Object.entries(this.state.device).length > 0
+                        ?
+                        <input className="button center-margin" type="submit" name="add" value="Lägg till" />
+                        :
+                        null
+                    }
+                </form>
             </div>
         );
     }
 }
 
-export default withRouter(ClassroomDeviceCreate);
+export default withRouter(ClassroomManager);

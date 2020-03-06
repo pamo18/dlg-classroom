@@ -57,52 +57,48 @@ class DeviceCreate extends Component {
 
     render() {
         return (
-            <div className="double-column">
-                <div className="column-2">
-                    <div className="form-wrapper">
-                        <h2 class="center">{ this.state.title }</h2>
-                        <form action="/login" className="form-register" onSubmit={ this.createDevice }>
-                            <label className="form-label">Kategori
-                                <select className="form-input" type="text" name="category" required>
-                                    {
-                                        this.state.categories.map(function(cat) {
-                                            let name = cat.name;
-                                            return [
-                                                <option key={ name } value={ name }>{ name }</option>
-                                            ]
-                                        })
-                                    }
-                                </select>
-                            </label>
+            <div className="form-wrapper">
+                <h2 class="center">{ this.state.title }</h2>
+                <form action="/login" className="form-register" onSubmit={ this.createDevice }>
+                    <label className="form-label">Kategori
+                        <select className="form-input" type="text" name="category" required>
+                            {
+                                this.state.categories.map(function(cat) {
+                                    let name = cat.name;
+                                    return [
+                                        <option key={ name } value={ name }>{ name }</option>
+                                    ]
+                                })
+                            }
+                        </select>
+                    </label>
 
-                            <label className="form-label">Märke
-                                <input className="form-input" type="text" name="brand" required />
-                            </label>
+                    <label className="form-label">Märke
+                        <input className="form-input" type="text" name="brand" required />
+                    </label>
 
-                            <label className="form-label">Model
-                                <input className="form-input" type="text" name="model" required />
-                            </label>
+                    <label className="form-label">Model
+                        <input className="form-input" type="text" name="model" required />
+                    </label>
 
-                            <label className="form-label">Serial Nummer
-                                <input className="form-input" type="text" name="serialnum" />
-                            </label>
+                    <label className="form-label">Serial Nummer
+                        <input className="form-input" type="text" name="serialnum" />
+                    </label>
 
-                            <label className="form-label">Pris
-                                <input className="form-input" type="text" name="price" placeholder="990,90"/>
-                            </label>
+                    <label className="form-label">Pris
+                        <input className="form-input" type="text" name="price" placeholder="990,90"/>
+                    </label>
 
-                            <label className="form-label">Länk URL
-                                <input className="form-input" type="text" name="url" placeholder="www.device.se" />
-                            </label>
+                    <label className="form-label">Länk URL
+                        <input className="form-input" type="text" name="url" placeholder="www.device.se" />
+                    </label>
 
-                            <label className="form-label">Info
-                                <textarea className="form-input" name="message" placeholder="Skriv något som kan vara intressant." />
-                            </label>
+                    <label className="form-label">Info
+                        <textarea className="form-input" name="message" placeholder="Skriv något som kan vara intressant." />
+                    </label>
 
-                            <input className="button center-margin" type="submit" name="create" value="Skapa" />
-                        </form>
-                    </div>
-                </div>
+                    <input className="button center-margin" type="submit" name="create" value="Skapa" />
+                </form>
             </div>
         );
     }
