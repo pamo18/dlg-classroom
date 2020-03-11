@@ -160,7 +160,7 @@ class ClassroomManager extends Component {
             }
 
             return [
-                <tr key={ `${classroom}Device-${device.id}` }>
+                <tr key={ `${classroom}Device-${device.id}` } className="clickable" onClick={ () => utils.redirect(that, "/device", {id: device.id}) }>
                     <td data-title="Kategori">{ icon.get(device.category)}</td>
                     <td data-title="Märke">{ device.brand }</td>
                     <td data-title="Modell">{ device.model }</td>
@@ -395,7 +395,7 @@ class ClassroomManager extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr key={ `availableDevice-${this.state.device.id}` }>
+                                    <tr key={ `availableDevice-${this.state.device.id}` } className="clickable" onClick={ () => utils.redirect(this, "/device", {id: this.state.device.id}) }>
                                         <td data-title="Kategori">{ icon.get(this.state.device.category)}</td>
                                         <td data-title="Märke">{ this.state.device.brand }</td>
                                         <td data-title="Modell">{ this.state.device.model }</td>

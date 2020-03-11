@@ -5,6 +5,7 @@ import Header from '../header/Header.js';
 import Footer from '../footer/Footer.js';
 import About from '../about/About.js';
 import Classroom from '../classroom/Classroom.js';
+import Device from '../device/Device.js';
 import Admin from '../admin/Admin.js';
 import './App.css';
 
@@ -61,6 +62,7 @@ class App extends Component {
                     <div className="page-wrapper">
                         <Switch>
                             <Route exact path="/" component={Classroom} />
+                            <Route exact path="/device" component={Device} />
                             <Route exact path="/about" component={About} />
                             <Route exact path="/admin" component={Admin} />
                             <Route exact path="/admin/:type/:admin" component={Admin} />

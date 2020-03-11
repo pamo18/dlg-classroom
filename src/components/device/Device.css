@@ -1,0 +1,10 @@
+/* Main column */
+.device-view {
+    width: 900px;
+}
+
+@media only screen and (max-width: 980px) {
+    .device-view {
+        width: 100%;
+    }
+}

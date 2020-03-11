@@ -3,6 +3,12 @@ const utils = {
         that.props.history.push(url);
         window.location.reload(false);
     },
+    redirect: function(that, dest, state) {
+        that.props.history.push({
+            pathname: dest,
+            state: state
+        });
+    },
     slugify: function(text) {
         return text.toString().toLowerCase()
             .replace(/\s+/g, '-')           // Replace spaces with -

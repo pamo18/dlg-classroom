@@ -8,7 +8,7 @@
 }
 
 .admin-control .toggle-button {
-    width: 100%;
+    width: 24rem;
     margin-bottom: 1rem;
 }
 
@@ -41,6 +41,10 @@ table.results.swap tr:hover {
 
 @media (max-width: 980px) {
     .admin-column {
+        width: 100%;
+    }
+
+    .admin-control .toggle-button {
         width: 100%;
     }
 }

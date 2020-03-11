@@ -150,7 +150,7 @@ class Admin extends Component {
                                 this.state.view
                                 :
                                 <div>
-                                    <h2 className="center margin">De La Gardiegymnasiet</h2>
+                                    <h2 className="center margin">DLG</h2>
                                     <div className="classroom-image">
                                         <img src={ this.state.image } alt="Classroom image"/>
                                     </div>

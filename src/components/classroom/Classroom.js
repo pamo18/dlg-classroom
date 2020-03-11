@@ -94,16 +94,15 @@ class Classroom extends Component {
 
     getDevices() {
         let count = 0;
+        let that = this;
         let classroomDevicesRows = this.state.devices.map(function(device) {
             count++;
 
             return [
-                <tr key={`classroomDevice-${device.id}`}>
+                <tr key={`classroomDevice-${device.id}`} className="clickable" onClick={ () => utils.redirect(that, "/device", {id: device.id}) }>
                     <td data-title="Kategori">{ icon.get(device.category)}</td>
                     <td data-title="Märke">{ device.brand }</td>
                     <td data-title="Modell">{ device.model }</td>
-                    <td data-title="Serial">{ device.serialnum }</td>
-                    <td data-title="Pris">{ device.price }:-</td>
                     <td data-title="Länk"><a href={ device.url } target="_blank">Till produktsida</a></td>
                 </tr>
             ]});
@@ -112,30 +111,7 @@ class Classroom extends Component {
             classroomDevicesRows: classroomDevicesRows,
             classroomDevicesCount: count
         });
-
     }
-
-    // adminControls() {
-    //     return [
-    //         <div className="admin-control-bar">
-    //             <Link className="button" to={{
-    //                 pathname: "/admin",
-    //                 state: {
-    //                     admin: "classroom",
-    //                     type: "update"
-    //                 }
-    //             }}>Uppdatera</Link>
-    //
-    //             <Link className="button" to={{
-    //                 pathname: "/admin",
-    //                 state: {
-    //                     admin: "classroom",
-    //                     type: "delete"
-    //                 }
-    //             }}>Radera</Link>
-    //         </div>
-    //     ]
-    // }
 
     render() {
         return (
@@ -149,15 +125,14 @@ class Classroom extends Component {
                     <div className="left-column">
                         <div className="classroom-control">
                             <form action="/profile" className="form" onSubmit={this.registerSubmit}>
-                                <label className="form-label">Välj Klassrum
-                                    <select className="form-input" type="text" name="classroom" required onChange={ this.showClassroom }>
-                                        <option disabled selected>Klicka för att välja</option>
-                                        <optgroup label="Mina klassrum">
-                                            { this.state.myClassrooms }
-                                        </optgroup>
-                                        { this.state.groups }
-                                    </select>
-                                </label>
+                                <h2 className="center margin">Välj Klassrum</h2>
+                                <select className="form-input" type="text" name="classroom" required onChange={ this.showClassroom }>
+                                    <option disabled selected>Klicka för att välja</option>
+                                    <optgroup label="Mina klassrum">
+                                        { this.state.myClassrooms }
+                                    </optgroup>
+                                    { this.state.groups }
+                                </select>
                             </form>
                         </div>
                     </div>
@@ -165,7 +140,7 @@ class Classroom extends Component {
                         <div className="classroom-view">
                             <div>
                                 <h2 className="center margin">
-                                    De La Gardiegymnasiet
+                                    DLG
                                     { this.state.name
                                     ? " " + this.state.name
                                     : null
@@ -191,8 +166,6 @@ class Classroom extends Component {
                                             <th>Kategori</th>
                                             <th>Märke</th>
                                             <th>Modell</th>
-                                            <th>Serial Nummer</th>
-                                            <th>Pris</th>
                                             <th>Länk URL</th>
                                         </tr>
                                     </thead>
