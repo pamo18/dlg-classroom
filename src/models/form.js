@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 
 // Form helper
 const form = {
-    group: function(data, groupby, id, template) {
+    organize: function(data, groupby, id) {
         let res = {};
         let catGroups = {};
-        let groups = [];
 
         data.forEach(function(row) {
             let rowid = row[id];
+
             let rowGroup = row[groupby];
 
             res[rowid] = row;
@@ -20,29 +20,43 @@ const form = {
             catGroups[rowGroup].push(row);
         });
 
-        Object.keys(catGroups).forEach((key) => {
-            let options = [];
-
-            catGroups[key].forEach(function(option) {
-                let optionid = option[id];
-                let name = form.optionName(option, template);
-
-                options.push(
-                    <option key={ `option-${name}` } value={ optionid }>{ name }</option>
-                );
-            })
-
-            groups.unshift(
-                <optgroup key={ `group-${key}` } label={ key }>
-                    { options }
-                </optgroup>
-            );
-        });
-
         return {
             data: res,
-            groups: groups
+            groups: catGroups
         }
+    },
+    group: function(catGroups, id, template, selected, skip = null) {
+        let groups = [];
+
+        try {
+            Object.keys(catGroups).forEach((key) => {
+                let options = [];
+
+                catGroups[key].forEach(function(option) {
+                    let optionid = option[id];
+
+                    if (skip === optionid) {
+                        return;
+                    }
+
+                    let name = form.optionName(option, template);
+
+                    options.push(
+                        <option key={ `option-${name}` } selected={ selected(option[id]) } value={ optionid }>{ name }</option>
+                    );
+                })
+
+                groups.unshift(
+                    <optgroup key={ `group-${key}` } label={ key }>
+                        { options }
+                    </optgroup>
+                );
+            });
+        } catch(err) {
+            console.log(err);
+        }
+
+        return groups;
     },
     optionName: function(option, template) {
         let optionNames = [];

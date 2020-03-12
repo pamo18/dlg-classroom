@@ -1,11 +1,11 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
-import  { Redirect, Link } from 'react-router-dom';
-// import auth from '../../models/auth.js';
+import  { withRouter, Link } from 'react-router-dom';
 import db from '../../models/db.js';
 import utils from '../../models/utils.js';
 import form from '../../models/form.js';
+import table from '../../models/table.js';
 import icon from '../../models/icon.js';
 import './Classroom.css';
 import image from "../../assets/classroom/default.jpg";
@@ -26,21 +26,35 @@ class Classroom extends Component {
             image: image,
             classroom: null,
             devices: [],
-            classroomDevicesRows: [],
-            classroomDevicesCount: null
+            classroomDevicesTable: {},
+            classroomDevicesCount: null,
+            selected: null
         };
     }
 
     componentDidMount() {
+        let state = this.props.restore("classroomState");
+
+        if (state) {
+            this.setState(state);
+        }
+
         this.loadClassrooms();
+    }
+
+    componentWillUnmount() {
+        this.props.save("classroomState", this.state);
     }
 
     loadClassrooms() {
         let that = this;
         let res = db.fetchAll("classroom");
+        let selected = function(id) {
+            return that.state.selected == id ? "selected" : null;
+        };
 
         res.then(function(data) {
-            let formData = form.group(data, "location", "id", that.state.nameTemplate);
+            let formData = form.group(data, "location", "id", that.state.nameTemplate, selected);
 
             that.setState({
                 data: formData.data,
@@ -74,7 +88,8 @@ class Classroom extends Component {
                     level: res.level,
                     image: res.image
                 },
-                image: image
+                image: image,
+                selected: res.id
             }, () => this.loadDevices(id));
         } catch(err) {
             console.log(err);
@@ -95,20 +110,21 @@ class Classroom extends Component {
     getDevices() {
         let count = 0;
         let that = this;
+
         let classroomDevicesRows = this.state.devices.map(function(device) {
+            let view = () => utils.redirect(that, "/device", {id: device.id});
+            let key = `device-${device.id}`;
+
             count++;
 
-            return [
-                <tr key={`classroomDevice-${device.id}`} className="clickable" onClick={ () => utils.redirect(that, "/device", {id: device.id}) }>
-                    <td data-title="Kategori">{ icon.get(device.category)}</td>
-                    <td data-title="Märke">{ device.brand }</td>
-                    <td data-title="Modell">{ device.model }</td>
-                    <td data-title="Länk"><a href={ device.url } target="_blank">Till produktsida</a></td>
-                </tr>
-            ]});
+            return table.userRow(key, device, icon.get("View", view));
+        });
 
         this.setState({
-            classroomDevicesRows: classroomDevicesRows,
+            classroomDevicesTable: {
+                head: table.userHead(),
+                body: classroomDevicesRows
+            },
             classroomDevicesCount: count
         });
     }
@@ -127,7 +143,7 @@ class Classroom extends Component {
                             <form action="/profile" className="form" onSubmit={this.registerSubmit}>
                                 <h2 className="center margin">Välj Klassrum</h2>
                                 <select className="form-input" type="text" name="classroom" required onChange={ this.showClassroom }>
-                                    <option disabled selected>Klicka för att välja</option>
+                                    <option disabled selected={!this.state.delected ? "selected" : null}>Klicka för att välja</option>
                                     <optgroup label="Mina klassrum">
                                         { this.state.myClassrooms }
                                     </optgroup>
@@ -158,19 +174,14 @@ class Classroom extends Component {
                                 null
                             }
 
-                            { this.state.classroomDevicesRows.length > 0
+                            { this.state.classroomDevicesCount
                                 ?
                                 <table className="results">
                                     <thead>
-                                        <tr>
-                                            <th>Kategori</th>
-                                            <th>Märke</th>
-                                            <th>Modell</th>
-                                            <th>Länk URL</th>
-                                        </tr>
+                                        { this.state.classroomDevicesTable.head }
                                     </thead>
                                     <tbody>
-                                        { this.state.classroomDevicesRows }
+                                        { this.state.classroomDevicesTable.body }
                                     </tbody>
                                 </table>
                                 :
@@ -184,4 +195,4 @@ class Classroom extends Component {
     }
 }
 
-export default Classroom;
+export default withRouter(Classroom);

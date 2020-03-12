@@ -5,20 +5,18 @@ import  { withRouter, Link } from 'react-router-dom';
 import db from '../../../../models/db.js';
 import utils from '../../../../models/utils.js';
 import form from '../../../../models/form.js';
+import table from '../../../../models/table.js';
 import icon from '../../../../models/icon.js';
 import '../../Admin.css';
-import Clone from "lodash";
-import DeleteIcon from "@material-ui/icons/DeleteForever";
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 class ClassroomManager extends Component {
     constructor(props) {
         super(props);
         this.getClassroom = this.getClassroom.bind(this);
-        this.getClassroomForm = this.getClassroomForm.bind(this);
+        this.getClassroom1Groups = this.getClassroom1Groups.bind(this);
+        this.getClassroom2Groups = this.getClassroom2Groups.bind(this);
         this.getDevice = this.getDevice.bind(this);
-        this.getDeviceForm = this.getDeviceForm.bind(this);
+        this.getDeviceGroups = this.getDeviceGroups.bind(this);
         this.getClassroomDevice = this.getClassroomDevice.bind(this);
         this.removeDevice = this.removeDevice.bind(this);
         this.addDevice = this.addDevice.bind(this);
@@ -28,52 +26,101 @@ class ClassroomManager extends Component {
         this.classroom1Handler = this.classroom1Handler.bind(this);
         this.classroom2Handler = this.classroom2Handler.bind(this);
         this.changeType = this.changeType.bind(this);
-        this.classroom2Groups = this.classroom2Groups.bind(this);
         this.state = {
             title: " apparater i ett klassrum",
-            classroomData: [],
-            deviceData: [],
-            classroomGroups: [],
-            classroom2Groups: [],
-            deviceGroups: [],
             classroomNameTemplate: "name",
+            deviceNameTemplate: "brand,model,(serialnum)",
+            classroomData: [],
+            classroomGroups: {},
+            deviceData: [],
+            deviceGroups: [],
+            selectedDevice: null,
+            device: {},
+            deviceTable: {},
             classroom1: {},
+            classroom1Selected: null,
             classroom1Devices: [],
-            classroom1DevicesRows: [],
+            classroom1DevicesTable: {},
             classroom1DevicesCount: null,
             classroom2: {},
+            classroom2Selected: null,
             classroom2Devices: [],
-            classroom2DevicesRows: [],
+            classroom2DevicesTable: {},
             classroom2DevicesCount: null,
-            deviceNameTemplate: "brand,model,(serialnum)",
-            device: {},
             type: "Lägg till"
         };
     }
 
     componentDidMount() {
-        this.loadClassrooms();
-        this.loadDevices();
+        let state = this.props.restore("managerState");
+
+        if (state) {
+            this.setState(state, () => this.reload());
+        } else {
+            this.loadClassrooms();
+            this.loadDevices();
+        }
     }
 
-    // Load Classrooms - Step 1
+    componentWillUnmount() {
+        this.props.save("managerState", this.state);
+    }
+
+    // Load Classrooms and group data - Step 1
     loadClassrooms() {
         let that = this;
         let res = db.fetchAll("classroom");
 
         res.then(function(data) {
-            that.getClassroomForm(data);
+            let organize = form.organize(data, "location", "id");
+            let classroomData = organize.data;
+            let classroomGroups = organize.groups;
+            let classroom1Groups = that.getClassroom1Groups(classroomGroups);
+
+            that.setState({
+                classroomData: classroomData,
+                classroomGroups: classroomGroups,
+                classroom1Groups: classroom1Groups
+            });
         });
     }
 
-    // Load Classrooms - Step 2 - Get Formdata
-    getClassroomForm(data) {
-        let formData = form.group(data, "location", "id", this.state.classroomNameTemplate);
+    // Load Classrooms1 form groups - Step 2 - Get Formdata
+    getClassroom1Groups(data = null) {
+        if (!data) {
+            data = this.state.classroomGroups;
+        }
 
-        this.setState({
-            classroomData: formData.data,
-            classroomGroups: formData.groups
-        });
+        let that = this;
+        let template = this.state.classroomNameTemplate;
+        let classroom2 = this.state.classroom2Selected;
+
+        let selected = function(id) {
+            return that.state.classroom1Selected == id ? "selected" : null;
+        };
+
+        let groups = form.group(data, "id", template, selected, classroom2);
+
+        return groups;
+    }
+
+    // Load Classrooms2 form groups - Step 3 optional - Get Formdata
+    getClassroom2Groups(data = null) {
+        if (!data) {
+            data = this.state.classroomGroups;
+        }
+
+        let that = this;
+        let template = this.state.classroomNameTemplate;
+        let classroom1 = this.state.classroom1Selected;
+
+        let selected = function(id) {
+            return that.state.classroom2Selected == id ? "selected" : null;
+        };
+
+        let groups = form.group(data, "id", template, selected, classroom1);
+
+        return groups;
     }
 
     // Load Devices - Step 1
@@ -84,17 +131,24 @@ class ClassroomManager extends Component {
         let res = db.fetchAll("device/available");
 
         res.then(function(data) {
-            that.getDeviceForm(data);
+            that.getDeviceGroups(data);
         });
     }
 
     // Load Devices - Step 2 - Get Formdata
-    getDeviceForm(data) {
-        let formData = form.group(data, "category", "id", this.state.deviceNameTemplate);
+    getDeviceGroups(data) {
+        let that = this;
+        let selected = function(id) {
+            return that.state.selectedDevice == id ? "selected" : null;
+        };
+        let organize = form.organize(data, "category", "id");
+        let deviceData = organize.data;
+        let groupData = organize.groups;
+        let deviceGroups = form.group(groupData, "id", this.state.deviceNameTemplate, selected);
 
         this.setState({
-            deviceData: formData.data,
-            deviceGroups: formData.groups
+            deviceData: deviceData,
+            deviceGroups: deviceGroups
         });
     }
 
@@ -112,7 +166,8 @@ class ClassroomManager extends Component {
             }
 
             this.setState({
-                [classroom]: details
+                [classroom]: details,
+                [`${classroom}Selected`]: res.id
             }, () => this.loadClassroomDevices(id, classroom));
         } catch(err) {
             console.log(err);
@@ -140,46 +195,34 @@ class ClassroomManager extends Component {
 
         let classroomDevicesRows = this.state[classroomDevices].map(function(device) {
             let swap;
+            let down = () => that.swapDevice(that.state.classroom1.id, that.state.classroom2.id, device.id);
+            let up = () => that.swapDevice(that.state.classroom2.id, that.state.classroom1.id, device.id);
+            let view = () => utils.redirect(that, "/device", {id: device.id});
+            let del = () => that.removeDevice(classroomid, device.id);
 
             count++;
 
             if (that.state.type === "Byta" && classroom === "classroom1") {
-                swap = [
-                    <ArrowDownwardIcon
-                        onClick={ () => that.swapDevice(that.state.classroom1.id, that.state.classroom2.id, device.id) }
-                        className="arrow-down-icon"
-                    />
-                ]
+                swap = icon.get("Down", down);
             } else if (that.state.type === "Byta" && classroom === "classroom2") {
-                swap = [
-                    <ArrowUpwardIcon
-                        onClick={ () => that.swapDevice(that.state.classroom2.id, that.state.classroom1.id, device.id) }
-                        className="arrow-up-icon"
-                    />
-                ]
+                swap = icon.get("Up", up);
             }
 
-            return [
-                <tr key={ `${classroom}Device-${device.id}` } className="clickable" onClick={ () => utils.redirect(that, "/device", {id: device.id}) }>
-                    <td data-title="Kategori">{ icon.get(device.category)}</td>
-                    <td data-title="Märke">{ device.brand }</td>
-                    <td data-title="Modell">{ device.model }</td>
-                    <td data-title="Serial">{ device.serialnum }</td>
-                    <td data-title="Pris">{ device.price }:-</td>
-                    <td data-title="Länk"><a href={ device.url } target="_blank">Till produktsida</a></td>
-                    <td data-title="Admin">
-                        <DeleteIcon
-                            onClick={ () => that.removeDevice(classroomid, device.id) }
-                            className="delete-icon"
-                        />
-                        { swap }
-                    </td>
-                </tr>
-            ]
+            let key = `${classroom}Device-${device.id}`;
+            let admin = [
+                icon.get("View", view),
+                icon.get("Delete", del),
+                swap
+            ];
+
+            return table.adminRow(key, device, admin);
         });
 
         this.setState({
-            [`${classroom}DevicesRows`]: classroomDevicesRows,
+            [`${classroom}DevicesTable`]: {
+                head: table.adminHead(),
+                body: classroomDevicesRows
+            },
             [`${classroom}DevicesCount`]: count
         });
     }
@@ -189,21 +232,17 @@ class ClassroomManager extends Component {
             let res = this.state.deviceData[id];
             let purchased = new Date(res.purchased).toISOString().substring(0, 10);
             let expires = new Date(res.expires).toISOString().substring(0, 10);
+            let key = `device-${res.id}`;
+            let view = () => utils.redirect(this, "/device", {id: res.id});
+            let row = table.adminRow(key, res, icon.get("View", view));
 
             this.setState({
-                device: {
-                    id: res.id,
-                    category: res.category,
-                    brand: res.brand,
-                    model: res.model,
-                    purchased: purchased,
-                    expires: expires,
-                    warranty: res.warranty,
-                    price: res.price,
-                    serialnum: res.serialnum,
-                    url: res.url,
-                    message: res.message
-                }
+                device: res,
+                deviceTable: {
+                    head: table.adminHead(),
+                    body: row
+                },
+                selectedDevice: id
             });
         } catch(err) {
             console.log(err);
@@ -234,57 +273,46 @@ class ClassroomManager extends Component {
         });
     }
 
-    removeDevice(classroomid, deviceid) {
-        let that = this;
-
-        let res = db.delete("classroom/device", `${classroomid}&${deviceid}`);
-
-        res.then(() => this.reload());
-    }
-
     swapDevice(classroomFrom, classroomTo, deviceid) {
-        let that = this;
         let classroomDevice = {
             classroom_id: classroomTo
         };
 
         let res = db.update(
             "classroom/device",
-            `${classroomFrom}&${classroomTo}&${deviceid}`,
+            `${classroomFrom}&${deviceid}`,
             classroomDevice
         );
 
-        res.then(() => this.reload(classroomFrom, classroomTo));
+        res.then(() => this.reload());
     }
 
-    reload() {
-        let classroom1 = this.state.classroom1.id;
+    removeDevice(classroomid, deviceid) {
+        let res = db.delete("classroom/device", `${classroomid}&${deviceid}`);
 
-        this.loadClassrooms();
-        this.loadDevices();
-        this.getClassroom(classroom1, "classroom1");
-
-        if (this.state.type === "Byta") {
-            let classroom2 = this.state.classroom2.id;
-
-            this.getClassroom(classroom2, "classroom2");
-        }
+        res.then(() => this.reload());
     }
 
     // Change type, reset bottom options/table then update classroom1 options to include/exclude swap function
     changeType(e) {
+        let that = this;
         let type = e.target.value;
 
+        // Add/remove properties and swap arrows for classroom1 -> getClassroomDevice
         if (type === "Lägg till") {
+            // Remove classroom2 properties, only classroom1 devices needed
             this.setState({
                 type: type,
-                classroom2: {}
+                classroom2: {},
+                classroom2Selected: null
             }, () => this.getClassroomDevice("classroom1"));
         } else if (type === "Byta") {
+            // Remove device properties, only classroom1 and classroom2 needed here
             this.setState({
                 type: type,
-                device: {}
-            }, () => this.getClassroomDevice("classroom1"));
+                device: {},
+                selectedDevice: null
+            }, () => that.getClassroomDevice("classroom1"));
         }
     }
 
@@ -300,22 +328,17 @@ class ClassroomManager extends Component {
         this.getClassroom(e.target.value, "classroom2");
     }
 
-    classroom2Groups() {
-        let that = this;
-        try {
-            let groups = Clone.cloneDeep(this.state.classroomGroups);
+    reload() {
+        let classroom1 = this.state.classroom1.id;
 
-            if (groups.length === 1) {
-                let newChildren = groups[0].props.children.filter(function(row) {
-                    return row.props.value != that.state.classroom1.id;
-                });
+        this.loadClassrooms();
+        this.loadDevices();
+        this.getClassroom(classroom1, "classroom1");
 
-                groups[0].props.children = newChildren;
+        if (this.state.type === "Byta") {
+            let classroom2 = this.state.classroom2.id;
 
-                return groups;
-            }
-        } catch(e) {
-            console.log(e);
+            this.getClassroom(classroom2, "classroom2");
         }
     }
 
@@ -334,7 +357,7 @@ class ClassroomManager extends Component {
                     <label className="form-label">{this.state.type === "Lägg till" ? "Välj klassrum" : "Välj klassrum 1"}
                         <select className="form-input" type="text" name="classroom" required onChange={ this.classroom1Handler }>
                             <option disabled selected>Klicka här för att välja Klassrum</option>
-                            { this.state.classroomGroups }
+                            { this.getClassroom1Groups() }
                         </select>
                     </label>
 
@@ -344,18 +367,10 @@ class ClassroomManager extends Component {
                             <h3 class="center">{ `Antal apparater: ${this.state.classroom1DevicesCount}` }</h3>
                             <table className={ this.state.type === "Lägg till" ? "results" : "results swap" }>
                                 <thead>
-                                    <tr>
-                                        <th>Kategori</th>
-                                        <th>Märke</th>
-                                        <th>Modell</th>
-                                        <th>Serial Nummer</th>
-                                        <th>Pris</th>
-                                        <th>Länk URL</th>
-                                        <th>Admin</th>
-                                    </tr>
+                                    { this.state.classroom1DevicesTable.head }
                                 </thead>
                                 <tbody>
-                                    { this.state.classroom1DevicesRows }
+                                    { this.state.classroom1DevicesTable.body }
                                 </tbody>
                             </table>
                         </div>
@@ -374,7 +389,7 @@ class ClassroomManager extends Component {
                         <label className="form-label">Välj klassrum 2
                             <select className="form-input" type="text" name="classroom" required onChange={ this.classroom2Handler }>
                                 <option disabled selected>Klicka här för att välja Klassrum</option>
-                                { this.classroom2Groups() }
+                                { this.getClassroom2Groups() }
                             </select>
                         </label>
                     }
@@ -385,24 +400,10 @@ class ClassroomManager extends Component {
                             ?
                             <table className="results add">
                                 <thead>
-                                    <tr>
-                                        <th>Kategori</th>
-                                        <th>Märke</th>
-                                        <th>Modell</th>
-                                        <th>Serial Nummer</th>
-                                        <th>Pris</th>
-                                        <th>Länk URL</th>
-                                    </tr>
+                                    { this.state.deviceTable.head }
                                 </thead>
                                 <tbody>
-                                    <tr key={ `availableDevice-${this.state.device.id}` } className="clickable" onClick={ () => utils.redirect(this, "/device", {id: this.state.device.id}) }>
-                                        <td data-title="Kategori">{ icon.get(this.state.device.category)}</td>
-                                        <td data-title="Märke">{ this.state.device.brand }</td>
-                                        <td data-title="Modell">{ this.state.device.model }</td>
-                                        <td data-title="Serial Nummer">{ this.state.device.serialnum }</td>
-                                        <td data-title="Pris">{ this.state.device.price }:-</td>
-                                        <td data-title="Länk URL"><a href={ this.state.device.url } target="_blank">Till produktsida</a></td>
-                                    </tr>
+                                    { this.state.deviceTable.body }
                                 </tbody>
                             </table>
                             :
@@ -414,18 +415,10 @@ class ClassroomManager extends Component {
                                 <h3 class="center">{ `Antal apparater: ${this.state.classroom2DevicesCount}` }</h3>
                                 <table className="results swap">
                                     <thead>
-                                        <tr>
-                                            <th>Kategori</th>
-                                            <th>Märke</th>
-                                            <th>Modell</th>
-                                            <th>Serial Nummer</th>
-                                            <th>Pris</th>
-                                            <th>Länk URL</th>
-                                            <th>Admin</th>
-                                        </tr>
+                                        { this.state.classroom2DevicesTable.head }
                                     </thead>
                                     <tbody>
-                                        { this.state.classroom2DevicesRows }
+                                        { this.state.classroom2DevicesTable.body }
                                     </tbody>
                                 </table>
                             </div>

@@ -14,8 +14,19 @@ class App extends Component {
         super(props);
         this.state = {
             activeUser: "",
-            register: ""
+            register: "",
+            classroomState: null,
+            adminState: null,
+            managerState: null
         };
+        this.saveState = function(page, state) {
+            this.setState({
+                [page]: state
+            });
+        }.bind(this);
+        this.restoreState = function(page) {
+            return this.state[page];
+        }.bind(this);
     }
 
     // componentDidMount() {
@@ -61,11 +72,10 @@ class App extends Component {
                     <Header />
                     <div className="page-wrapper">
                         <Switch>
-                            <Route exact path="/" component={Classroom} />
+                            <Route exact path="/" render={() => <Classroom save={this.saveState} restore={this.restoreState} />} />
+                            <Route exact path="/admin" render={() => <Admin save={this.saveState} restore={this.restoreState} />} />
                             <Route exact path="/device" component={Device} />
                             <Route exact path="/about" component={About} />
-                            <Route exact path="/admin" component={Admin} />
-                            <Route exact path="/admin/:type/:admin" component={Admin} />
                         </Switch>
                     </div>
                     <Footer />

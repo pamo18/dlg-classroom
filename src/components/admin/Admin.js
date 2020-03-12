@@ -39,20 +39,15 @@ class Admin extends Component {
     }
 
     componentDidMount () {
-        if (this.props.location.state) {
-            this.setState({
-                type: this.props.location.state.type,
-                admin: this.props.location.state.admin
-            });
+        let state = this.props.restore("adminState");
 
-            this.props.history.replace({
-                pathname: this.props.location.pathname,
-                state: {
-                    type: "create",
-                    admin: "classroom",
-                }
-            });
+        if (state) {
+            this.setState(state);
         }
+    }
+
+    componentWillUnmount() {
+        this.props.save("adminState", this.state);
     }
 
     changeType(e) {
@@ -111,7 +106,7 @@ class Admin extends Component {
     getManager(manager) {
         switch(true) {
             case (manager == "classroomManager"):
-                return <ClassroomManager />;
+                return <ClassroomManager save={this.props.save} restore={this.props.restore} />;
         }
     }
 
