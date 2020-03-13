@@ -55,7 +55,11 @@ class ClassroomManager extends Component {
         let state = this.props.restore("managerState");
 
         if (state) {
-            this.setState(state, () => this.reload());
+            this.setState(state, () => {
+                if (this.state.classroom1.hasOwnProperty("id")) {
+                    this.reload();
+                }
+            });
         } else {
             this.loadClassrooms();
             this.loadDevices();
@@ -328,6 +332,7 @@ class ClassroomManager extends Component {
         this.getClassroom(e.target.value, "classroom2");
     }
 
+    // Reload classrooms, devices and classroom devices to update any changes
     reload() {
         let classroom1 = this.state.classroom1.id;
 

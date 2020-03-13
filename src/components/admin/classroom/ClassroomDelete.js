@@ -14,9 +14,9 @@ class ClassroomDelete extends Component {
         this.deleteClassroom = this.deleteClassroom.bind(this);
         this.state = {
             title: "Radera Klassrum",
-            data: [],
-            groups: [],
-            nameTemplate: "name",
+            classroomData: [],
+            classroomGroups: [],
+            classroomTemplate: "name",
             classroom: null,
         };
     }
@@ -30,11 +30,15 @@ class ClassroomDelete extends Component {
         let res = db.fetchAll("classroom");
 
         res.then(function(data) {
-            let formData = form.group(data, "location", "id", that.state.nameTemplate);
+            let organize = form.organize(data, "location", "id");
+            let classroomData = organize.data;
+            let classroomGroups = organize.groups;
+            let template = that.state.classroomTemplate;
+            let formGroups = form.group(classroomGroups, "id", template);
 
             that.setState({
-                data: formData.data,
-                groups: formData.groups
+                classroomData: classroomData,
+                classroomGroups: formGroups
             });
         });
     }
@@ -43,8 +47,8 @@ class ClassroomDelete extends Component {
         let id = e.target.value;
 
         try {
-            let res = this.state.data[id];
-            let name = form.optionName(res, this.state.nameTemplate);
+            let res = this.state.classroomData[id];
+            let name = form.optionName(res, this.state.classroomTemplate);
 
             this.setState({
                 classroom: {
@@ -75,7 +79,7 @@ class ClassroomDelete extends Component {
                 <form action="/delete" className="form-register" onSubmit={ this.deleteClassroom }>
                     <select className="form-input" type="text" name="name" required onChange={ this.getClassroom }>
                         <option disabled selected>Klicka här för att välja Klassrum</option>
-                        { this.state.groups }
+                        { this.state.classroomGroups }
                     </select>
                     { this.state.classroom
                         ?

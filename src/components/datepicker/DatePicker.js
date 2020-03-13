@@ -18,17 +18,25 @@ class DatePicker extends Component {
             year: ""
         };
     }
+
     componentDidMount() {
+        let startDate;
+
+        if (this.props.hasOwnProperty("startDate")) {
+            startDate = this.state.props.startDate;
+        } else {
+            startDate = this.state.date;
+        }
+
         this.setState({
-            monthPicker: this.initMonth()
-        }, () => {
-            this.setState({
-                monthName: this.state.date.toLocaleString('default', { month: 'long' }),
-                monthNumber: this.state.date.getMonth(),
-                year: this.state.date.getFullYear()
-            });
+            date: startDate,
+            monthPicker: this.initMonth(),
+            monthName: startDate.toLocaleString('default', { month: 'long' }),
+            monthNumber: startDate.getMonth(),
+            year: startDate.getFullYear()
         });
     }
+
     getMonths() {
         let options = [],
             allMonths = utils.getMonthNames();
@@ -43,6 +51,7 @@ class DatePicker extends Component {
         }
         return options;
     }
+
     getYears() {
         let currentDate = new Date(),
             currentYear = currentDate.getFullYear(),
@@ -59,11 +68,11 @@ class DatePicker extends Component {
         }
         return allYears;
     }
-    selectDate(selected) {
-        let dob = document.getElementById("birthday");
 
-        dob.value = selected;
+    selectDate(selected) {
+        this.props.changeDate(selected);
     }
+
     onMonthChange(e) {
         let y = this.state.year,
             m = parseInt(e.target.value);
@@ -79,8 +88,8 @@ class DatePicker extends Component {
             });
         });
     }
+
     onYearChange(e) {
-        console.log(this.state.monthName);
         const y = e.target.value;
         const m = this.state.monthNumber;
 
@@ -95,6 +104,7 @@ class DatePicker extends Component {
             });
         });
     }
+
     initMonth() {
         let current = this.state.date,
             selectedMonth = current.getMonth(),
@@ -116,6 +126,7 @@ class DatePicker extends Component {
         for (let i = 0; i < startDay; i++) {
             weeks[1].push(<td className="dates empty"></td>);
         }
+
         for (day = 1; day <= (7 - startDay); day++) {
             let currentDate = this.state.date;
 
@@ -150,6 +161,7 @@ class DatePicker extends Component {
         }
         return weeks;
     }
+
     render() {
         return (
             <div id="date-picker" className="date-wrapper">

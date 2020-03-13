@@ -14,9 +14,9 @@ class DeviceDelete extends Component {
         this.deleteDevice = this.deleteDevice.bind(this);
         this.state = {
             title: "Radera Apparat",
-            data: {},
-            groups: [],
-            nameTemplate: "brand,model,(serialnum)",
+            deviceData: {},
+            deviceGroups: [],
+            deviceTemplate: "brand,model,(serialnum)",
             device: null
         };
     }
@@ -33,11 +33,15 @@ class DeviceDelete extends Component {
 
         res.then(function(data) {
             data.forEach(function(row) {
-                let formData = form.group(data, "category", "id", that.state.nameTemplate);
+                let organize = form.organize(data, "category", "id");
+                let deviceData = organize.data;
+                let deviceGroups = organize.groups;
+                let template = that.state.deviceTemplate;
+                let formGroups = form.group(deviceGroups, "id", template);
 
                 that.setState({
-                    data: formData.data,
-                    groups: formData.groups
+                    deviceData: deviceData,
+                    deviceGroups: formGroups
                 });
             });
         });
@@ -47,8 +51,8 @@ class DeviceDelete extends Component {
         let id = e.target.value;
 
         try {
-            let res = this.state.data[id];
-            let name = form.optionName(res, this.state.nameTemplate);
+            let res = this.state.deviceData[id];
+            let name = form.optionName(res, this.state.deviceTemplate);
 
             this.setState({
                 device: {
@@ -79,7 +83,7 @@ class DeviceDelete extends Component {
                 <form action="/delete" className="form-register" onSubmit={this.deleteDevice}>
                     <select className="form-input" type="text" name="fullname" required onChange={ this.getDevice }>
                         <option disabled selected>Klicka för att välja</option>
-                            { this.state.groups }
+                            { this.state.deviceGroups }
                     </select>
                     { this.state.device
                         ?

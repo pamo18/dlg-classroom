@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 
 // Form helper
 const form = {
-    organize: function(data, groupby, id) {
+    organize: function(data, groupby, id, filters = []) {
         let res = {};
         let catGroups = {};
 
         data.forEach(function(row) {
+            if (filters.length > 0 && !filters.includes(row.location)) {
+                return;
+            }
+
             let rowid = row[id];
 
             let rowGroup = row[groupby];
@@ -25,7 +29,7 @@ const form = {
             groups: catGroups
         }
     },
-    group: function(catGroups, id, template, selected, skip = null) {
+    group: function(catGroups, id, template, selected = null, skip = null) {
         let groups = [];
 
         try {
@@ -42,7 +46,7 @@ const form = {
                     let name = form.optionName(option, template);
 
                     options.push(
-                        <option key={ `option-${name}` } selected={ selected(option[id]) } value={ optionid }>{ name }</option>
+                        <option key={ `option-${name}` } selected={ selected ? selected(option[id]) : null } value={ optionid }>{ name }</option>
                     );
                 })
 

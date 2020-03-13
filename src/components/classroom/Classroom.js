@@ -16,19 +16,23 @@ class Classroom extends Component {
         this.showClassroom = this.showClassroom.bind(this);
         this.loadDevices = this.loadDevices.bind(this);
         this.getDevices = this.getDevices.bind(this);
+        this.classroomHandler = this.classroomHandler.bind(this);
+        this.filterHandler = this.filterHandler.bind(this);
         this.state = {
             title: "Klassrum vy",
-            data: [],
-            groups: [],
             myOptions: [],
-            nameTemplate: "name",
-            name: null,
-            image: image,
-            classroom: null,
-            devices: [],
+            buildings: [],
+            classroomTemplate: "name",
+            classroomData: [],
+            classroomGroups: [],
             classroomDevicesTable: {},
             classroomDevicesCount: null,
-            selected: null
+            classroomSelected: null,
+            classroom: {},
+            name: null,
+            image: image,
+            devices: [],
+            filters: []
         };
     }
 
@@ -36,14 +40,36 @@ class Classroom extends Component {
         let state = this.props.restore("classroomState");
 
         if (state) {
-            this.setState(state);
+            this.setState(state, () => {
+                if (this.state.classroom.hasOwnProperty("id")) {
+                    // Reload classrooms and devices
+                    this.loadClassrooms();
+                    this.loadDevices(this.state.classroom.id);
+                }
+            });
         }
-
+        // Load buildings
+        this.buildings();
+        // Load classrooms
         this.loadClassrooms();
     }
 
     componentWillUnmount() {
         this.props.save("classroomState", this.state);
+    }
+
+    buildings() {
+        let res = db.fetchAll("building");
+        let that = this;
+
+        res.then(function(data) {
+            let filters = that.state.filters;
+
+            that.setState({
+                buildings: data
+            });
+        });
+
     }
 
     loadClassrooms() {
@@ -54,21 +80,28 @@ class Classroom extends Component {
         };
 
         res.then(function(data) {
-            let formData = form.group(data, "location", "id", that.state.nameTemplate, selected);
+            let organize = form.organize(data, "location", "id", that.state.filters);
+            let classroomData = organize.data;
+            let classroomGroups = organize.groups;
+
+            let selected = function(id) {
+                return that.state.classroomSelected == id ? "selected" : null;
+            };
+            let template = that.state.classroomTemplate;
+
+            let formGroups = form.group(classroomGroups, "id", template, selected);
 
             that.setState({
-                data: formData.data,
-                groups: formData.groups
+                classroomData: classroomData,
+                classroomGroups: formGroups
             });
         });
     }
 
-    showClassroom(e) {
-        let id = e.target.value;
-
+    showClassroom(id) {
         try {
-            let res = this.state.data[id];
-            let name = form.optionName(res, this.state.nameTemplate);
+            let res = this.state.classroomData[id];
+            let name = form.optionName(res, this.state.classroomTemplate);
 
             try {
                 this.setState({
@@ -129,6 +162,31 @@ class Classroom extends Component {
         });
     }
 
+    classroomHandler(e) {
+        let id = e.target.value;
+
+        this.setState({
+            classroomSelected: id
+        }, () => this.showClassroom(id));
+    }
+
+    filterHandler(e) {
+        let filter = e.target.value;
+        let filters = this.state.filters;
+
+        if (!filters.includes(filter)) {
+            this.state.filters.push(filter);
+        } else {
+            let updatedFilters = filters.filter(item => item != filter);
+
+            this.setState({
+                filters: updatedFilters
+            });
+        }
+
+        this.loadClassrooms();
+    }
+
     render() {
         return (
             <main>
@@ -142,12 +200,23 @@ class Classroom extends Component {
                         <div className="classroom-control">
                             <form action="/profile" className="form" onSubmit={this.registerSubmit}>
                                 <h2 className="center margin">Välj Klassrum</h2>
-                                <select className="form-input" type="text" name="classroom" required onChange={ this.showClassroom }>
+                                <div className="filters">
+                                    { this.state.buildings.map((house) => {
+                                        return [
+                                            <button
+                                                className={ this.state.filters.includes(house.name) ? "toggle-button on" : "toggle-button" }
+                                                type="button"
+                                                value={ house.name }
+                                                onClick={ this.filterHandler }>{ house.name }</button>
+                                        ];
+                                    }) }
+                                </div>
+                                <select className="form-input" type="text" name="classroom" required onChange={ this.classroomHandler }>
                                     <option disabled selected={!this.state.delected ? "selected" : null}>Klicka för att välja</option>
                                     <optgroup label="Mina klassrum">
                                         { this.state.myClassrooms }
                                     </optgroup>
-                                    { this.state.groups }
+                                    { this.state.classroomGroups }
                                 </select>
                             </form>
                         </div>

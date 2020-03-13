@@ -1,28 +1,35 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import DatePicker from '../../datepicker/DatePicker.js';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
 import '../Admin.css';
 
 class DeviceCreate extends Component {
-    static propTypes = {
-        history: PropTypes.object.isRequired
-    };
-
     constructor(props) {
         super(props);
         this.createDevice = this.createDevice.bind(this);
+        this.inputHandler = this.inputHandler.bind(this);
+        this.changeDate = this.changeDate.bind(this);
         this.state = {
             title: "Ny Apparat",
-            categories: []
+            categories: [],
+            warranty: 24,
+            purchased: "",
+            expires: "",
+            showing: null
         };
     }
 
     componentDidMount() {
-        this.categories();
+        let period = utils.dateAddMonths(this.state.warranty);
+
+        this.setState({
+            purchased: period.start,
+            expires: period.end
+        }, () => this.categories())
     }
 
     categories() {
@@ -47,7 +54,10 @@ class DeviceCreate extends Component {
             serialnum: data.get("serialnum"),
             url: data.get("url"),
             message: data.get("message"),
-            price: data.get("price")
+            price: data.get("price"),
+            purchased: data.get("purchased"),
+            warranty: data.get("warranty"),
+            expires: data.get("expires")
         };
 
         let res = db.insert("device", device);
@@ -55,7 +65,39 @@ class DeviceCreate extends Component {
         res.then(utils.reload(this, "/"));
     }
 
+    inputHandler(e) {
+        let key = e.target.name;
+        let val = e.target.value;
+
+        if (key === "warranty") {
+            val = parseInt(val);
+
+            let period = utils.dateAddMonths(val, new Date(this.state.purchased));
+
+            this.setState({
+                warranty: val,
+                expires: period.end
+            });
+        } else {
+            this.setState({
+                [key]: val
+            });
+        }
+    }
+
+    changeDate(date) {
+        let warranty = parseInt(this.state.warranty);
+        let period = utils.dateAddMonths(warranty, new Date(date));
+
+        this.setState({
+            purchased: period.start,
+            expires: period.end,
+            showing: null
+        });
+    }
+
     render() {
+        const { showing } = this.state;
         return (
             <div className="form-wrapper">
                 <h2 class="center">{ this.state.title }</h2>
@@ -87,6 +129,31 @@ class DeviceCreate extends Component {
 
                     <label className="form-label">Pris
                         <input className="form-input" type="text" name="price" placeholder="990,90"/>
+                    </label>
+
+                    <label className="form-label">Köpt
+                        <input
+                            className="form-input"
+                            type="date"
+                            name="purchased"
+                            placeholder="1/1/2020"
+                            value={ this.state.purchased }
+                            onClick={() => this.setState({ showing: !showing })}
+                            readOnly
+                        />
+                    </label>
+
+                    { showing
+                        ? <DatePicker changeDate={ this.changeDate } />
+                        : null
+                    }
+
+                    <label className="form-label">Garanti (Månader)
+                        <input className="form-input" type="number" name="warranty" placeholder="24" value={ this.state.warranty } onChange={ this.inputHandler } />
+                    </label>
+
+                    <label className="form-label">Garanti giltid till
+                        <input className="form-input" type="date" name="expires" placeholder="1/1/2025" readonly value={ this.state.expires } />
                     </label>
 
                     <label className="form-label">Länk URL

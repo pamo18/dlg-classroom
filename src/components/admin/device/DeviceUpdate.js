@@ -1,6 +1,7 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
+import DatePicker from '../../datepicker/DatePicker.js';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
@@ -13,12 +14,13 @@ class DeviceUpdate extends Component {
         this.getDevice = this.getDevice.bind(this);
         this.updateDevice = this.updateDevice.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
+        this.changeDate = this.changeDate.bind(this);
         this.state = {
             title: "Uppdatera Apparat",
             categories: [],
-            data: {},
-            groups: [],
-            nameTemplate: "brand,model,(serialnum)",
+            deviceData: {},
+            deviceGroups: [],
+            deviceTemplate: "brand,model,(serialnum)",
             device: null
         };
     }
@@ -45,11 +47,15 @@ class DeviceUpdate extends Component {
         let res = db.fetchAll("device");
 
         res.then(function(data) {
-            let formData = form.group(data, "category", "id", that.state.nameTemplate);
+            let organize = form.organize(data, "category", "id");
+            let deviceData = organize.data;
+            let deviceGroups = organize.groups;
+            let template = that.state.deviceTemplate;
+            let formGroups = form.group(deviceGroups, "id", template);
 
             that.setState({
-                data: formData.data,
-                groups: formData.groups
+                deviceData: deviceData,
+                deviceGroups: formGroups
             });
         });
     }
@@ -59,7 +65,7 @@ class DeviceUpdate extends Component {
         let id = e.target.value;
 
         try {
-            let res = this.state.data[id];
+            let res = this.state.deviceData[id];
             let purchased = new Date(res.purchased).toISOString().substring(0, 10);
             let expires = new Date(res.expires).toISOString().substring(0, 10);
 
@@ -110,13 +116,17 @@ class DeviceUpdate extends Component {
     inputHandler(e) {
         let key = e.target.name;
         let device = this.state.device;
-        device[key] = e.target.value;
+        let val = e.target.value;
 
         if (key === "warranty") {
-            let purchased = new Date(device.purchased);
+            val = parseInt(val);
 
-            purchased.setMonth(purchased.getMonth() + e.target.value);
-            device.expires = purchased.toISOString().substring(0, 10);
+            let period = utils.dateAddMonths(val, new Date(device.purchased));
+
+            device.warranty = val;
+            device.expires = period.end;
+        } else {
+            device[key] = e.target.value;
         }
 
         this.setState({
@@ -124,14 +134,29 @@ class DeviceUpdate extends Component {
         });
     }
 
+    changeDate(date) {
+        let device = this.state.device;
+        let warranty = parseInt(device.warranty);
+        let period = utils.dateAddMonths(warranty, new Date(date));
+
+        device.purchased = period.start;
+        device.expires = period.end;
+
+        this.setState({
+            device: device,
+            showing: null
+        });
+    }
+
     render() {
+        const { showing } = this.state;
         return (
             <div className="form-wrapper">
                 <h2 className="center">Välj apparat att uppdatera</h2>
                 <form action="/update" className="form-register" onSubmit={this.updateDevice}>
                     <select className="form-input" type="text" name="fullname" required onChange={ this.getDevice }>
                         <option disabled selected>Klicka för att välja</option>
-                            { this.state.groups }
+                            { this.state.deviceGroups }
                     </select>
                     { this.state.device ?
                         <div>
@@ -169,15 +194,28 @@ class DeviceUpdate extends Component {
                             </label>
 
                             <label className="form-label">Köpt
-                                <input className="form-input" type="text" name="purchased" placeholder="1/1/2020" value={ this.state.device.purchased } onChange={ this.inputHandler } />
+                                <input
+                                    className="form-input"
+                                    type="date"
+                                    name="purchased"
+                                    placeholder="1/1/2020"
+                                    value={ this.state.device.purchased }
+                                    onClick={() => this.setState({ showing: !showing })}
+                                    readonly
+                                />
                             </label>
 
+                            { showing
+                                ? <DatePicker changeDate={ this.changeDate } />
+                                : null
+                            }
+
                             <label className="form-label">Garanti (Månader)
-                                <input className="form-input" type="text" name="warranty" placeholder="24" value={ this.state.device.warranty } onChange={ this.inputHandler } />
+                                <input className="form-input" type="number" name="warranty" placeholder="24" value={ this.state.device.warranty } onChange={ this.inputHandler } />
                             </label>
 
                             <label className="form-label">Garanti giltid till
-                                <input className="form-input" type="text" name="expires" placeholder="1/1/2025" readonly value={ this.state.device.expires } />
+                                <input className="form-input" type="date" name="expires" placeholder="1/1/2025" readonly value={ this.state.device.expires } />
                             </label>
 
                             <label className="form-label">Länk URL

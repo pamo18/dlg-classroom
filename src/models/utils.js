@@ -1,4 +1,17 @@
 const utils = {
+    dateAddMonths: function(months, start = new Date()) {
+        let end = new Date(start);
+
+
+        end.setMonth(end.getMonth() + months);
+
+        console.log(months);
+
+        return {
+            start: utils.getDateAsString(start),
+            end: utils.getDateAsString(end)
+        }
+    },
     reload: function(that, url) {
         that.props.history.push(url);
         window.location.reload(false);
@@ -66,10 +79,18 @@ const utils = {
     getDateAsString: function(date) {
         let y = date.getFullYear(),
             m = date.getMonth() + 1,
-            d = date.getDate(),
-            dateAsString = d + "/" + m + "/" + y;
+            d = date.getDate();
 
-        return dateAsString;
+        if (m < 10) {
+            m = `0${m}`;
+        }
+
+        if (d < 10) {
+            d = `0${d}`;
+        }
+
+        return `${y}-${m}-${d}`;
+        // return date.toISOString().substring(0, 10);
     },
     getMonthNames: function() {
         const months = {
