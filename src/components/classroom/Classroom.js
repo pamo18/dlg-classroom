@@ -6,9 +6,9 @@ import db from '../../models/db.js';
 import utils from '../../models/utils.js';
 import form from '../../models/form.js';
 import table from '../../models/table.js';
+import image from '../../models/image.js';
 import icon from '../../models/icon.js';
 import './Classroom.css';
-import image from "../../assets/classroom/default.jpg";
 
 class Classroom extends Component {
     constructor(props) {
@@ -28,9 +28,10 @@ class Classroom extends Component {
             classroomDevicesTable: {},
             classroomDevicesCount: null,
             classroomSelected: null,
-            classroom: {},
+            classroom: {
+                image: ""
+            },
             name: null,
-            image: image,
             devices: [],
             filters: []
         };
@@ -232,7 +233,7 @@ class Classroom extends Component {
                                     }
                                 </h2>
                                 <div className="classroom-image">
-                                    <img src={ this.state.image } alt="Classroom image"/>
+                                    <img src={ image.get(this.state.classroom.image) } alt="Classroom image"/>
                                 </div>
                             </div>
 
