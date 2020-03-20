@@ -12,8 +12,30 @@
     margin-bottom: 1rem;
 }
 
+.admin-control .category-view {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.category-view figure {
+    margin: 1rem;
+}
+
 .delete-icon:hover {
     color: red;
+}
+
+.control-icon .icon {
+    width: 100px;
+    height: 100px;
+}
+
+.control-icon i {
+    margin-left: 2px;
+    margin-right: 2px;
 }
 
 .type-control-bar {

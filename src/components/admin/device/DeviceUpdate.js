@@ -16,7 +16,7 @@ class DeviceUpdate extends Component {
         this.inputHandler = this.inputHandler.bind(this);
         this.changeDate = this.changeDate.bind(this);
         this.state = {
-            title: "Uppdatera Apparat",
+            title: "Uppdatera Utrustning",
             categories: [],
             deviceData: {},
             deviceGroups: [],

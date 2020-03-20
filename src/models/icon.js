@@ -4,10 +4,16 @@ import TheatersIcon from '@material-ui/icons/Theaters';
 import TvIcon from '@material-ui/icons/Tv';
 import SpeakerIcon from '@material-ui/icons/Speaker';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import DeleteIcon from "@material-ui/icons/DeleteForever";
+import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import EditIcon from '@material-ui/icons/Edit';
+import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle';
 
+import classroom from '../assets/img/icons/classroom.png';
+import device from '../assets/img/icons/device.png';
+import classroomDevice from '../assets/img/icons/classroom-device.png'
 // Icon helper
 const icon = {
     cat: {
@@ -26,14 +32,32 @@ const icon = {
         "View": [
             <VisibilityIcon fontSize="large" />
         ],
-        "Delete": [
-            <DeleteIcon fontSize="large" />
-        ],
         "Up": [
             <ArrowUpwardIcon fontSize="large" />
         ],
         "Down": [
             <ArrowDownwardIcon fontSize="large" />
+        ],
+        "Add": [
+            <AddBoxIcon fontSize="large" />
+        ],
+        "Edit": [
+            <EditIcon fontSize="large" />
+        ],
+        "Delete": [
+            <DeleteIcon fontSize="large" />
+        ],
+        "Swap": [
+            <SwapVerticalCircleIcon fontSize="large" />
+        ],
+        "Classroom": [
+            <img src={ classroom } className="icon" />
+        ],
+        "Device": [
+            <img src={ device } className="icon" />
+        ],
+        "classroomDevice": [
+            <img src={ classroomDevice } className="icon" />
         ]
     },
     get: function(name, callback = null) {
@@ -42,7 +66,7 @@ const icon = {
 
         if (callback) {
             element = [
-                <i className="clickable" onClick={ callback } >
+                <i key={`icon-${name}`} className="clickable" onClick={ callback } >
                     { icon }
                 </i>
             ]

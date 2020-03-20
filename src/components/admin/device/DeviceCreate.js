@@ -14,7 +14,7 @@ class DeviceCreate extends Component {
         this.inputHandler = this.inputHandler.bind(this);
         this.changeDate = this.changeDate.bind(this);
         this.state = {
-            title: "Ny Apparat",
+            title: "Ny Utrustning",
             categories: [],
             warranty: 24,
             purchased: "",

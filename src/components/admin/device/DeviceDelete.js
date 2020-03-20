@@ -13,7 +13,7 @@ class DeviceDelete extends Component {
         this.getDevice = this.getDevice.bind(this);
         this.deleteDevice = this.deleteDevice.bind(this);
         this.state = {
-            title: "Radera Apparat",
+            title: "Radera Utrustning",
             deviceData: {},
             deviceGroups: [],
             deviceTemplate: "brand,model,(serialnum)",

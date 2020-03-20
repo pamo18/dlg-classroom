@@ -5,6 +5,7 @@ import  { withRouter } from 'react-router-dom';
 // import auth from '../../models/auth.js';
 import utils from '../../models/utils.js';
 import db from '../../models/db.js';
+import icon from '../../models/icon.js';
 import './Admin.css';
 import image from "../../assets/classroom/default.jpg";
 import ClassroomCreate from './classroom/ClassroomCreate.js';
@@ -14,27 +15,27 @@ import DeviceCreate from './device/DeviceCreate.js';
 import DeviceUpdate from './device/DeviceUpdate.js';
 import DeviceDelete from './device/DeviceDelete.js';
 import ClassroomManager from './classroom/manager/ClassroomManager.js';
+import AddDevices from './classroom/manager/AddDevices.js';
+import SwapDevices from './classroom/manager/SwapDevices.js';
+import Devices from './device/view/Devices.js';
 
 class Admin extends Component {
     constructor(props) {
         super(props);
-        this.changeType = this.changeType.bind(this);
-        this.changeAdmin = this.changeAdmin.bind(this);
-        this.changeManager = this.changeManager.bind(this);
-        this.getForm = this.getForm.bind(this);
-        this.getManager = this.getManager.bind(this);
+        this.getControls = this.getControls.bind(this);
+        this.change = this.change.bind(this);
+        this.classroomView = this.classroomView.bind(this);
+        this.deviceView = this.deviceView.bind(this);
+        this.classroomDeviceView = this.classroomDeviceView.bind(this);
         this.state = {
             title: "Admin",
             image: image,
-            type: "",
-            admin: "",
-            manager: "",
             view: null,
-            data: [],
-            current: {},
-            devices: [],
-            allOptions: [],
-            myOptions: []
+            control: {
+                classroom: [],
+                device: [],
+                classroomDevice: []
+            }
         };
     }
 
@@ -44,70 +45,149 @@ class Admin extends Component {
         if (state) {
             this.setState(state);
         }
+
+        this.getControls();
     }
 
     componentWillUnmount() {
         this.props.save("adminState", this.state);
     }
 
-    changeType(e) {
-        let type = e.target.value;
-        let admin = this.state.admin;
-        let formView = this.getForm(type, admin);
-
+    async getControls() {
         this.setState({
-            manager: "",
-            view: formView,
-            type: type
-        });
+            control: {
+                classroom: this.classroomControl(),
+                device: this.deviceControl(),
+                classroomDevice: this.classroomDeviceControl()
+            }
+        })
     }
 
-    changeAdmin(e) {
-        let type = this.state.type;
-        let admin = e.target.value;
-        let formView = this.getForm(type, admin);
+    classroomControl() {
+        let view = () => this.classroomView("view");
+        let add = () => this.classroomView("add");
+        let edit = () => this.classroomView("edit");
+        let del = () => this.classroomView("delete");
 
-        this.setState({
-            manager: "",
-            view: formView,
-            admin: admin
-        });
+        let classroom = [
+            <figure className="control-icon center">
+                { icon.get("Classroom") }
+                <figcaption>
+                    <div>
+                        { icon.get("View", view) }
+                        { icon.get("Add", add) }
+                        { icon.get("Edit", edit) }
+                        { icon.get("Delete", del) }
+                    </div>
+
+                </figcaption>
+            </figure>
+        ];
+
+        return classroom;
     }
 
-    changeManager(e) {
-        let manager = e.target.value;
-        let managerView = this.getManager(manager);
+    classroomView(admin) {
+        let view;
 
-        this.setState({
-            manager: manager,
-            view: managerView,
-            type: "",
-            admin: ""
-        });
-    }
-
-    getForm(type, admin) {
         switch(true) {
-            case (admin == "classroom" && type === "create"):
-                return <ClassroomCreate />;
-            case (admin == "classroom" && type === "update"):
-                return <ClassroomUpdate />;
-            case (admin == "classroom" && type === "delete"):
-                return <ClassroomDelete />;
-            case (admin == "device" && type === "create"):
-                return <DeviceCreate />;
-            case (admin == "device" && type === "update"):
-                return <DeviceUpdate />;
-            case (admin == "device" && type === "delete"):
-                return <DeviceDelete />;
+            case (admin === "add"):
+                view = <ClassroomCreate />;
+                break;
+            case (admin === "edit"):
+                view = <ClassroomUpdate />;
+                break;
+            case (admin === "delete"):
+                view = <ClassroomDelete />;
+                break;
         }
+
+        this.change(view);
     }
 
-    getManager(manager) {
+    deviceControl() {
+        let view = () => this.deviceView("view");
+        let add = () => this.deviceView("add");
+        let edit = () => this.deviceView("edit");
+        let del = () => this.deviceView("delete");
+
+        let device = [
+            <figure className="control-icon center">
+                { icon.get("Device") }
+                <figcaption>
+                    <div>
+                        { icon.get("View", view) }
+                        { icon.get("Add", add) }
+                        { icon.get("Edit", edit) }
+                        { icon.get("Delete", del) }
+                    </div>
+
+                </figcaption>
+            </figure>
+        ];
+
+        return device;
+    }
+
+    deviceView(admin) {
+        let view;
+
         switch(true) {
-            case (manager == "classroomManager"):
-                return <ClassroomManager save={this.props.save} restore={this.props.restore} />;
+            case (admin === "view"):
+                view = <Devices />;
+                break;
+            case (admin === "add"):
+                view = <DeviceCreate />;
+                break;
+            case (admin === "edit"):
+                view = <DeviceUpdate />;
+                break;
+            case (admin === "delete"):
+                view = <DeviceDelete />;
+                break;
         }
+
+        this.change(view);
+    }
+
+    classroomDeviceControl() {
+        let add = () => this.classroomDeviceView("add");
+        let swap = () => this.classroomDeviceView("swap");
+
+        let classroomDevice = [
+            <figure className="control-icon center">
+                { icon.get("classroomDevice") }
+                <figcaption>
+                    <div>
+                        { icon.get("Add", add) }
+                        { icon.get("Swap", swap) }
+                    </div>
+                </figcaption>
+            </figure>
+        ];
+
+        return classroomDevice;
+    }
+
+    classroomDeviceView(admin) {
+        let view;
+
+        switch(true) {
+            case (admin === "add"):
+                view = <AddDevices save={this.props.save} restore={this.props.restore} />;
+                break;
+            case (admin === "swap"):
+                view = <SwapDevices save={this.props.save} restore={this.props.restore} />;
+                break;
+        }
+
+        this.change(view);
+    }
+
+    change(view) {
+        this.setState({
+            view: view
+        });
     }
 
     render() {
@@ -119,22 +199,19 @@ class Admin extends Component {
                 <article>
                     <div className="left-column">
                         <div className="admin-control">
-                            <h2 className="center">Admin</h2>
+                            <h2 className="center">Klassrum</h2>
                             <div className="admin-control">
-                                <button className={this.state.type === "create" ? "toggle-button on" : "toggle-button"} type="button" value="create" onClick={ this.changeType }>Ny</button>
-                                <button className={this.state.type === "update" ? "toggle-button on" : "toggle-button"} type="button" value="update" onClick={ this.changeType }>Redigera</button>
-                                <button className={this.state.type === "delete" ? "toggle-button on" : "toggle-button"} type="button" value="delete" onClick={ this.changeType }>Radera</button>
+                                { this.state.control.classroom }
                             </div>
 
-                            <h2 className="center">Område</h2>
+                            <h2 className="center">Utrustning</h2>
                             <div className="admin-control">
-                                <button className={this.state.admin === "classroom" ? "toggle-button on" : "toggle-button"} type="button" value="classroom" onClick={ this.changeAdmin }>Klassrum</button>
-                                <button className={this.state.admin === "device" ? "toggle-button on" : "toggle-button"} type="button" value="device" onClick={ this.changeAdmin }>Apparat</button>
+                                { this.state.control.device }
                             </div>
 
-                            <h2 className="center">Hantera</h2>
+                            <h2 className="center">Koppla</h2>
                             <div className="admin-control">
-                                <button className={this.state.manager === "classroomManager" ? "toggle-button on" : "toggle-button"} type="button" value="classroomManager" onClick={ this.changeManager }>Klassrum</button>
+                                { this.state.control.classroomDevice }
                             </div>
                         </div>
                     </div>
