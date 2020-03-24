@@ -10,6 +10,8 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import EditIcon from '@material-ui/icons/Edit';
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle';
+import HomeWorkIcon from '@material-ui/icons/HomeWork';
+import SelectAllIcon from '@material-ui/icons/SelectAll';
 
 import classroom from '../assets/img/icons/classroom.png';
 import device from '../assets/img/icons/device.png';
@@ -50,6 +52,12 @@ const icon = {
         "Swap": [
             <SwapVerticalCircleIcon fontSize="large" />
         ],
+        "Building": [
+            <HomeWorkIcon fontSize="large" />
+        ],
+        "All": [
+            <SelectAllIcon fontSize="large" />
+        ],
         "Classroom": [
             <img src={ classroom } className="icon" />
         ],
@@ -60,14 +68,24 @@ const icon = {
             <img src={ classroomDevice } className="icon" />
         ]
     },
-    get: function(name, callback = null) {
-        let icon = this.cat[name];
+    get: function(name, callback = null, selected = null) {
+        let icon;
         let element;
+
+        if (name.includes("hus") || name === "Norra" || name === "Östra") {
+            icon = this.cat["Building"];
+        } else {
+            icon = this.cat[name];
+        }
 
         if (callback) {
             element = [
-                <i key={`icon-${name}`} className="clickable" onClick={ callback } >
-                    { icon }
+                <i
+                    key={`icon-${name}`}
+                    className={selected ? "selected" : "clickable" }
+                    onClick={ callback }
+                >
+                { icon }
                 </i>
             ]
         } else {

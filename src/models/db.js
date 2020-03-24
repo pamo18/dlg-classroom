@@ -12,18 +12,18 @@ const db = {
             console.error(err);
         }
     },
-    fetchAllWhere: async function(table, where) {
+    fetchAllWhere: async function(table, column, value) {
         try {
-            let res = await fetch(`${api}/${table}/view/${where}`);
+            let res = await fetch(`${api}/${table}/view/${column}&${value}`);
 
             return await res.json();
         } catch(err) {
             console.error(err);
         }
     },
-    fetchWhere: async function(table, where) {
+    fetchWhere: async function(table, column, value) {
         try {
-            let res = await fetch(`${api}/${table}/view/${where}`);
+            let res = await fetch(`${api}/${table}/view/${column}&${value}`);
 
             let data = await res.json();
             return data[0];

@@ -132,7 +132,7 @@ class Classroom extends Component {
 
     loadDevices(id) {
         let that = this;
-        let res = db.fetchAllWhere("classroom/device", id);
+        let res = db.fetchAllWhere("classroom/device", "classroom_id", id);
 
         res.then(function(data) {
             that.setState({

@@ -8,25 +8,24 @@ import db from '../../models/db.js';
 import icon from '../../models/icon.js';
 import './Admin.css';
 import image from "../../assets/classroom/default.jpg";
+import ClassroomView from './classroom/ClassroomView.js';
 import ClassroomCreate from './classroom/ClassroomCreate.js';
 import ClassroomUpdate from './classroom/ClassroomUpdate.js';
 import ClassroomDelete from './classroom/ClassroomDelete.js';
+import DeviceView from './device/DeviceView.js';
 import DeviceCreate from './device/DeviceCreate.js';
 import DeviceUpdate from './device/DeviceUpdate.js';
 import DeviceDelete from './device/DeviceDelete.js';
-import ClassroomManager from './classroom/manager/ClassroomManager.js';
-import AddDevices from './classroom/manager/AddDevices.js';
-import SwapDevices from './classroom/manager/SwapDevices.js';
-import Devices from './device/view/Devices.js';
+import AddDevices from './classroom/devices/AddDevices.js';
+import SwapDevices from './classroom/devices/SwapDevices.js';
 
 class Admin extends Component {
     constructor(props) {
         super(props);
-        this.getControls = this.getControls.bind(this);
-        this.change = this.change.bind(this);
         this.classroomView = this.classroomView.bind(this);
         this.deviceView = this.deviceView.bind(this);
         this.classroomDeviceView = this.classroomDeviceView.bind(this);
+        this.change = this.change.bind(this);
         this.state = {
             title: "Admin",
             image: image,
@@ -35,7 +34,8 @@ class Admin extends Component {
                 classroom: [],
                 device: [],
                 classroomDevice: []
-            }
+            },
+            selected: ""
         };
     }
 
@@ -45,22 +45,10 @@ class Admin extends Component {
         if (state) {
             this.setState(state);
         }
-
-        this.getControls();
     }
 
     componentWillUnmount() {
         this.props.save("adminState", this.state);
-    }
-
-    async getControls() {
-        this.setState({
-            control: {
-                classroom: this.classroomControl(),
-                device: this.deviceControl(),
-                classroomDevice: this.classroomDeviceControl()
-            }
-        })
     }
 
     classroomControl() {
@@ -68,16 +56,17 @@ class Admin extends Component {
         let add = () => this.classroomView("add");
         let edit = () => this.classroomView("edit");
         let del = () => this.classroomView("delete");
+        let selected = this.state.selected;
 
         let classroom = [
             <figure className="control-icon center">
                 { icon.get("Classroom") }
                 <figcaption>
                     <div>
-                        { icon.get("View", view) }
-                        { icon.get("Add", add) }
-                        { icon.get("Edit", edit) }
-                        { icon.get("Delete", del) }
+                        { icon.get("View", view, selected === "classroom-view") }
+                        { icon.get("Add", add, selected === "classroom-add") }
+                        { icon.get("Edit", edit, selected === "classroom-edit") }
+                        { icon.get("Delete", del, selected === "classroom-delete") }
                     </div>
 
                 </figcaption>
@@ -91,6 +80,9 @@ class Admin extends Component {
         let view;
 
         switch(true) {
+            case (admin === "view"):
+                view = <ClassroomView />;
+                break;
             case (admin === "add"):
                 view = <ClassroomCreate />;
                 break;
@@ -102,7 +94,7 @@ class Admin extends Component {
                 break;
         }
 
-        this.change(view);
+        this.change(view, `classroom-${admin}`);
     }
 
     deviceControl() {
@@ -110,16 +102,17 @@ class Admin extends Component {
         let add = () => this.deviceView("add");
         let edit = () => this.deviceView("edit");
         let del = () => this.deviceView("delete");
+        let selected = this.state.selected;
 
         let device = [
             <figure className="control-icon center">
                 { icon.get("Device") }
                 <figcaption>
                     <div>
-                        { icon.get("View", view) }
-                        { icon.get("Add", add) }
-                        { icon.get("Edit", edit) }
-                        { icon.get("Delete", del) }
+                        { icon.get("View", view, selected === "device-view") }
+                        { icon.get("Add", add, selected === "device-add") }
+                        { icon.get("Edit", edit, selected === "device-edit") }
+                        { icon.get("Delete", del, selected === "device-delete") }
                     </div>
 
                 </figcaption>
@@ -134,7 +127,7 @@ class Admin extends Component {
 
         switch(true) {
             case (admin === "view"):
-                view = <Devices />;
+                view = <DeviceView />;
                 break;
             case (admin === "add"):
                 view = <DeviceCreate />;
@@ -147,20 +140,21 @@ class Admin extends Component {
                 break;
         }
 
-        this.change(view);
+        this.change(view, `device-${admin}`);
     }
 
     classroomDeviceControl() {
         let add = () => this.classroomDeviceView("add");
         let swap = () => this.classroomDeviceView("swap");
+        let selected = this.state.selected;
 
         let classroomDevice = [
             <figure className="control-icon center">
                 { icon.get("classroomDevice") }
                 <figcaption>
                     <div>
-                        { icon.get("Add", add) }
-                        { icon.get("Swap", swap) }
+                        { icon.get("Add", add, selected === "classroom-device-add") }
+                        { icon.get("Swap", swap, selected === "classroom-device-swap") }
                     </div>
                 </figcaption>
             </figure>
@@ -181,12 +175,13 @@ class Admin extends Component {
                 break;
         }
 
-        this.change(view);
+        this.change(view, `classroom-device-${admin}`);
     }
 
-    change(view) {
+    change(view, selected = "") {
         this.setState({
-            view: view
+            view: view,
+            selected: selected
         });
     }
 
@@ -198,20 +193,20 @@ class Admin extends Component {
                 </div>
                 <article>
                     <div className="left-column">
-                        <div className="admin-control">
-                            <h2 className="center">Klassrum</h2>
+                        <div className="admin-panel">
                             <div className="admin-control">
-                                { this.state.control.classroom }
+                                <h2 className="center">Klassrum</h2>
+                                { this.classroomControl() }
                             </div>
 
-                            <h2 className="center">Utrustning</h2>
                             <div className="admin-control">
-                                { this.state.control.device }
+                                <h2 className="center">Utrustning</h2>
+                                { this.deviceControl() }
                             </div>
 
-                            <h2 className="center">Koppla</h2>
                             <div className="admin-control">
-                                { this.state.control.classroomDevice }
+                                <h2 className="center">Koppla</h2>
+                                { this.classroomDeviceControl() }
                             </div>
                         </div>
                     </div>

@@ -73,8 +73,8 @@ class App extends Component {
                     <div className="page-wrapper">
                         <Switch>
                             <Route exact path="/" render={() => <Classroom save={this.saveState} restore={this.restoreState} />} />
-                            <Route exact path="/admin" render={() => <Admin save={this.saveState} restore={this.restoreState} />} />
                             <Route exact path="/device" component={Device} />
+                            <Route exact path="/admin" render={() => <Admin save={this.saveState} restore={this.restoreState} />} />
                             <Route exact path="/about" component={About} />
                         </Switch>
                     </div>

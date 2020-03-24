@@ -13,7 +13,7 @@ class Device extends Component {
         super(props);
         this.state = {
             title: "Utrustning vy",
-            id: null,
+            id: "",
             device: {}
         };
     }
@@ -28,7 +28,7 @@ class Device extends Component {
 
     loadDevice() {
         let that = this;
-        let res = db.fetchWhere("device", this.state.id);
+        let res = db.fetchWhere("device", "id", this.state.id);
 
         res.then(function(data) {
             that.setState({

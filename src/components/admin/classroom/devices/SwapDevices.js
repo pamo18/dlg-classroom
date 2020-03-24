@@ -135,7 +135,7 @@ class SwapDevices extends Component {
 
     // Get classroom - Step 2 - Get classroom devices
     loadClassroomDevices(id, classroom) {
-        let res = db.fetchAllWhere("classroom/device", id);
+        let res = db.fetchAllWhere("classroom/device", "classroom_id", id);
 
         res.then((data) => {
             this.setState({
