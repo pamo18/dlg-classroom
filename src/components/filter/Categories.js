@@ -12,21 +12,33 @@ class Categories extends Component {
         this.categories = this.categories.bind(this);
         this.filter = this.filter.bind(this);
         this.state = {
-            title: "Filter",
+            title: "Kategorier",
             data: [],
-            filterCb: "",
-            url: "",
-            name: "",
-            selected: "all"
+            filterCb: this.props.filterCb,
+            url: this.props.url,
+            name: this.props.name,
+            filter: "Alla"
         };
     }
 
     componentDidMount() {
-        this.setState({
-            filterCb: this.props.filterCb,
-            url: this.props.url,
-            name: this.props.name
-        }, () => this.categories());
+        let sourceState = this.props.sourceState;
+        let state = this.props.restore(`${sourceState}Category`);
+
+        if (state) {
+            this.setState({
+                data: state.data,
+                filter: state.filter
+            });
+        } else {
+            this.categories();
+        }
+    }
+
+    componentWillUnmount() {
+        let sourceState = this.props.sourceState;
+
+        this.props.save(`${sourceState}Category`, this.state);
     }
 
     categories() {
@@ -43,46 +55,30 @@ class Categories extends Component {
         this.state.filterCb(category);
 
         this.setState({
-            selected: category
+            filter: category
         });
     }
 
     render() {
+        let filter = this.state.filter;
         return (
-            <div className="page-wrapper">
+            <figure className="admin-group">
                 <h2 className="center">{ this.state.title }</h2>
-                <div className="admin-control category-view">
-                    <figure
-                        className={ this.state.selected === "all" ? "selected" : "clickable" }
-                        onClick={() => this.filter("all") }
-                    >
-                        { icon.get("All") }
-                        <figcaption>
-                            Alla
-                        </figcaption>
-                    </figure>
-                    {
-                        this.state.data.map((cat) => {
-                            let category = cat[this.state.name];
-                            let key = `filter-category-${category}`;
-                            let selected = this.state.selected;
+                <figcaption>
+                    <div className="control-icon">
+                        { icon.getFigure("Alla", () => { this.filter("Alla") }, filter === "Alla") }
 
-                            return [
-                                <figure
-                                    key={ key }
-                                    className={ category === selected ? "selected" : "clickable" }
-                                    onClick={() => this.filter(category) }
-                                >
-                                    { icon.get(category) }
-                                    <figcaption>
-                                        { category }
-                                    </figcaption>
-                                </figure>
-                            ]
-                        })
-                    }
-                </div>
-            </div>
+                        {
+                            this.state.data.map((cat) => {
+                                let category = cat[this.state.name];
+                                let key = `filter-category-${category}`;
+
+                                return icon.getFigure(category, () => { this.filter(category) }, filter === category)
+                            })
+                        }
+                    </div>
+                </figcaption>
+            </figure>
         );
     }
 }

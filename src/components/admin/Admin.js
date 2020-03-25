@@ -30,11 +30,6 @@ class Admin extends Component {
             title: "Admin",
             image: image,
             view: null,
-            control: {
-                classroom: [],
-                device: [],
-                classroomDevice: []
-            },
             selected: ""
         };
     }
@@ -51,37 +46,12 @@ class Admin extends Component {
         this.props.save("adminState", this.state);
     }
 
-    classroomControl() {
-        let view = () => this.classroomView("view");
-        let add = () => this.classroomView("add");
-        let edit = () => this.classroomView("edit");
-        let del = () => this.classroomView("delete");
-        let selected = this.state.selected;
-
-        let classroom = [
-            <figure className="control-icon center">
-                { icon.get("Classroom") }
-                <figcaption>
-                    <div>
-                        { icon.get("View", view, selected === "classroom-view") }
-                        { icon.get("Add", add, selected === "classroom-add") }
-                        { icon.get("Edit", edit, selected === "classroom-edit") }
-                        { icon.get("Delete", del, selected === "classroom-delete") }
-                    </div>
-
-                </figcaption>
-            </figure>
-        ];
-
-        return classroom;
-    }
-
     classroomView(admin) {
         let view;
 
         switch(true) {
             case (admin === "view"):
-                view = <ClassroomView />;
+                view = <ClassroomView save={this.props.save} restore={this.props.restore} />;
                 break;
             case (admin === "add"):
                 view = <ClassroomCreate />;
@@ -97,37 +67,12 @@ class Admin extends Component {
         this.change(view, `classroom-${admin}`);
     }
 
-    deviceControl() {
-        let view = () => this.deviceView("view");
-        let add = () => this.deviceView("add");
-        let edit = () => this.deviceView("edit");
-        let del = () => this.deviceView("delete");
-        let selected = this.state.selected;
-
-        let device = [
-            <figure className="control-icon center">
-                { icon.get("Device") }
-                <figcaption>
-                    <div>
-                        { icon.get("View", view, selected === "device-view") }
-                        { icon.get("Add", add, selected === "device-add") }
-                        { icon.get("Edit", edit, selected === "device-edit") }
-                        { icon.get("Delete", del, selected === "device-delete") }
-                    </div>
-
-                </figcaption>
-            </figure>
-        ];
-
-        return device;
-    }
-
     deviceView(admin) {
         let view;
 
         switch(true) {
             case (admin === "view"):
-                view = <DeviceView />;
+                view = <DeviceView save={this.props.save} restore={this.props.restore} />;
                 break;
             case (admin === "add"):
                 view = <DeviceCreate />;
@@ -141,26 +86,6 @@ class Admin extends Component {
         }
 
         this.change(view, `device-${admin}`);
-    }
-
-    classroomDeviceControl() {
-        let add = () => this.classroomDeviceView("add");
-        let swap = () => this.classroomDeviceView("swap");
-        let selected = this.state.selected;
-
-        let classroomDevice = [
-            <figure className="control-icon center">
-                { icon.get("classroomDevice") }
-                <figcaption>
-                    <div>
-                        { icon.get("Add", add, selected === "classroom-device-add") }
-                        { icon.get("Swap", swap, selected === "classroom-device-swap") }
-                    </div>
-                </figcaption>
-            </figure>
-        ];
-
-        return classroomDevice;
     }
 
     classroomDeviceView(admin) {
@@ -186,6 +111,7 @@ class Admin extends Component {
     }
 
     render() {
+        let selected = this.state.selected;
         return (
             <main>
                 <div className="page-heading">
@@ -195,18 +121,46 @@ class Admin extends Component {
                     <div className="left-column">
                         <div className="admin-panel">
                             <div className="admin-control">
-                                <h2 className="center">Klassrum</h2>
-                                { this.classroomControl() }
+                                <figure className="admin-group">
+                                    <h2 className="center">Klassrum</h2>
+                                    { icon.get("Classroom") }
+                                    <figcaption>
+                                        <div className="control-icon">
+                                            { icon.get("View", () => { this.classroomView("view") }, selected === "classroom-view") }
+                                            { icon.get("Add", () => { this.classroomView("add") }, selected === "classroom-add") }
+                                            { icon.get("Edit", () => { this.classroomView("edit") }, selected === "classroom-edit") }
+                                            { icon.get("Delete", () => { this.classroomView("delete") }, selected === "classroom-delete") }
+                                        </div>
+                                    </figcaption>
+                                </figure>
                             </div>
 
                             <div className="admin-control">
-                                <h2 className="center">Utrustning</h2>
-                                { this.deviceControl() }
+                                <figure className="admin-group">
+                                    <h2 className="center">Utrustning</h2>
+                                    { icon.get("Device") }
+                                    <figcaption>
+                                        <div className="control-icon">
+                                            { icon.get("View", () => { this.deviceView("view") }, selected === "device-view") }
+                                            { icon.get("Add", () => { this.deviceView("add") }, selected === "device-add") }
+                                            { icon.get("Edit", () => { this.deviceView("edit") }, selected === "device-edit") }
+                                            { icon.get("Delete", () => { this.deviceView("delete") }, selected === "device-delete") }
+                                        </div>
+                                    </figcaption>
+                                </figure>
                             </div>
 
                             <div className="admin-control">
-                                <h2 className="center">Koppla</h2>
-                                { this.classroomDeviceControl() }
+                                <figure className="admin-group">
+                                    <h2 className="center">Koppla</h2>
+                                    { icon.get("classroomDevice") }
+                                    <figcaption>
+                                        <div className="control-icon">
+                                            { icon.get("Add", () => { this.classroomDeviceView("add") }, selected === "classroom-device-add") }
+                                            { icon.get("Swap", () => { this.classroomDeviceView("swap") }, selected === "classroom-device-swap") }
+                                        </div>
+                                    </figcaption>
+                                </figure>
                             </div>
                         </div>
                     </div>
@@ -218,7 +172,7 @@ class Admin extends Component {
                                 :
                                 <div>
                                     <h2 className="center margin">DLG</h2>
-                                    <div className="classroom-image">
+                                    <div className="admin-default-image">
                                         <img src={ this.state.image } alt="Classroom image"/>
                                     </div>
                                 </div>

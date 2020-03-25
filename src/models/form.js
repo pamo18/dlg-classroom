@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 
 // Form helper
 const form = {
-    organize: function(data, groupby, id, filters = []) {
+    organize: function(data, groupby, id, filter = null) {
         let res = {};
         let catGroups = {};
 
         data.forEach(function(row) {
-            if (filters.length > 0 && !filters.includes(row.location)) {
+            if (filter && filter != row[groupby]) {
                 return;
             }
 

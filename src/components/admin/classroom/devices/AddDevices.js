@@ -263,7 +263,7 @@ class AddDevice extends Component {
 
     render() {
         return (
-            <div className="manager-wrapper">
+            <div className="page-wrapper">
                 <h2 className="center">{ this.state.title }</h2>
                 <form action="/admin" className="form-register" onSubmit={ this.addDevice }>
                     <input className="form-input" type="hidden" name="classroomid" required value={ this.state.classroom.id } />

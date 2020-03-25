@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Header from '../header/Header.js';
 import Footer from '../footer/Footer.js';
+import Home from '../home/Home.js';
 import About from '../about/About.js';
 import Classroom from '../classroom/Classroom.js';
 import Device from '../device/Device.js';
@@ -15,18 +16,23 @@ class App extends Component {
         this.state = {
             activeUser: "",
             register: "",
-            classroomState: null,
+            homeState: null,
             adminState: null,
-            managerState: null
+            managerState: null,
+            classroomViewState: null,
+            deviceViewState: null,
+            homeStateCategory: null,
+            classroomViewStateCategory: null,
+            deviceViewStateCategory: null
         };
-        this.saveState = function(page, state) {
+        this.saveState = (page, state) => {
             this.setState({
                 [page]: state
             });
-        }.bind(this);
-        this.restoreState = function(page) {
+        };
+        this.restoreState = (page) => {
             return this.state[page];
-        }.bind(this);
+        };
     }
 
     // componentDidMount() {
@@ -72,10 +78,11 @@ class App extends Component {
                     <Header />
                     <div className="page-wrapper">
                         <Switch>
-                            <Route exact path="/" render={() => <Classroom save={this.saveState} restore={this.restoreState} />} />
-                            <Route exact path="/device" component={Device} />
-                            <Route exact path="/admin" render={() => <Admin save={this.saveState} restore={this.restoreState} />} />
+                            <Route exact path="/" render={() => <Home save={this.saveState} restore={this.restoreState} />} />
                             <Route exact path="/about" component={About} />
+                            <Route exact path="/device" component={Device} />
+                            <Route exact path="/classroom" component={Classroom} />
+                            <Route exact path="/admin" render={() => <Admin save={this.saveState} restore={this.restoreState} />} />
                         </Switch>
                     </div>
                     <Footer />

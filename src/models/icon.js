@@ -13,6 +13,7 @@ import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle';
 import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import SelectAllIcon from '@material-ui/icons/SelectAll';
 
+import house from '../assets/img/icons/house.png';
 import classroom from '../assets/img/icons/classroom.png';
 import device from '../assets/img/icons/device.png';
 import classroomDevice from '../assets/img/icons/classroom-device.png'
@@ -55,8 +56,11 @@ const icon = {
         "Building": [
             <HomeWorkIcon fontSize="large" />
         ],
-        "All": [
+        "Alla": [
             <SelectAllIcon fontSize="large" />
+        ],
+        "House": [
+            <img src={ house } className="icon" />
         ],
         "Classroom": [
             <img src={ classroom } className="icon" />
@@ -91,6 +95,42 @@ const icon = {
         } else {
             element = [
                 <i>{ icon }</i>
+            ]
+        }
+
+        return element;
+    },
+    getFigure: function(name, callback = null, selected = null) {
+        let icon;
+        let element;
+
+        if (name.includes("hus") || name === "Norra" || name === "Östra") {
+            icon = this.cat["Building"];
+        } else {
+            icon = this.cat[name];
+        }
+
+        if (callback) {
+            element = [
+                <figure
+                    key={`icon-${name}`}
+                    className={selected ? "selected" : "clickable" }
+                    onClick={ callback }
+                >
+                { icon }
+                    <figcaption>
+                        { name }
+                    </figcaption>
+                </figure>
+            ]
+        } else {
+            element = [
+                <figure>
+                    { icon }
+                    <figcaption>
+                        { name }
+                    </figcaption>
+                </figure>
             ]
         }
 

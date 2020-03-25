@@ -71,6 +71,14 @@ table.results-alt td {
     cursor: pointer;
 }
 
+table.results i {
+    border-bottom: 2px solid rgb(255, 255, 255, 0);
+}
+
+table.results i:hover {
+    border-bottom: 2px solid rgb(255, 255, 255, 1);
+}
+
 @media only screen and (max-width: 980px) {
     table.results {
         border: none;

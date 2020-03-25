@@ -1,28 +1,17 @@
 /* Top column */
 
-.admin-control.category-view {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.admin-control.category-view i:hover {
-    border-bottom: none;
-}
-
-.admin-control.category-view figure {
+.control-icon figure {
     text-align: center;
     border-bottom: 2px solid black;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 
-.admin-control.category-view figure:hover {
-    border-bottom: 2px solid rgb(14, 125, 255);
+.control-icon figure:not(.selected):hover {
+    border-bottom: 2px solid rgb(46, 174, 52);
 }
 
-.admin-control.category-view figure.selected {
-    color: white;
+.control-icon figure.selected {
     border-bottom: 2px solid rgb(14, 125, 255);
 }
 

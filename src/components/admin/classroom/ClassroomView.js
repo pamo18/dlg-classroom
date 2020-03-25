@@ -1,7 +1,7 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
-import  { Redirect, Link } from 'react-router-dom';
+import  { withRouter, Redirect, Link } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
 import form from '../../../models/form.js';
@@ -15,31 +15,39 @@ class ClassroomView extends Component {
         this.filter = this.filter.bind(this);
         this.state = {
             title: "Klassrum vy",
-            id: null,
             data: [],
-            dataCategory: [],
             filter: "location",
-            value: "all"
+            value: "Alla"
         };
     }
 
     componentDidMount() {
-        this.loadDevice(this.state.filter, this.state.value);
+        let state = this.props.restore("classroomViewState");
+
+        if (state) {
+            this.setState(state);
+        } else {
+            this.loadDevice(this.state.filter, this.state.value);
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.save("classroomViewState", this.state);
     }
 
     loadDevice(filter, value) {
-        let that = this;
         let res
 
-        if (value === "all") {
+        if (value === "Alla") {
             res = db.fetchAll("classroom");
         } else {
             res = db.fetchAllWhere("classroom", filter, value);
         }
 
-        res.then(function(data) {
-            that.setState({
-                data: data
+        res.then((data) => {
+            this.setState({
+                data: data,
+                value: value
             });
         });
     }
@@ -58,11 +66,16 @@ class ClassroomView extends Component {
                 </div>
                 <article>
                     <div className="single-column">
-                        <Categories
-                            filterCb={ this.filter }
-                            url="building"
-                            name="name"
-                        />
+                        <div className="admin-control category-control">
+                            <Categories
+                                filterCb={ this.filter }
+                                url="building"
+                                name="name"
+                                sourceState="classroomViewState"
+                                save={ this.props.save }
+                                restore={ this.props.restore }
+                            />
+                        </div>
                         <table className="results">
                             <thead>
                                 <tr>
@@ -70,6 +83,7 @@ class ClassroomView extends Component {
                                     <th>Typ</th>
                                     <th>Våning</th>
                                     <th>Hus</th>
+                                    <th>Hantera</th>
                                 </tr>
                             </thead>
 
@@ -81,6 +95,7 @@ class ClassroomView extends Component {
                                         <td>{ classroom.type }</td>
                                         <td>{ classroom.level }</td>
                                         <td>{ classroom.location }</td>
+                                        <td>{ icon.get("View", () => utils.redirect(this, "/classroom", {id: classroom.id})) }</td>
                                     </tr>
                                 </tbody>
                             ];
@@ -94,4 +109,4 @@ class ClassroomView extends Component {
     }
 }
 
-export default ClassroomView;
+export default withRouter(ClassroomView);

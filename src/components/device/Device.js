@@ -49,7 +49,7 @@ class Device extends Component {
                     <div className="single-column">
                         <div className="device-view">
                             <div>
-                                { Object.entries(this.state.device).length > 0
+                                { this.state.device && Object.entries(this.state.device).length > 0
                                     ?
                                     <div>
                                         <h2 className="center margin">

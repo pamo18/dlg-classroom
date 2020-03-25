@@ -224,7 +224,7 @@ class SwapDevices extends Component {
 
     render() {
         return (
-            <div className="manager-wrapper">
+            <div className="page-wrapper">
                 <h2 className="center">{ this.state.title }</h2>
                 <form className="form-register">
                     <label className="form-label">Välj klassrum 1
