@@ -180,12 +180,12 @@ class AddDevice extends Component {
                 icon.get("Delete", del),
             ];
 
-            return table.adminRow(key, device, admin);
+            return table.adminRowDevice(key, device, admin);
         });
 
         this.setState({
             classroomDevicesTable: {
-                head: table.adminHead(),
+                head: table.adminHeadDevice(),
                 body: classroomDevicesRows
             },
             classroomDevicesCount: count
@@ -199,12 +199,12 @@ class AddDevice extends Component {
             let expires = new Date(res.expires).toISOString().substring(0, 10);
             let key = `device-${res.id}`;
             let view = () => utils.redirect(this, "/device", {id: res.id});
-            let row = table.adminRow(key, res, icon.get("View", view));
+            let row = table.adminRowDevice(key, res, icon.get("View", view));
 
             this.setState({
                 device: res,
                 deviceTable: {
-                    head: table.adminHead(),
+                    head: table.adminHeadDevice(),
                     body: row
                 },
                 selectedDevice: id
@@ -292,7 +292,7 @@ class AddDevice extends Component {
                         : null
                     }
 
-                    <label className="form-label">Välj apparat
+                    <label className="form-label">Välj uttrustning
                         <select className="form-input" type="text" name="default" required onChange={ this.deviceHandler }>
                             <option disabled selected>Klicka här för att välja uttrustning</option>
                             { this.state.deviceGroups }

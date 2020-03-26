@@ -7,6 +7,7 @@ import Home from '../home/Home.js';
 import About from '../about/About.js';
 import Classroom from '../classroom/Classroom.js';
 import Device from '../device/Device.js';
+import Report from '../report/Report.js';
 import Admin from '../admin/Admin.js';
 import './App.css';
 
@@ -82,6 +83,7 @@ class App extends Component {
                             <Route exact path="/about" component={About} />
                             <Route exact path="/device" component={Device} />
                             <Route exact path="/classroom" component={Classroom} />
+                            <Route exact path="/report" component={Report} />
                             <Route exact path="/admin" render={() => <Admin save={this.saveState} restore={this.restoreState} />} />
                         </Switch>
                     </div>

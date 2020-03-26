@@ -126,35 +126,44 @@ class Home extends Component {
     }
 
     loadDevices(id) {
-        let that = this;
         let res = db.fetchAllWhere("classroom/device", "classroom_id", id);
 
-        res.then(function(data) {
-            that.setState({
+        res.then((data) => {
+            this.setState({
                 devices: data
-            }, () => that.getDevices());
+            }, () => this.getDevices());
         });
     }
 
     getDevices() {
         let count = 0;
-        let that = this;
+        let rows = [];
 
-        let classroomDevicesRows = this.state.devices.map(function(device) {
-            let view = () => utils.redirect(that, "/device", {id: device.id});
-            let key = `device-${device.id}`;
-
+        this.state.devices.forEach((device) => {
             count++;
+            let key = `device-${device.id}`;
+            let view = () => utils.redirect(this, "/device", {id: device.id});
+            let report = () => utils.redirect(this, "/report", {item: "device", id: device.id, data: device});
+            let reportStatus = db.reportCheck("device", device.id);
 
-            return table.userRow(key, device, icon.get("View", view));
-        });
+            reportStatus.then((data) => {
+                let actions = [
+                    icon.get("View", view),
+                    icon.reportStatus(report, data)
+                ];
 
-        this.setState({
-            classroomDevicesTable: {
-                head: table.userHead(),
-                body: classroomDevicesRows
-            },
-            classroomDevicesCount: count
+                rows.push(table.userRowDevice(key, device, actions));
+
+                if (rows.length === this.state.devices.length) {
+                    this.setState({
+                        classroomDevicesTable: {
+                            head: table.userHeadDevice(),
+                            body: rows
+                        },
+                        classroomDevicesCount: count
+                    });
+                }
+            });
         });
     }
 

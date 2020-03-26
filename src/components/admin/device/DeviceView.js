@@ -40,7 +40,6 @@ class DeviceView extends Component {
         let res = db.fetchAllWhere("device", column, filter);
 
         res.then((data) => {
-            console.log(data);
             this.setState({
                 data: data,
                 filter: filter
@@ -90,7 +89,10 @@ class DeviceView extends Component {
                                         <td data-title="Serial nummer">{ device.serialnum }</td>
                                         <td data-title="Köpt">{ new Date(device.purchased).toISOString().substring(0, 10) }</td>
                                         <td data-title="Klassrum">{ device.classroomName || "-" }</td>
-                                        <td data-title="Hantera">{ icon.get("View", () => utils.redirect(this, "/device", {id: device.deviceID})) }</td>
+                                        <td data-title="Hantera">
+                                            { icon.get("View", () => utils.redirect(this, "/device", {id: device.deviceID})) }
+                                            { icon.get("Report", () => utils.redirect(this, "/report", {item: "device", id: device.deviceID, data: device})) }
+                                        </td>
                                     </tr>
                                 ];
                             })

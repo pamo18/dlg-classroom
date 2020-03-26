@@ -3,6 +3,17 @@ const api = base.api();
 
 // Database helper
 const db = {
+    reportCheck: async function(item, value) {
+        try {
+            let res = await fetch(`${api}/report/check/${item}&${value}`);
+
+            let data = await res.json();
+
+            return data.length > 0;
+        } catch(err) {
+            console.error(err);
+        }
+    },
     fetchAll: async function(table) {
         try {
             let res = await fetch(`${api}/${table}`);

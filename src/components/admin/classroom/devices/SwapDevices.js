@@ -172,12 +172,12 @@ class SwapDevices extends Component {
                 swap
             ];
 
-            return table.adminRow(key, device, admin);
+            return table.adminRowDevice(key, device, admin);
         });
 
         this.setState({
             [`${classroom}DevicesTable`]: {
-                head: table.adminHead(),
+                head: table.adminHeadDevice(),
                 body: classroomDevicesRows
             },
             [`${classroom}DevicesCount`]: count

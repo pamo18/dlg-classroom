@@ -67,6 +67,11 @@ table.results-alt td {
     width: 70%;
 }
 
+table.results i {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
 .clickable {
     cursor: pointer;
 }

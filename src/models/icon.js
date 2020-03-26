@@ -12,6 +12,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle';
 import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import SelectAllIcon from '@material-ui/icons/SelectAll';
+import ErrorIcon from '@material-ui/icons/Error';
 
 import house from '../assets/img/icons/house.png';
 import classroom from '../assets/img/icons/classroom.png';
@@ -59,6 +60,12 @@ const icon = {
         "Alla": [
             <SelectAllIcon fontSize="large" />
         ],
+        "Report": [
+            <ErrorIcon fontSize="large" color="primary"/>
+        ],
+        "Reported": [
+            <ErrorIcon fontSize="large" color="error"/>
+        ],
         "House": [
             <img src={ house } className="icon" />
         ],
@@ -97,6 +104,27 @@ const icon = {
                 <i>{ icon }</i>
             ]
         }
+
+        return element;
+    },
+    reportStatus: function(callback, check) {
+        let icon;
+
+        if (check) {
+            icon = this.cat["Reported"];
+        } else {
+            icon = this.cat["Report"];
+        }
+
+        let element = [
+            <i
+                key={`icon-Report`}
+                className="clickable"
+                onClick={ callback }
+            >
+            { icon }
+            </i>
+        ]
 
         return element;
     },

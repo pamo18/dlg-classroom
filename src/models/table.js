@@ -3,7 +3,25 @@ import icon from './icon.js';
 
 // Table helper
 const table = {
-    adminHead: function() {
+    head: function(items) {
+        let tableHead = items.map((item) => {
+            return <th>{ item }</th>
+        });
+
+        return [
+            <tr>{ tableHead }</tr>
+        ]
+    },
+    body: function(items, data) {
+        let tableBody = items.map((item) => {
+            return <td data-title={ item }>{ data[item] }</td>
+        });
+
+        return [
+            <tr>{ tableBody }</tr>
+        ]
+    },
+    adminHeadDevice: function() {
         let head = [
             <tr>
                 <th>Kategori</th>
@@ -18,7 +36,7 @@ const table = {
 
         return head;
     },
-    adminRow: function(key, device, admin) {
+    adminRowDevice: function(key, device, actions) {
         let row = [
             <tr key={ key }>
                 <td data-title="Kategori">{ icon.get(device.category)}</td>
@@ -28,14 +46,14 @@ const table = {
                 <td data-title="Pris">{ device.price }:-</td>
                 <td data-title="Länk"><a href={ device.url } target="_blank">Till produktsida</a></td>
                 <td data-title="Hantera">
-                    { admin }
+                    { actions }
                 </td>
             </tr>
         ];
 
         return row;
     },
-    userHead: function() {
+    userHeadDevice: function() {
         let head = [
             <tr>
                 <th>Kategori</th>
@@ -48,7 +66,7 @@ const table = {
 
         return head;
     },
-    userRow: function(key, device, extra) {
+    userRowDevice: function(key, device, actions) {
         let row = [
             <tr key={ key }>
                 <td data-title="Kategori">{ icon.get(device.category)}</td>
@@ -56,7 +74,7 @@ const table = {
                 <td data-title="Modell">{ device.model }</td>
                 <td data-title="Länk"><a href={ device.url } target="_blank">Till produktsida</a></td>
                 <td data-title="Hantera">
-                    { extra }
+                    { actions }
                 </td>
             </tr>
         ];
