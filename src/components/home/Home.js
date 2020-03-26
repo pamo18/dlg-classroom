@@ -175,74 +175,73 @@ class Home extends Component {
     render() {
         return (
             <main>
-                <div className="page-heading">
-                    <h1>
-                        { this.state.title }
-                    </h1>
+                <div className="left-column">
+                    <div className="column-heading">
+                        <h2>Kontrollpanel</h2>
+                    </div>
+                    <aside className="home-panel">
+                        <div className="home-control category-control">
+                            <Categories
+                                filterCb={ this.filterHandler }
+                                url="building"
+                                categoryName="name"
+                                sourceState="homeState"
+                                save={ this.props.save }
+                                restore={ this.props.restore }
+                            />
+                        </div>
+
+                        <div className="home-control">
+                            <div className="home-group">
+                                <h2 className="center margin">Välj Klassrum</h2>
+                                <select className="form-input" type="text" name="classroom" required onChange={ this.classroomHandler }>
+                                    <option disabled selected={!this.state.delected ? "selected" : null}>Klassrum</option>
+                                    { this.state.classroomGroups }
+                                </select>
+                            </div>
+                        </div>
+                    </aside>
                 </div>
-                <article>
-                    <div className="left-column">
-                        <div className="home-panel">
-                            <div className="home-control category-control">
-                                <Categories
-                                    filterCb={ this.filterHandler }
-                                    url="building"
-                                    name="name"
-                                    sourceState="homeState"
-                                    save={ this.props.save }
-                                    restore={ this.props.restore }
-                                />
-                            </div>
-
-                            <div className="home-control">
-                                <div className="home-group">
-                                    <h2 className="center margin">Välj Klassrum</h2>
-                                    <select className="form-input" type="text" name="classroom" required onChange={ this.classroomHandler }>
-                                        <option disabled selected={!this.state.delected ? "selected" : null}>Klicka för att välja</option>
-                                        { this.state.classroomGroups }
-                                    </select>
-                                </div>
+                <div className="main-column">
+                    <div className="column-heading">
+                        <h1>{ this.state.title }</h1>
+                    </div>
+                    <article>
+                        <div>
+                            <h2 className="center margin">
+                                DLG
+                                { this.state.name
+                                ? " " + this.state.name
+                                : null
+                                }
+                            </h2>
+                            <div className="home-image">
+                                <img src={ image.get(this.state.classroom.image) } alt="Classroom image"/>
                             </div>
                         </div>
-                    </div>
-                    <div className="main-column">
-                        <div className="home-view">
-                            <div>
-                                <h2 className="center margin">
-                                    DLG
-                                    { this.state.name
-                                    ? " " + this.state.name
-                                    : null
-                                    }
-                                </h2>
-                                <div className="home-image">
-                                    <img src={ image.get(this.state.classroom.image) } alt="Classroom image"/>
-                                </div>
-                            </div>
 
-                            { this.state.classroomDevicesCount != null
-                                ?
-                                <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevicesCount}` }</h3>
-                                :
-                                null
-                            }
+                        { this.state.classroomDevicesCount != null
+                            ?
+                            <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevicesCount}` }</h3>
+                            :
+                            null
+                        }
 
-                            { this.state.classroomDevicesCount
-                                ?
-                                <table className="results">
-                                    <thead>
-                                        { this.state.classroomDevicesTable.head }
-                                    </thead>
-                                    <tbody>
-                                        { this.state.classroomDevicesTable.body }
-                                    </tbody>
-                                </table>
-                                :
-                                null
-                            }
-                        </div>
-                    </div>
-                </article>
+                        { this.state.classroomDevicesCount
+                            ?
+                            <table className="results">
+                                <thead>
+                                    { this.state.classroomDevicesTable.head }
+                                </thead>
+                                <tbody>
+                                    { this.state.classroomDevicesTable.body }
+                                </tbody>
+                            </table>
+                            :
+                            null
+                        }
+                    </article>
+                </div>
             </main>
         );
     }

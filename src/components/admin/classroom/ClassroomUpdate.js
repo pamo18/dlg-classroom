@@ -108,7 +108,7 @@ class ClassroomUpdate extends Component {
 
     render() {
         return (
-            <div className="form-wrapper">
+            <article>
                 <h2 className="center">Välj klassrum att uppdatera</h2>
                 <form action="/update" className="form-register" onSubmit={this.updateClassroom}>
                     <select className="form-input" type="text" name="fullname" required onChange={ this.getClassroom }>
@@ -157,7 +157,7 @@ class ClassroomUpdate extends Component {
                         null
                     }
                 </form>
-            </div>
+            </article>
         );
     }
 }

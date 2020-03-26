@@ -71,11 +71,11 @@ table.results-alt td {
     cursor: pointer;
 }
 
-table.results i {
+table.results i.clickable {
     border-bottom: 2px solid rgb(255, 255, 255, 0);
 }
 
-table.results i:hover {
+table.results i.clickable:hover {
     border-bottom: 2px solid rgb(255, 255, 255, 1);
 }
 

@@ -114,72 +114,72 @@ class Admin extends Component {
         let selected = this.state.selected;
         return (
             <main>
-                <div className="page-heading">
-                    <h1>{ this.state.title }</h1>
-                </div>
-                <article>
-                    <div className="left-column">
-                        <div className="admin-panel">
-                            <div className="admin-control">
-                                <figure className="admin-group">
-                                    <h2 className="center">Klassrum</h2>
-                                    { icon.get("Classroom") }
-                                    <figcaption>
-                                        <div className="control-icon">
-                                            { icon.get("View", () => { this.classroomView("view") }, selected === "classroom-view") }
-                                            { icon.get("Add", () => { this.classroomView("add") }, selected === "classroom-add") }
-                                            { icon.get("Edit", () => { this.classroomView("edit") }, selected === "classroom-edit") }
-                                            { icon.get("Delete", () => { this.classroomView("delete") }, selected === "classroom-delete") }
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </div>
-
-                            <div className="admin-control">
-                                <figure className="admin-group">
-                                    <h2 className="center">Utrustning</h2>
-                                    { icon.get("Device") }
-                                    <figcaption>
-                                        <div className="control-icon">
-                                            { icon.get("View", () => { this.deviceView("view") }, selected === "device-view") }
-                                            { icon.get("Add", () => { this.deviceView("add") }, selected === "device-add") }
-                                            { icon.get("Edit", () => { this.deviceView("edit") }, selected === "device-edit") }
-                                            { icon.get("Delete", () => { this.deviceView("delete") }, selected === "device-delete") }
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </div>
-
-                            <div className="admin-control">
-                                <figure className="admin-group">
-                                    <h2 className="center">Koppla</h2>
-                                    { icon.get("classroomDevice") }
-                                    <figcaption>
-                                        <div className="control-icon">
-                                            { icon.get("Add", () => { this.classroomDeviceView("add") }, selected === "classroom-device-add") }
-                                            { icon.get("Swap", () => { this.classroomDeviceView("swap") }, selected === "classroom-device-swap") }
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </div>
-                        </div>
+                <div className="left-column">
+                    <div className="column-heading">
+                        <h2>Kontrollpanel</h2>
                     </div>
-                    <div className="main-column">
-                        <div className="admin-view">
-                            { this.state.view
-                                ?
-                                this.state.view
-                                :
-                                <div>
-                                    <h2 className="center margin">DLG</h2>
-                                    <div className="admin-default-image">
-                                        <img src={ this.state.image } alt="Classroom image"/>
+                    <aside className="admin-panel">
+                        <div className="admin-control">
+                            <figure className="admin-group">
+                                <h2 className="center">Klassrum</h2>
+                                { icon.get("Classroom") }
+                                <figcaption>
+                                    <div className="control-icon">
+                                        { icon.get("View", () => { this.classroomView("view") }, selected === "classroom-view") }
+                                        { icon.get("Add", () => { this.classroomView("add") }, selected === "classroom-add") }
+                                        { icon.get("Edit", () => { this.classroomView("edit") }, selected === "classroom-edit") }
+                                        { icon.get("Delete", () => { this.classroomView("delete") }, selected === "classroom-delete") }
                                     </div>
-                                </div>
-                            }
+                                </figcaption>
+                            </figure>
                         </div>
+
+                        <div className="admin-control">
+                            <figure className="admin-group">
+                                <h2 className="center">Utrustning</h2>
+                                { icon.get("Device") }
+                                <figcaption>
+                                    <div className="control-icon">
+                                        { icon.get("View", () => { this.deviceView("view") }, selected === "device-view") }
+                                        { icon.get("Add", () => { this.deviceView("add") }, selected === "device-add") }
+                                        { icon.get("Edit", () => { this.deviceView("edit") }, selected === "device-edit") }
+                                        { icon.get("Delete", () => { this.deviceView("delete") }, selected === "device-delete") }
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <div className="admin-control">
+                            <figure className="admin-group">
+                                <h2 className="center">Koppla</h2>
+                                { icon.get("classroomDevice") }
+                                <figcaption>
+                                    <div className="control-icon">
+                                        { icon.get("Add", () => { this.classroomDeviceView("add") }, selected === "classroom-device-add") }
+                                        { icon.get("Swap", () => { this.classroomDeviceView("swap") }, selected === "classroom-device-swap") }
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </aside>
+                </div>
+
+                <div className="main-column">
+                    <div className="column-heading">
+                        <h1>{ this.state.title }</h1>
                     </div>
-                </article>
+                    { this.state.view
+                        ?
+                        this.state.view
+                        :
+                        <article>
+                            <h2 className="center margin">DLG</h2>
+                            <div className="admin-default-image">
+                                <img src={ this.state.image } alt="Classroom image"/>
+                            </div>
+                        </article>
+                    }
+                </div>
             </main>
         );
     }

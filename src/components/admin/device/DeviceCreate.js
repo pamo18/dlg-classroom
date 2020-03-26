@@ -99,7 +99,7 @@ class DeviceCreate extends Component {
     render() {
         const { showing } = this.state;
         return (
-            <div className="form-wrapper">
+            <article>
                 <h2 class="center">{ this.state.title }</h2>
                 <form action="/login" className="form-register" onSubmit={ this.createDevice }>
                     <label className="form-label">Kategori
@@ -166,7 +166,7 @@ class DeviceCreate extends Component {
 
                     <input className="button center-margin" type="submit" name="create" value="Skapa" />
                 </form>
-            </div>
+            </article>
         );
     }
 }

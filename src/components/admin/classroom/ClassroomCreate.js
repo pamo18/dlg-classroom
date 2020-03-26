@@ -50,7 +50,7 @@ class ClassroomCreate extends Component {
 
     render() {
         return (
-            <div className="form-wrapper">
+            <article>
                 <h2 className="center">{ this.state.title }</h2>
                 <form action="/create" className="form-register" onSubmit={this.classroomCreate}>
                     <label className="form-label">Namn
@@ -84,7 +84,7 @@ class ClassroomCreate extends Component {
 
                     <input className="button center-margin" type="submit" name="create" value="Skapa" />
                 </form>
-            </div>
+            </article>
         );
     }
 }

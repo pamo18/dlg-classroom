@@ -21,7 +21,7 @@ class SwapDevices extends Component {
         this.removeDevice = this.removeDevice.bind(this);
         this.reload = this.reload.bind(this);
         this.state = {
-            title: "Byta apparater i ett klassrum",
+            title: "Byta utrustning i ett klassrum",
             classroomNameTemplate: "name",
             deviceNameTemplate: "brand,model,(serialnum)",
             classroomData: [],
@@ -224,7 +224,7 @@ class SwapDevices extends Component {
 
     render() {
         return (
-            <div className="page-wrapper">
+            <article>
                 <h2 className="center">{ this.state.title }</h2>
                 <form className="form-register">
                     <label className="form-label">Välj klassrum 1
@@ -276,7 +276,7 @@ class SwapDevices extends Component {
                         null
                     }
                 </form>
-            </div>
+            </article>
         );
     }
 }

@@ -24,7 +24,7 @@ class AddDevice extends Component {
         this.deviceHandler = this.deviceHandler.bind(this);
         this.classroomHandler = this.classroomHandler.bind(this);
         this.state = {
-            title: "Lägg till apparater i ett klassrum",
+            title: "Lägg till utrustning i ett klassrum",
             classroomNameTemplate: "name",
             deviceNameTemplate: "brand,model,(serialnum)",
             classroomData: [],
@@ -263,7 +263,7 @@ class AddDevice extends Component {
 
     render() {
         return (
-            <div className="page-wrapper">
+            <article>
                 <h2 className="center">{ this.state.title }</h2>
                 <form action="/admin" className="form-register" onSubmit={ this.addDevice }>
                     <input className="form-input" type="hidden" name="classroomid" required value={ this.state.classroom.id } />
@@ -294,7 +294,7 @@ class AddDevice extends Component {
 
                     <label className="form-label">Välj apparat
                         <select className="form-input" type="text" name="default" required onChange={ this.deviceHandler }>
-                            <option disabled selected>Klicka här för att välja apparat</option>
+                            <option disabled selected>Klicka här för att välja uttrustning</option>
                             { this.state.deviceGroups }
                         </select>
                     </label>
@@ -321,7 +321,7 @@ class AddDevice extends Component {
                         null
                     }
                 </form>
-            </div>
+            </article>
         );
     }
 }

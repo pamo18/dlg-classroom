@@ -16,7 +16,7 @@ class Categories extends Component {
             data: [],
             filterCb: this.props.filterCb,
             url: this.props.url,
-            name: this.props.name,
+            categoryName: this.props.categoryName,
             filter: "Alla"
         };
     }
@@ -65,12 +65,12 @@ class Categories extends Component {
             <figure className="admin-group">
                 <h2 className="center">{ this.state.title }</h2>
                 <figcaption>
-                    <div className="control-icon">
+                    <div className="control-icon filter-categories">
                         { icon.getFigure("Alla", () => { this.filter("Alla") }, filter === "Alla") }
 
                         {
                             this.state.data.map((cat) => {
-                                let category = cat[this.state.name];
+                                let category = cat[this.state.categoryName];
                                 let key = `filter-category-${category}`;
 
                                 return icon.getFigure(category, () => { this.filter(category) }, filter === category)

@@ -41,55 +41,51 @@ class Classroom extends Component {
     render() {
         return (
             <main>
-                <div className="page-heading">
-                    <h1>
-                        { this.state.title }
-                    </h1>
-                </div>
-                <article>
-                    <div className="single-column">
-                        <div className="classroom-view">
-                            <div>
-                                { this.state.classroom && Object.entries(this.state.classroom).length > 0
-                                    ?
-                                    <div>
-                                        <h2 className="center margin">
-                                            { icon.get(this.state.classroom.location) }<br />
-                                            { this.state.classroom.name }
-                                        </h2>
-                                        <div className="classroom-view-image">
-                                            <img src={ image.get(this.state.classroom.image) } alt="Classroom image"/>
-                                        </div>
-                                        <table className="results-alt">
-                                            <tr>
-                                                <th>Namn</th>
-                                                <td>{ this.state.classroom.name }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Typ</th>
-                                                <td>{ this.state.classroom.type }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Hus</th>
-                                                <td>{ this.state.classroom.location }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Våning</th>
-                                                <td>{ this.state.classroom.level }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Bild Länk</th>
-                                                <td>{ this.state.classroom.image }</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    :
-                                    null
-                                    }
-                            </div>
-                        </div>
+                <div className="single-column">
+                    <div className="column-heading">
+                        <h1>{ this.state.title }</h1>
                     </div>
-                </article>
+                    <article className="classroom-view">
+                        <div>
+                            { this.state.classroom && Object.entries(this.state.classroom).length > 0
+                                ?
+                                <div>
+                                    <h2 className="center margin">
+                                        { icon.get(this.state.classroom.location) }<br />
+                                        { this.state.classroom.name }
+                                    </h2>
+                                    <div className="classroom-view-image">
+                                        <img src={ image.get(this.state.classroom.image) } alt="Classroom image"/>
+                                    </div>
+                                    <table className="results-alt">
+                                        <tr>
+                                            <th>Namn</th>
+                                            <td>{ this.state.classroom.name }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Typ</th>
+                                            <td>{ this.state.classroom.type }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Hus</th>
+                                            <td>{ this.state.classroom.location }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Våning</th>
+                                            <td>{ this.state.classroom.level }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Bild Länk</th>
+                                            <td>{ this.state.classroom.image }</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                :
+                                null
+                                }
+                        </div>
+                    </article>
+                </div>
             </main>
         );
     }

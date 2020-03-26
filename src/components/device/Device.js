@@ -40,72 +40,68 @@ class Device extends Component {
     render() {
         return (
             <main>
-                <div className="page-heading">
-                    <h1>
-                        { this.state.title }
-                    </h1>
-                </div>
-                <article>
-                    <div className="single-column">
-                        <div className="device-view">
-                            <div>
-                                { this.state.device && Object.entries(this.state.device).length > 0
-                                    ?
-                                    <div>
-                                        <h2 className="center margin">
-                                            { icon.get(this.state.device.category) }<br />
-                                            { this.state.device.brand + " " + this.state.device.model}
-                                        </h2>
-                                        <table className="results-alt">
-                                            <tr>
-                                                <th>Kategori</th>
-                                                <td>{ this.state.device.category }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Märke</th>
-                                                <td>{ this.state.device.brand }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Model</th>
-                                                <td>{ this.state.device.model }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Pris</th>
-                                                <td>{ this.state.device.price }:-</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Serial nummer</th>
-                                                <td>{ this.state.device.serialnum }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Köpt</th>
-                                                <td>{ new Date(this.state.device.purchased).toISOString().substring(0, 10) }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Garanti giltid till</th>
-                                                <td>{ new Date(this.state.device.expires).toISOString().substring(0, 10) }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Garanti månader</th>
-                                                <td>{ this.state.device.warranty }</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Länk URL</th>
-                                                <td><a href={ this.state.device.url } target="_blank">Till produktsida</a></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Info</th>
-                                                <td>{ this.state.device.message }</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    :
-                                    null
-                                    }
-                            </div>
-                        </div>
+                <div className="single-column">
+                    <div className="column-heading">
+                        <h1>{ this.state.title }</h1>
                     </div>
-                </article>
+                    <article className="device-view">
+                        <div>
+                            { this.state.device && Object.entries(this.state.device).length > 0
+                                ?
+                                <div>
+                                    <h2 className="center margin">
+                                        { icon.get(this.state.device.category) }<br />
+                                        { this.state.device.brand + " " + this.state.device.model}
+                                    </h2>
+                                    <table className="results-alt">
+                                        <tr>
+                                            <th>Kategori</th>
+                                            <td>{ this.state.device.category }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Märke</th>
+                                            <td>{ this.state.device.brand }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Model</th>
+                                            <td>{ this.state.device.model }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Pris</th>
+                                            <td>{ this.state.device.price }:-</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Serial nummer</th>
+                                            <td>{ this.state.device.serialnum }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Köpt</th>
+                                            <td>{ new Date(this.state.device.purchased).toISOString().substring(0, 10) }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Garanti giltid till</th>
+                                            <td>{ new Date(this.state.device.expires).toISOString().substring(0, 10) }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Garanti månader</th>
+                                            <td>{ this.state.device.warranty }</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Länk URL</th>
+                                            <td><a href={ this.state.device.url } target="_blank">Till produktsida</a></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Info</th>
+                                            <td>{ this.state.device.message }</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                :
+                                null
+                                }
+                        </div>
+                    </article>
+                </div>
             </main>
         );
     }

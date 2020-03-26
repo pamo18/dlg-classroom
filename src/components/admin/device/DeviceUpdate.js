@@ -151,7 +151,7 @@ class DeviceUpdate extends Component {
     render() {
         const { showing } = this.state;
         return (
-            <div className="form-wrapper">
+            <article>
                 <h2 className="center">Välj apparat att uppdatera</h2>
                 <form action="/update" className="form-register" onSubmit={this.updateDevice}>
                     <select className="form-input" type="text" name="fullname" required onChange={ this.getDevice }>
@@ -232,7 +232,7 @@ class DeviceUpdate extends Component {
                         null
                     }
                 </form>
-            </div>
+            </article>
         );
     }
 }

@@ -16,11 +16,6 @@ body {
     background-color: #121d26;
 }
 
-h1 {
-    font-size: 2em;
-    text-align: center;
-}
-
 a {
     color: rgb(120, 160, 255);
     text-decoration: none;
@@ -34,26 +29,31 @@ tr:hover a {
     color: rgb(0, 33, 107)
 }
 
-article {
+main {
     display: flex;
-    flex-direction: row;
-    width: 100%;
-    background-color: #121d26;
-    padding-left: 2em;
-    padding-right: 2em;
-    padding-top: 2rem;
-    font-size: 1.1em;
-    min-height: 57em;
-    margin-bottom: 84px;
+    margin-bottom: 2rem;
 }
 
-.left-column,
-.single-column {
+.column-heading {
+    width: 100%;
+    background-color: #060d13;
+}
+
+.column-heading h1,
+.column-heading h2 {
+    font-size: 2em;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 5px;
+}
+
+.left-column {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex-basis: 100%;
-    flex: 1;
+    flex: 0 0 300px;
 }
 
 .main-column {
@@ -62,7 +62,24 @@ article {
     align-items: center;
     flex-basis: 100%;
     flex: 4;
+}
+
+.single-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-basis: 100%;
+}
+
+aside,
+article {
+    padding: 2rem;
+}
+
+article {
+    width: 100%;
     padding-left: 2rem;
+    min-height: 57em;
 }
 
 .center {
@@ -156,23 +173,7 @@ article {
         width: auto;
     }
 
-    article {
+    main {
         display: block;
-        min-height: 53.6em;
-        padding: 1rem;
-    }
-
-    .left-column {
-        display: block;
-        width: 100%;
-        padding-bottom: 1rem;
-    }
-
-    .main-column {
-        display: block;
-        width: 100%;
-        padding-top: 1rem;
-        padding-left: 0;
-        padding-right: 0;
     }
 }

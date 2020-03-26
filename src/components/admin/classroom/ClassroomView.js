@@ -16,8 +16,8 @@ class ClassroomView extends Component {
         this.state = {
             title: "Klassrum vy",
             data: [],
-            filter: "location",
-            value: "Alla"
+            column: "location",
+            filter: "Alla"
         };
     }
 
@@ -25,9 +25,9 @@ class ClassroomView extends Component {
         let state = this.props.restore("classroomViewState");
 
         if (state) {
-            this.setState(state);
+            this.setState(state, () => this.loadDevice(this.state.filter));
         } else {
-            this.loadDevice(this.state.filter, this.state.value);
+            this.loadDevice(this.state.filter);
         }
     }
 
@@ -35,76 +35,67 @@ class ClassroomView extends Component {
         this.props.save("classroomViewState", this.state);
     }
 
-    loadDevice(filter, value) {
-        let res
+    loadDevice(filter) {
+        let column = this.state.column;
+        let res;
 
-        if (value === "Alla") {
+        if (filter === "Alla") {
             res = db.fetchAll("classroom");
         } else {
-            res = db.fetchAllWhere("classroom", filter, value);
+            res = db.fetchAllWhere("classroom", column, filter);
         }
 
         res.then((data) => {
             this.setState({
                 data: data,
-                value: value
+                filter: filter
             });
         });
     }
 
-    filter(value) {
-        this.loadDevice(this.state.filter, value);
+    filter(filter) {
+        this.loadDevice(filter);
     }
 
     render() {
         return (
-            <main>
-                <div className="page-heading">
-                    <h1>
-                        { this.state.title }
-                    </h1>
+            <article>
+                <div className="admin-control category-control">
+                    <Categories
+                        filterCb={ this.filter }
+                        url="building"
+                        categoryName="name"
+                        sourceState="classroomViewState"
+                        save={ this.props.save }
+                        restore={ this.props.restore }
+                    />
                 </div>
-                <article>
-                    <div className="single-column">
-                        <div className="admin-control category-control">
-                            <Categories
-                                filterCb={ this.filter }
-                                url="building"
-                                name="name"
-                                sourceState="classroomViewState"
-                                save={ this.props.save }
-                                restore={ this.props.restore }
-                            />
-                        </div>
-                        <table className="results">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Typ</th>
-                                    <th>Våning</th>
-                                    <th>Hus</th>
-                                    <th>Hantera</th>
-                                </tr>
-                            </thead>
 
+                <table className="results">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Typ</th>
+                            <th>Våning</th>
+                            <th>Hus</th>
+                            <th>Hantera</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         { this.state.data.map((classroom) => {
                             return [
-                                <tbody>
-                                    <tr>
-                                        <td>{ classroom.name }</td>
-                                        <td>{ classroom.type }</td>
-                                        <td>{ classroom.level }</td>
-                                        <td>{ classroom.location }</td>
-                                        <td>{ icon.get("View", () => utils.redirect(this, "/classroom", {id: classroom.id})) }</td>
-                                    </tr>
-                                </tbody>
+                                <tr>
+                                    <td data-title="Name">{ classroom.name }</td>
+                                    <td data-title="Typ">{ classroom.type }</td>
+                                    <td data-title="Våning">{ classroom.level }</td>
+                                    <td data-title="Hus">{ classroom.location }</td>
+                                    <td data-title="Hantera">{ icon.get("View", () => utils.redirect(this, "/classroom", {id: classroom.id})) }</td>
+                                </tr>
                             ];
                         })}
-
-                        </table>
-                    </div>
-                </article>
-            </main>
+                    </tbody>
+                </table>
+            </article>
         );
     }
 }

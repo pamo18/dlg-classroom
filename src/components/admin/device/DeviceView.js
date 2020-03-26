@@ -16,8 +16,8 @@ class DeviceView extends Component {
         this.state = {
             title: "Utrustning vy",
             data: [],
-            filter: "category",
-            value: "Alla"
+            column: "category",
+            filter: "Alla"
         };
     }
 
@@ -25,9 +25,9 @@ class DeviceView extends Component {
         let state = this.props.restore("deviceViewState");
 
         if (state) {
-            this.setState(state);
+            this.setState(state, () => this.loadClassroom(this.state.filter));
         } else {
-            this.loadClassroom(this.state.filter, this.state.value);
+            this.loadClassroom(this.state.filter);
         }
     }
 
@@ -35,87 +35,71 @@ class DeviceView extends Component {
         this.props.save("deviceViewState", this.state);
     }
 
-    loadClassroom(filter, value) {
-        let res;
-
-        if (value === "Alla") {
-            res = db.fetchAll("device");
-        } else {
-            res = db.fetchAllWhere("device", filter, value);
-        }
+    loadClassroom(filter) {
+        let column = this.state.column;
+        let res = db.fetchAllWhere("device", column, filter);
 
         res.then((data) => {
+            console.log(data);
             this.setState({
                 data: data,
-                value: value
+                filter: filter
             });
         });
     }
 
-    filter(value) {
-        this.loadClassroom(this.state.filter, value);
+    filter(filter) {
+        this.loadClassroom(filter);
     }
 
     render() {
         return (
-            <main>
-                <div className="page-heading">
-                    <h1>
-                        { this.state.title }
-                    </h1>
+            <article>
+                <div className="admin-control category-control">
+                    <Categories
+                        filterCb={ this.filter }
+                        url="device/category"
+                        categoryName="name"
+                        sourceState="deviceViewState"
+                        save={ this.props.save }
+                        restore={ this.props.restore }
+                    />
                 </div>
-                <article>
-                    <div className="single-column">
-                        <div className="admin-control category-control">
-                            <Categories
-                                filterCb={ this.filter }
-                                url="device/category"
-                                name="name"
-                                sourceState="deviceViewState"
-                                save={ this.props.save }
-                                restore={ this.props.restore }
-                            />
-                        </div>
-                        <table className="results">
-                            <thead>
-                                <tr>
-                                    <th>Kategori</th>
-                                    <th>Märke</th>
-                                    <th>Model</th>
-                                    <th>Pris</th>
-                                    <th>Serial nummer</th>
-                                    <th>Köpt</th>
-                                    <th>Hus</th>
-                                    <th>Hantera</th>
-                                </tr>
-                            </thead>
 
+                <table className="results">
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Märke</th>
+                            <th>Model</th>
+                            <th>Serial nummer</th>
+                            <th>Köpt</th>
+                            <th>Klassrum</th>
+                            <th>Hantera</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         { this.state.data
                             ?
                             this.state.data.map((device) => {
                                 return [
-                                    <tbody>
-                                        <tr>
-                                            <td>{ icon.get(device.category) }</td>
-                                            <td>{ device.brand }</td>
-                                            <td>{ device.model }</td>
-                                            <td>{ device.price }:-</td>
-                                            <td>{ device.serialnum }</td>
-                                            <td>{ new Date(device.purchased).toISOString().substring(0, 10) }</td>
-                                            <td>{ device.location || "-" }</td>
-                                            <td>{ icon.get("View", () => utils.redirect(this, "/device", {id: device.deviceID})) }</td>
-                                        </tr>
-                                    </tbody>
+                                    <tr>
+                                        <td data-title="Kategori">{ icon.get(device.category) }</td>
+                                        <td data-title="Märke">{ device.brand }</td>
+                                        <td data-title="Model">{ device.model }</td>
+                                        <td data-title="Serial nummer">{ device.serialnum }</td>
+                                        <td data-title="Köpt">{ new Date(device.purchased).toISOString().substring(0, 10) }</td>
+                                        <td data-title="Klassrum">{ device.classroomName || "-" }</td>
+                                        <td data-title="Hantera">{ icon.get("View", () => utils.redirect(this, "/device", {id: device.deviceID})) }</td>
+                                    </tr>
                                 ];
                             })
                             :
                             null
                         }
-
-                        </table>
-                    </div>
-                </article>
-            </main>
+                    </tbody>
+                </table>
+            </article>
         );
     }
 }

@@ -74,7 +74,7 @@ class ClassroomDelete extends Component {
 
     render() {
         return (
-            <div className="form-wrapper">
+            <article>
                 <h2 className="center">Välj klassrum att radera</h2>
                 <form action="/delete" className="form-register" onSubmit={ this.deleteClassroom }>
                     <select className="form-input" type="text" name="name" required onChange={ this.getClassroom }>
@@ -102,7 +102,7 @@ class ClassroomDelete extends Component {
                         null
                     }
                 </form>
-            </div>
+            </article>
         );
     }
 }

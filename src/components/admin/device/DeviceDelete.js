@@ -78,7 +78,7 @@ class DeviceDelete extends Component {
 
     render() {
         return (
-            <div className="form-wrapper">
+            <article>
                 <h2 className="center">Välj apparat att radera</h2>
                 <form action="/delete" className="form-register" onSubmit={this.deleteDevice}>
                     <select className="form-input" type="text" name="fullname" required onChange={ this.getDevice }>
@@ -106,7 +106,7 @@ class DeviceDelete extends Component {
                         null
                     }
                 </form>
-            </div>
+            </article>
         );
     }
 }
