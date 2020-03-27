@@ -1,10 +1,11 @@
+.form-register,
+.form {
+    margin-bottom: 2rem;
+}
+
 .form-register.small .form-input,
 .form-register.small .form-label {
     width: 20rem;
-}
-
-.form {
-
 }
 
 .form-input {

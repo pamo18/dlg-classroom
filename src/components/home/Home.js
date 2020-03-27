@@ -14,7 +14,7 @@ import Categories from '../filter/Categories.js';
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.showClassroom = this.showClassroom.bind(this);
+        this.getClassroom = this.getClassroom.bind(this);
         this.loadDevices = this.loadDevices.bind(this);
         this.getDevices = this.getDevices.bind(this);
         this.classroomHandler = this.classroomHandler.bind(this);
@@ -94,32 +94,37 @@ class Home extends Component {
         });
     }
 
-    showClassroom(id) {
+    getClassroom(id) {
         try {
-            let res = this.state.classroomData[id];
-            let name = form.optionName(res, this.state.classroomTemplate);
+            let classroom = this.state.classroomData[id];
+            let name = form.optionName(classroom, this.state.classroomTemplate);
+            let report = () => utils.redirect(this, "/report", {item: "classroom", id: classroom.id, data: classroom});
+            let reportStatus = db.reportCheck("classroom", classroom.id);
 
             try {
                 this.setState({
-                    image: require(`../../assets/classroom/${res.image}`)
+                    image: require(`../../assets/classroom/${classroom.image}`)
                 });
             } catch(error) {
                 console.log(error);
             }
 
-            this.setState({
-                name: name,
-                classroom: {
-                    id: res.id,
-                    name: res.name,
-                    type: res.type,
-                    location: res.location,
-                    level: res.level,
-                    image: res.image
-                },
-                image: image,
-                selected: res.id
-            }, () => this.loadDevices(id));
+            reportStatus.then((status) => {
+                this.setState({
+                    name: name,
+                    classroom: {
+                        id: classroom.id,
+                        name: classroom.name,
+                        type: classroom.type,
+                        location: classroom.location,
+                        level: classroom.level,
+                        image: classroom.image,
+                        report: icon.reportStatus(report, status)
+                    },
+                    image: image,
+                    selected: classroom.id
+                }, () => this.loadDevices(id));
+            });
         } catch(err) {
             console.log(err);
         }
@@ -137,31 +142,27 @@ class Home extends Component {
 
     getDevices() {
         let count = 0;
-        let rows = [];
 
-        this.state.devices.forEach((device) => {
+        let deviceRows = this.state.devices.map(async (device) => {
             count++;
             let key = `device-${device.id}`;
             let view = () => utils.redirect(this, "/device", {id: device.id});
             let report = () => utils.redirect(this, "/report", {item: "device", id: device.id, data: device});
-            let reportStatus = db.reportCheck("device", device.id);
+            let status = await db.reportCheck("device", device.id);
+            let actions = [
+                icon.get("View", view),
+                icon.reportStatus(report, status)
+            ];
 
-            reportStatus.then((data) => {
-                let actions = [
-                    icon.get("View", view),
-                    icon.reportStatus(report, data)
-                ];
+            return table.userRowDevice(key, device, actions);
+        });
 
-                rows.push(table.userRowDevice(key, device, actions));
-
-                if (rows.length === this.state.devices.length) {
-                    this.setState({
-                        classroomDevicesTable: {
-                            head: table.userHeadDevice(),
-                            body: rows
-                        },
-                        classroomDevicesCount: count
-                    });
+        Promise.all(deviceRows).then((rows) => {
+            this.setState({
+                classroomDevicesTable: {
+                    head: table.userHeadDevice(),
+                    body: rows,
+                    count: count
                 }
             });
         });
@@ -172,7 +173,7 @@ class Home extends Component {
 
         this.setState({
             classroomSelected: id
-        }, () => this.showClassroom(id));
+        }, () => this.getClassroom(id));
     }
 
     filterHandler(filter) {
@@ -220,8 +221,9 @@ class Home extends Component {
                             <h2 className="center margin">
                                 DLG
                                 { this.state.name
-                                ? " " + this.state.name
-                                : null
+                                    ?
+                                    <span className="classroom-name"> { this.state.name } { this.state.classroom.report }</span>
+                                    : null
                                 }
                             </h2>
                             <div className="home-image">
@@ -229,14 +231,14 @@ class Home extends Component {
                             </div>
                         </div>
 
-                        { this.state.classroomDevicesCount != null
+                        { this.state.classroomDevicesTable.count != null
                             ?
-                            <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevicesCount}` }</h3>
+                            <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevicesTable.count}` }</h3>
                             :
                             null
                         }
 
-                        { this.state.classroomDevicesCount
+                        { this.state.classroomDevicesTable.count
                             ?
                             <table className="results">
                                 <thead>

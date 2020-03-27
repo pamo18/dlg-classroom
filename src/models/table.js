@@ -80,6 +80,30 @@ const table = {
         ];
 
         return row;
+    },
+    userHeadClassroom: function() {
+        return [
+            <tr>
+                <th>Name</th>
+                <th>Typ</th>
+                <th>Våning</th>
+                <th>Hus</th>
+                <th>Hantera</th>
+            </tr>
+        ];
+    },
+    userRowClassroom: function(key, classroom, actions) {
+        return [
+            <tr>
+                <td data-title="Name">{ classroom.name }</td>
+                <td data-title="Typ">{ classroom.type }</td>
+                <td data-title="Våning">{ classroom.level }</td>
+                <td data-title="Hus">{ classroom.location }</td>
+                <td data-title="Hantera">
+                    { actions }
+                </td>
+            </tr>
+        ];
     }
 };
 

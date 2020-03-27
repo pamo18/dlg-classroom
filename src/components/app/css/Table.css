@@ -72,19 +72,32 @@ table.results i {
     margin-right: 2px;
 }
 
-.clickable {
-    cursor: pointer;
+table.results.large-rows tbody tr {
+    height: 6rem;
 }
 
-table.results i.clickable {
-    border-bottom: 2px solid rgb(255, 255, 255, 0);
+table.results.large-rows .table-message {
+    height: 6rem;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
 }
 
-table.results i.clickable:hover {
-    border-bottom: 2px solid rgb(255, 255, 255, 1);
+table.results tr figure {
+    margin: 0;
+    padding: 0;
 }
 
 @media only screen and (max-width: 980px) {
+    table.results.large-rows tbody tr {
+        height: auto;
+    }
+
+    table.results.large-rows .table-message {
+        height: auto;
+        display: block;
+    }
+
     table.results {
         border: none;
     }
@@ -119,7 +132,8 @@ table.results i.clickable:hover {
         display: block;
         position: relative;
         white-space: normal;
-        text-align: center;
+        text-align: left;
+        padding-left: 8rem;
     }
 
     table.results td:not(:last-child) {

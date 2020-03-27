@@ -1,9 +1,13 @@
+/* Report page */
 
+.report-log {
+    margin-top: 4rem;
+}
 
 @media only screen and (max-width: 980px) {
 
 }
 
 @media (max-width: 500px) {
-    
+
 }

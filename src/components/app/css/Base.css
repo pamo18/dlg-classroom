@@ -25,6 +25,19 @@ a:hover {
     text-decoration: underline;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
+i.clickable {
+    border-bottom: 2px solid rgb(255, 255, 255, 0);
+}
+
+i.clickable:not(.icon-text i):hover,
+.icon-text:hover .caption-text {
+    border-bottom: 2px solid rgb(255, 255, 255, 1);
+}
+
 tr:hover a {
     color: rgb(0, 33, 107)
 }

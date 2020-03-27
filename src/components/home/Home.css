@@ -67,6 +67,11 @@
     width: 80%;
 }
 
+.classroom-name i {
+    position: relative;
+    top: 7px;
+}
+
 @media only screen and (max-width: 980px) {
     .home-control .filter-categories {
         width: 450px;

@@ -22,9 +22,11 @@ class App extends Component {
             managerState: null,
             classroomViewState: null,
             deviceViewState: null,
+            reportViewState: null,
             homeStateCategory: null,
             classroomViewStateCategory: null,
-            deviceViewStateCategory: null
+            deviceViewStateCategory: null,
+            reportViewStateCategory: null
         };
         this.saveState = (page, state) => {
             this.setState({

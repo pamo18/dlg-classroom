@@ -18,6 +18,9 @@ import DeviceUpdate from './device/DeviceUpdate.js';
 import DeviceDelete from './device/DeviceDelete.js';
 import AddDevices from './classroom/devices/AddDevices.js';
 import SwapDevices from './classroom/devices/SwapDevices.js';
+import ReportView from './report/ReportView.js';
+import ReportUpdate from './report/ReportUpdate.js';
+import ReportDelete from './report/ReportDelete.js';
 
 class Admin extends Component {
     constructor(props) {
@@ -25,6 +28,7 @@ class Admin extends Component {
         this.classroomView = this.classroomView.bind(this);
         this.deviceView = this.deviceView.bind(this);
         this.classroomDeviceView = this.classroomDeviceView.bind(this);
+        this.reportView = this.reportView.bind(this);
         this.change = this.change.bind(this);
         this.state = {
             title: "Admin",
@@ -103,6 +107,24 @@ class Admin extends Component {
         this.change(view, `classroom-device-${admin}`);
     }
 
+    reportView(admin, id = null) {
+        let view;
+
+        switch(true) {
+            case (admin === "view"):
+                view = <ReportView admin={ this.reportView } save={this.props.save} restore={this.props.restore} />;
+                break;
+            case (admin === "edit"):
+                view = <ReportUpdate id={id} />;
+                break;
+            case (admin === "delete"):
+                view = <ReportDelete id={id} />;
+                break;
+        }
+
+        this.change(view, `report-${admin}`);
+    }
+
     change(view, selected = "") {
         this.setState({
             view: view,
@@ -157,6 +179,20 @@ class Admin extends Component {
                                     <div className="control-icon">
                                         { icon.get("Add", () => { this.classroomDeviceView("add") }, selected === "classroom-device-add") }
                                         { icon.get("Swap", () => { this.classroomDeviceView("swap") }, selected === "classroom-device-swap") }
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <div className="admin-control">
+                            <figure className="admin-group">
+                                <h2 className="center">Felanmälningar</h2>
+                                { icon.get("Message") }
+                                <figcaption>
+                                    <div className="control-icon">
+                                        { icon.get("View", () => { this.reportView("view") }, selected === "report-view") }
+                                        { icon.get("Edit", () => { this.reportView("edit") }, selected === "report-edit") }
+                                        { icon.get("Delete", () => { this.reportView("delete") }, selected === "report-delete") }
                                     </div>
                                 </figcaption>
                             </figure>
