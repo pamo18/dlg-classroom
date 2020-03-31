@@ -5,6 +5,7 @@ import  { withRouter, Redirect, Link } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
 import form from '../../../models/form.js';
+import table from '../../../models/table.js';
 import icon from '../../../models/icon.js';
 import '../Admin.css';
 import Categories from '../../filter/Categories.js';
@@ -12,12 +13,14 @@ import Categories from '../../filter/Categories.js';
 class ReportView extends Component {
     constructor(props) {
         super(props);
+        this.getReports = this.getReports.bind(this);
         this.filter = this.filter.bind(this);
         this.adminHandler = this.adminHandler.bind(this);
         this.state = {
             data: [],
             column: "location",
-            filter: "Alla"
+            filter: "Alla",
+            reportsTable: {}
         };
     }
 
@@ -49,7 +52,34 @@ class ReportView extends Component {
             this.setState({
                 data: data,
                 filter: filter
-            });
+            }, () => this.getReports());
+        });
+    }
+
+    getReports() {
+        let count = 0;
+
+        let reportRows = this.state.data.map((report) => {
+            count++;
+            let key = `report-${report.id}`;
+            let view = () => utils.redirect(this, "/report/page", { id: report.id });
+            let edit = () => this.adminHandler("edit", report.id);
+            let del = () => this.adminHandler("delete", report.id);
+            let actions = [
+                icon.get("View", view),
+                icon.get("Edit", edit),
+                icon.get("Delete", del)
+            ];
+
+            return table.adminRowReport(key, report, actions, this);
+        });
+
+        this.setState({
+            reportsTable: {
+                head: table.adminHeadReport(),
+                body: reportRows,
+                count: count
+            }
         });
     }
 
@@ -75,51 +105,14 @@ class ReportView extends Component {
                     />
                 </div>
 
+                <h2 class="center">Aktuella Felanmälningar: { this.state.reportsTable.count }st </h2>
+
                 <table className="results large-rows">
                     <thead>
-                        <tr>
-                            <th width="15%">Klassrum</th>
-                            <th width="30%">Vad</th>
-                            <th width="30%">Beskrivning</th>
-                            <th width="5%">ag</th>
-                            <th width="5%">ad</th>
-                            <th width="15%">Hantera</th>
-                        </tr>
+                        { this.state.reportsTable.head }
                     </thead>
                     <tbody>
-                        { this.state.data.map((report) => {
-                            return [
-                                <tr>
-                                    <td data-title="Klassrum">
-                                    <figure className="icon-text">
-                                        { icon.get("View", () => utils.redirect(this, `/classroom`, {id: report.classroom_id})) }
-                                        <figcaption>
-                                            <span className="caption-text">
-                                                { report.classroom_name }
-                                            </span>
-                                        </figcaption>
-                                    </figure>
-                                    </td>
-                                    <td data-title="Vad">
-                                        <figure className="icon-text">
-                                            { icon.get("View", () => utils.redirect(this, `/${report.item}`, {id: report.device_id || report.classroom_id})) }
-                                            <figcaption>
-                                                <span className="caption-text">
-                                                    { report.item === "device" ? `${report.device_brand} ${report.device_model}` : "Allämnt" }
-                                                </span>
-                                            </figcaption>
-                                        </figure>
-                                    </td>
-                                    <td data-title="Beskrivning"><div className="table-message">{ report.message }</div></td>
-                                    <td data-title="Åtgärdning">{ report.action || "-" }</td>
-                                    <td data-title="Åtgärdat">{ report.solved || "-" }</td>
-                                    <td data-title="Hantera">
-                                        { icon.get("Edit", () => this.adminHandler("edit", report.id)) }
-                                        { icon.get("Delete", () => this.adminHandler("delete", report.id)) }
-                                    </td>
-                                </tr>
-                            ];
-                        })}
+                        { this.state.reportsTable.body }
                     </tbody>
                 </table>
             </article>

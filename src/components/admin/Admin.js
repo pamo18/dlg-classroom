@@ -25,6 +25,7 @@ import ReportDelete from './report/ReportDelete.js';
 class Admin extends Component {
     constructor(props) {
         super(props);
+        this.adminView = this.adminView.bind(this);
         this.classroomView = this.classroomView.bind(this);
         this.deviceView = this.deviceView.bind(this);
         this.classroomDeviceView = this.classroomDeviceView.bind(this);
@@ -34,7 +35,8 @@ class Admin extends Component {
             title: "Admin",
             image: image,
             view: null,
-            selected: ""
+            selected: "",
+            admin: ""
         };
     }
 
@@ -42,8 +44,25 @@ class Admin extends Component {
         let state = this.props.restore("adminState");
 
         if (state) {
-            this.setState(state);
+            this.setState(state, () => this.adminView(this.state.selected, this.state.admin));
         }
+    }
+
+    adminView(selected, admin) {
+        switch(true) {
+            case (selected === "classroom"):
+                this.classroomView(admin);
+                break;
+            case (selected === "device"):
+                this.deviceView(admin);
+                break;
+            case (selected === "classroom-device"):
+                this.classroomDeviceView(admin);
+                break;
+            case (selected === "report"):
+                this.reportView(admin);
+                break;
+            }
     }
 
     componentWillUnmount() {
@@ -68,7 +87,7 @@ class Admin extends Component {
                 break;
         }
 
-        this.change(view, `classroom-${admin}`);
+        this.change(view, "classroom", admin);
     }
 
     deviceView(admin) {
@@ -89,7 +108,7 @@ class Admin extends Component {
                 break;
         }
 
-        this.change(view, `device-${admin}`);
+        this.change(view, "device", admin);
     }
 
     classroomDeviceView(admin) {
@@ -104,7 +123,7 @@ class Admin extends Component {
                 break;
         }
 
-        this.change(view, `classroom-device-${admin}`);
+        this.change(view, "classroom-device", admin);
     }
 
     reportView(admin, id = null) {
@@ -112,7 +131,7 @@ class Admin extends Component {
 
         switch(true) {
             case (admin === "view"):
-                view = <ReportView admin={ this.reportView } save={this.props.save} restore={this.props.restore} />;
+                view = <ReportView admin={ this.reportView } save={this.props.save} restore={this.props.restore } />;
                 break;
             case (admin === "edit"):
                 view = <ReportUpdate id={id} />;
@@ -122,18 +141,20 @@ class Admin extends Component {
                 break;
         }
 
-        this.change(view, `report-${admin}`);
+        this.change(view, "report", admin);
     }
 
-    change(view, selected = "") {
+    change(view, selected, admin) {
         this.setState({
             view: view,
-            selected: selected
+            selected: selected,
+            admin: admin
         });
     }
 
     render() {
         let selected = this.state.selected;
+        let admin = this.state.admin;
         return (
             <main>
                 <div className="left-column">
@@ -147,10 +168,10 @@ class Admin extends Component {
                                 { icon.get("Classroom") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { this.classroomView("view") }, selected === "classroom-view") }
-                                        { icon.get("Add", () => { this.classroomView("add") }, selected === "classroom-add") }
-                                        { icon.get("Edit", () => { this.classroomView("edit") }, selected === "classroom-edit") }
-                                        { icon.get("Delete", () => { this.classroomView("delete") }, selected === "classroom-delete") }
+                                        { icon.get("View", () => { this.classroomView("view") }, selected === "classroom" && admin === "view") }
+                                        { icon.get("Add", () => { this.classroomView("add") }, selected === "classroom" && admin === "add") }
+                                        { icon.get("Edit", () => { this.classroomView("edit") }, selected === "classroom" && admin === "edit") }
+                                        { icon.get("Delete", () => { this.classroomView("delete") }, selected === "classroom" && admin === "delete") }
                                     </div>
                                 </figcaption>
                             </figure>
@@ -162,10 +183,10 @@ class Admin extends Component {
                                 { icon.get("Device") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { this.deviceView("view") }, selected === "device-view") }
-                                        { icon.get("Add", () => { this.deviceView("add") }, selected === "device-add") }
-                                        { icon.get("Edit", () => { this.deviceView("edit") }, selected === "device-edit") }
-                                        { icon.get("Delete", () => { this.deviceView("delete") }, selected === "device-delete") }
+                                        { icon.get("View", () => { this.deviceView("view") }, selected === "device" && admin === "view") }
+                                        { icon.get("Add", () => { this.deviceView("add") }, selected === "device" && admin === "add") }
+                                        { icon.get("Edit", () => { this.deviceView("edit") }, selected === "device" && admin === "edit") }
+                                        { icon.get("Delete", () => { this.deviceView("delete") }, selected === "device" && admin === "delete") }
                                     </div>
                                 </figcaption>
                             </figure>
@@ -177,8 +198,8 @@ class Admin extends Component {
                                 { icon.get("classroomDevice") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("Add", () => { this.classroomDeviceView("add") }, selected === "classroom-device-add") }
-                                        { icon.get("Swap", () => { this.classroomDeviceView("swap") }, selected === "classroom-device-swap") }
+                                        { icon.get("Add", () => { this.classroomDeviceView("add") }, selected === "classroom-device" && admin === "add") }
+                                        { icon.get("Swap", () => { this.classroomDeviceView("swap") }, selected === "classroom-device" && admin === "swap") }
                                     </div>
                                 </figcaption>
                             </figure>
@@ -190,9 +211,9 @@ class Admin extends Component {
                                 { icon.get("Message") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { this.reportView("view") }, selected === "report-view") }
-                                        { icon.get("Edit", () => { this.reportView("edit") }, selected === "report-edit") }
-                                        { icon.get("Delete", () => { this.reportView("delete") }, selected === "report-delete") }
+                                        { icon.get("View", () => { this.reportView("view") }, selected === "report" && admin === "view") }
+                                        { icon.get("Edit", () => { this.reportView("edit") }, selected === "report" && admin === "edit") }
+                                        { icon.get("Delete", () => { this.reportView("delete") }, selected === "report" && admin === "delete") }
                                     </div>
                                 </figcaption>
                             </figure>

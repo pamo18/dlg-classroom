@@ -28,9 +28,7 @@ class Home extends Component {
             classroomDevicesTable: {},
             classroomDevicesCount: null,
             classroomSelected: null,
-            classroom: {
-                image: ""
-            },
+            classroom: {},
             name: null,
             devices: [],
             filter: "Alla"
@@ -98,16 +96,8 @@ class Home extends Component {
         try {
             let classroom = this.state.classroomData[id];
             let name = form.optionName(classroom, this.state.classroomTemplate);
-            let report = () => utils.redirect(this, "/report", {item: "classroom", id: classroom.id, data: classroom});
+            let report = () => utils.redirect(this, "/report", { itemGroup: "classroom", classroomData: classroom, image: classroom.image });
             let reportStatus = db.reportCheck("classroom", classroom.id);
-
-            try {
-                this.setState({
-                    image: require(`../../assets/classroom/${classroom.image}`)
-                });
-            } catch(error) {
-                console.log(error);
-            }
 
             reportStatus.then((status) => {
                 this.setState({
@@ -121,7 +111,6 @@ class Home extends Component {
                         image: classroom.image,
                         report: icon.reportStatus(report, status)
                     },
-                    image: image,
                     selected: classroom.id
                 }, () => this.loadDevices(id));
             });
@@ -147,7 +136,7 @@ class Home extends Component {
             count++;
             let key = `device-${device.id}`;
             let view = () => utils.redirect(this, "/device", {id: device.id});
-            let report = () => utils.redirect(this, "/report", {item: "device", id: device.id, data: device});
+            let report = () => utils.redirect(this, "/report", { itemGroup: "device", deviceData: device, image: this.state.classroom.image });
             let status = await db.reportCheck("device", device.id);
             let actions = [
                 icon.get("View", view),

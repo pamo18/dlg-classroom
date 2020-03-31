@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import  { withRouter } from 'react-router-dom';
 import icon from './icon.js';
+import utils from './utils.js';
 
 // Table helper
 const table = {
@@ -84,7 +86,7 @@ const table = {
     userHeadClassroom: function() {
         return [
             <tr>
-                <th>Name</th>
+                <th>Namn</th>
                 <th>Typ</th>
                 <th>Våning</th>
                 <th>Hus</th>
@@ -94,7 +96,7 @@ const table = {
     },
     userRowClassroom: function(key, classroom, actions) {
         return [
-            <tr>
+            <tr key={ key }>
                 <td data-title="Name">{ classroom.name }</td>
                 <td data-title="Typ">{ classroom.type }</td>
                 <td data-title="Våning">{ classroom.level }</td>
@@ -104,7 +106,75 @@ const table = {
                 </td>
             </tr>
         ];
-    }
+    },
+    adminHeadReport: function() {
+        let head = [
+            <tr>
+                <th width="25%">Titel</th>
+                <th width="25%">Klassrum</th>
+                <th width="25%">Vad</th>
+                <th width="5%">Åtgärdat</th>
+                <th width="20%">Hantera</th>
+            </tr>
+        ];
+
+        return head;
+    },
+    adminRowReport: function(key, report, actions, that) {
+        let row = [
+            <tr key={ key }>
+                <td data-title="Titel">{ report.name }</td>
+                <td data-title="Klassrum">
+                <figure className="icon-text">
+                    { icon.get("View", () => utils.redirect(that, `/classroom`, { id: report.classroom_id })) }
+                    <figcaption>
+                        <span className="caption-text">
+                            { report.classroom_name }
+                        </span>
+                    </figcaption>
+                </figure>
+                </td>
+                <td data-title="Vad">
+                    <figure className="icon-text">
+                        { icon.get("View", () => utils.redirect(that, `/${ report.item_group }`, { id: report.item_id })) }
+                        <figcaption>
+                            <span className="caption-text">
+                                { report.item_group === "device" ? `${ report.device_brand } ${ report.device_model }` : "Allämnt" }
+                            </span>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td data-title="Åtgärdat">{ report.solved || "-" }</td>
+                <td data-title="Hantera">
+                    { actions }
+                </td>
+            </tr>
+        ];
+
+        return row;
+    },
+    userHeadReport: function() {
+        let head = [
+            <tr>
+                <th width="20%">Titel</th>
+                <th width="60%">Meddeland</th>
+                <th width="20%">Åtgärdat</th>
+            </tr>
+        ];
+
+        return head;
+    },
+    userRowReport: function(key, report) {
+        let row = [
+            <tr key={ key }>
+                <td data-title="Titel">{ report.name }</td>
+                <td data-title="Meddelande">{ report.message }</td>
+                <td data-title="Åtgärdat">{ report.solved || "-" }</td>
+            </tr>
+        ];
+
+        return row;
+    },
 };
 
-export default table;
+export default withRouter(table);

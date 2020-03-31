@@ -3,9 +3,9 @@ const api = base.api();
 
 // Database helper
 const db = {
-    reportCheck: async function(item, value) {
+    reportCheck: async function(itemGroup, itemid) {
         try {
-            let res = await fetch(`${api}/report/check/${item}&${value}`);
+            let res = await fetch(`${api}/report/check/${itemGroup}&${itemid}`);
 
             let data = await res.json();
 

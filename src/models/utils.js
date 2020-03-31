@@ -1,11 +1,13 @@
 const utils = {
+    getISODate: function(date) {
+        if (date) {
+            return new Date(date).toISOString().substring(0, 10);
+        }
+    },
     dateAddMonths: function(months, start = new Date()) {
         let end = new Date(start);
 
-
         end.setMonth(end.getMonth() + months);
-
-        console.log(months);
 
         return {
             start: utils.getDateAsString(start),

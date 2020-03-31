@@ -28,20 +28,21 @@ class ReportUpdate extends Component {
 
     loadReports() {
         let res = db.fetchAll("report");
+        let id = this.props.id || null;
 
         res.then((data) => {
             let organize = form.organize(data, "item", "id");
             let reportData = organize.data;
             let reportGroups = organize.groups;
             let template = this.state.reportTemplate;
-            let formGroups = form.group(reportGroups, "id", template);
+            let formGroups = form.group(reportGroups, "id", template, (optionId) => optionId === id);
 
             this.setState({
                 reportData: reportData,
                 reportGroups: formGroups
             },() => {
-                if (this.props.id) {
-                    this.getReport(this.props.id);
+                if (id) {
+                    this.getReport(id);
                 }
             });
         });

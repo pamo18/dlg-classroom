@@ -1,10 +1,12 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
+import ReportList from './view/ReportList.js';
 import  { withRouter } from 'react-router-dom';
 import db from '../../models/db.js';
 import utils from '../../models/utils.js';
 import icon from '../../models/icon.js';
+import image from '../../models/image.js';
 import table from '../../models/table.js';
 import './Report.css';
 
@@ -14,64 +16,54 @@ class Report extends Component {
         this.reportItem = this.reportItem.bind(this);
         this.state = {
             title: "Felanmäla",
-            report: [],
-            item: this.props.location.state.item,
-            id: this.props.location.state.id,
-            data: this.props.location.state.data,
-            deviceTable: {
-                head: [],
-                table: []
-            }
+            reports: [],
+            reportsTable: {},
+            reportList: null,
+            itemGroup: this.props.location.state.itemGroup,
+            classroomData: this.props.location.state.classroomData || {},
+            deviceData: this.props.location.state.deviceData || {},
+            itemTable: {}
         };
     }
 
     componentDidMount() {
-        this.getReports();
         this.getItem();
     }
 
-    getReports() {
-        let item = this.state.item;
-        let id = this.state.id;
-        let res = db.fetchAllWhere("report", item, id);
-
-        res.then((data) => {
-            this.setState({
-                report: data
-            });
-        });
-    }
-
     getItem() {
-        let item = this.state.item;
-        let id = this.state.id;
-        let data = this.state.data;
-        let key,
+        let itemGroup = this.state.itemGroup;
+        let classroomData = this.state.classroomData;
+        let deviceData = this.state.deviceData;
+        let data,
+            key,
             view,
             actions;
 
         switch(true) {
-            case (item === "classroom"):
+            case (itemGroup === "classroom"):
                 key = `report-classroom`;
-                view = () => utils.redirect(this, "/classroom", {id: this.state.id});
+                view = () => utils.redirect(this, "/classroom", { id: classroomData.id });
                 actions = icon.get("View", view);
 
                 this.setState({
-                    deviceTable: {
+                    reportList: <ReportList itemGroup={ itemGroup } itemid={ classroomData.id } />,
+                    itemTable: {
                         head: table.userHeadClassroom(),
-                        body: table.userRowClassroom(key, data, actions)
+                        body: table.userRowClassroom(key, classroomData, actions)
                     }
                 });
                 break;
-            case (item === "device"):
+
+            case (itemGroup === "device"):
                 key = `report-device`;
-                view = () => utils.redirect(this, "/device", {id: this.state.id});
+                view = () => utils.redirect(this, "/device", { id: deviceData.id });
                 actions = icon.get("View", view);
 
                 this.setState({
-                    deviceTable: {
+                    reportList: <ReportList itemGroup={ itemGroup } itemid={ deviceData.id } />,
+                    itemTable: {
                         head: table.userHeadDevice(),
-                        body: table.userRowDevice(key, data, actions)
+                        body: table.userRowDevice(key, deviceData, actions)
                     }
                 });
                 break;
@@ -81,25 +73,25 @@ class Report extends Component {
     reportItem(e) {
         e.preventDefault();
         const data = new FormData(e.target);
-        let item = this.state.item;
+        let itemGroup = this.state.itemGroup;
         let res;
 
         switch(true) {
-            case (item === "classroom"):
+            case (itemGroup === "classroom"):
                 let classroom = {
-                    item: "classroom",
-                    item_id: this.state.id,
                     name:  data.get("name"),
+                    item_group: "classroom",
+                    item_id: this.state.classroomData.id,
                     message: data.get("message")
                 };
 
                 res = db.insert("report", classroom);
                 break;
-            case (item === "device"):
+            case (itemGroup === "device"):
                 let device = {
-                    item: "device",
-                    item_id: this.state.id,
                     name:  data.get("name"),
+                    item_group: "device",
+                    item_id: this.state.deviceData.id,
                     message: data.get("message")
                 };
 
@@ -118,46 +110,23 @@ class Report extends Component {
                     <br />
                     { icon.get("Message") }
                 </h2>
+
+                <div className="report-image">
+                    <img src={ image.get(this.props.location.state.image) } alt="Classroom image"/>
+                </div>
+
+                <h2 className="center">Felanmäla följande:</h2>
+
                 <table className="results">
                     <thead>
-                        { this.state.deviceTable.head }
+                        { this.state.itemTable.head }
                     </thead>
                     <tbody>
-                        { this.state.deviceTable.body }
+                        { this.state.itemTable.body }
                     </tbody>
                 </table>
 
-                {
-                    this.state.report
-                        ?
-                        <div className="report-log">
-                            <h2 class="center">Alla felanmälningar, { this.state.report.length }st</h2>
-                            <table className="results gap">
-                                <thead>
-                                    <tr>
-                                        <th>Beskrivning</th>
-                                        <th>Åtgärdning</th>
-                                        <th>Åtgärdat</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    { this.state.report.map((row) => {
-                                        return [
-                                            <tr key={`report-${row.id}`}>
-                                                <td data-title="Beskrivning">{ row.message }</td>
-                                                <td data-title="Åtgärdning">{ row.action || "-" }</td>
-                                                <td data-title="Åtgärdat">{ row.solved || "-" }</td>
-                                            </tr>
-                                        ];
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
-                        :
-                        null
-                }
-
-                <form className="form-register" onSubmit={this.reportItem}>
+                <form className="form-register" onSubmit={ this.reportItem }>
                     <label className="form-label">Titel
                         <input className="form-input" type="text" name="name" placeholder="Ett namn som förklare snabbt problemet." />
                     </label>
@@ -169,6 +138,7 @@ class Report extends Component {
                     <input className="button center-margin" type="submit" name="create" value="Felanmäla" />
                 </form>
 
+                { this.state.reportList }
 
             </article>
         );

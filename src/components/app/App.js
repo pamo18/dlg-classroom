@@ -8,6 +8,7 @@ import About from '../about/About.js';
 import Classroom from '../classroom/Classroom.js';
 import Device from '../device/Device.js';
 import Report from '../report/Report.js';
+import ReportPage from '../report/view/ReportPage.js';
 import Admin from '../admin/Admin.js';
 import './App.css';
 
@@ -17,16 +18,15 @@ class App extends Component {
         this.state = {
             activeUser: "",
             register: "",
-            homeState: null,
             adminState: null,
             managerState: null,
-            classroomViewState: null,
-            deviceViewState: null,
-            reportViewState: null,
+            homeState: null,
             homeStateCategory: null,
+            classroomViewState: null,
             classroomViewStateCategory: null,
+            deviceViewState: null,
             deviceViewStateCategory: null,
-            reportViewStateCategory: null
+            reportViewState: null
         };
         this.saveState = (page, state) => {
             this.setState({
@@ -86,6 +86,7 @@ class App extends Component {
                             <Route exact path="/device" component={Device} />
                             <Route exact path="/classroom" component={Classroom} />
                             <Route exact path="/report" component={Report} />
+                            <Route exact path="/report/page" component={ReportPage} />
                             <Route exact path="/admin" render={() => <Admin save={this.saveState} restore={this.restoreState} />} />
                         </Switch>
                     </div>

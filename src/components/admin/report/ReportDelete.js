@@ -27,20 +27,21 @@ class ReportDelete extends Component {
 
     loadReports() {
         let res = db.fetchAll("report");
+        let id = this.props.id || null;
 
         res.then((data) => {
             let organize = form.organize(data, "item", "id");
             let reportData = organize.data;
             let reportGroups = organize.groups;
             let template = this.state.reportTemplate;
-            let formGroups = form.group(reportGroups, "id", template);
+            let formGroups = form.group(reportGroups, "id", template, (optionId) => optionId === id);
 
             this.setState({
                 reportData: reportData,
                 reportGroups: formGroups
             },() => {
-                if (this.props.id) {
-                    this.getReport(this.props.id);
+                if (id) {
+                    this.getReport(id);
                 }
             });
         });
@@ -88,7 +89,7 @@ class ReportDelete extends Component {
                             <h2 className="center">{ this.state.title }</h2>
                             <input className="form-input" type="hidden" name="id" required value={ this.state.report.id } />
 
-                            <label className="form-label">Meddelande
+                            <label className="form-label">Titel
                                 <input className="form-input" type="text" name="name" required readonly value={ this.state.report.name } />
                             </label>
 

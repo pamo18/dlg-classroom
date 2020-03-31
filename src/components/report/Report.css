@@ -4,8 +4,23 @@
     margin-top: 4rem;
 }
 
-@media only screen and (max-width: 980px) {
+.report-image {
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+}
 
+.report-image img {
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+
+
+@media only screen and (max-width: 980px) {
+    .report-image {
+        width: 100%;
+    }
 }
 
 @media (max-width: 500px) {
