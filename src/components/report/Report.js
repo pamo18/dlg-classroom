@@ -22,7 +22,21 @@ class Report extends Component {
             itemGroup: this.props.location.state.itemGroup,
             classroomData: this.props.location.state.classroomData || {},
             deviceData: this.props.location.state.deviceData || {},
-            itemTable: {}
+            itemTable: {},
+            classroomSelection: [
+                ["name", null],
+                ["type", null],
+                ["level", null],
+                ["location", null],
+                ["manage", null]
+            ],
+            deviceSelection: [
+                ["category", null],
+                ["brand", null],
+                ["model", null],
+                ["serial", null],
+                ["manage", null]
+            ]
         };
     }
 
@@ -35,35 +49,35 @@ class Report extends Component {
         let classroomData = this.state.classroomData;
         let deviceData = this.state.deviceData;
         let data,
-            key,
+            selection,
             view,
             actions;
 
         switch(true) {
             case (itemGroup === "classroom"):
-                key = `report-classroom`;
+                selection = this.state.classroomSelection;
                 view = () => utils.redirect(this, "/classroom", { id: classroomData.id });
                 actions = icon.get("View", view);
 
                 this.setState({
                     reportList: <ReportList itemGroup={ itemGroup } itemid={ classroomData.id } />,
                     itemTable: {
-                        head: table.userHeadClassroom(),
-                        body: table.userRowClassroom(key, classroomData, actions)
+                        head: table.classroomHead(selection),
+                        body: table.classroomBody(classroomData, selection, actions)
                     }
                 });
                 break;
 
             case (itemGroup === "device"):
-                key = `report-device`;
+                selection = this.state.deviceSelection;
                 view = () => utils.redirect(this, "/device", { id: deviceData.id });
                 actions = icon.get("View", view);
 
                 this.setState({
                     reportList: <ReportList itemGroup={ itemGroup } itemid={ deviceData.id } />,
                     itemTable: {
-                        head: table.userHeadDevice(),
-                        body: table.userRowDevice(key, deviceData, actions)
+                        head: table.deviceHead(selection),
+                        body: table.deviceBody(deviceData, selection, actions)
                     }
                 });
                 break;

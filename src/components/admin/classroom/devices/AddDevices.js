@@ -12,15 +12,7 @@ import '../../Admin.css';
 class AddDevice extends Component {
     constructor(props) {
         super(props);
-        this.getClassroom = this.getClassroom.bind(this);
-        this.getClassroomGroups = this.getClassroomGroups.bind(this);
-        this.getDevice = this.getDevice.bind(this);
-        this.getDeviceGroups = this.getDeviceGroups.bind(this);
-        this.getClassroomDevices = this.getClassroomDevices.bind(this);
-        this.removeDevice = this.removeDevice.bind(this);
         this.addDevice = this.addDevice.bind(this);
-        this.removeDevice = this.removeDevice.bind(this);
-        this.reload = this.reload.bind(this);
         this.deviceHandler = this.deviceHandler.bind(this);
         this.classroomHandler = this.classroomHandler.bind(this);
         this.state = {
@@ -38,8 +30,19 @@ class AddDevice extends Component {
             classroom: {},
             classroomSelected: null,
             classroomDevices: [],
-            classroomDevicesTable: {},
-            classroomDevicesCount: null,
+            classroomDevicesTable: {
+                head: [],
+                body: []
+            },
+            selection : [
+                ["category", null],
+                ["brand", null],
+                ["model", null],
+                ["serial", null],
+                ["price", null],
+                ["link", null],
+                ["manage", null]
+            ]
         };
     }
 
@@ -64,16 +67,15 @@ class AddDevice extends Component {
 
     // Load Classrooms and group data - Step 1
     loadClassrooms() {
-        let that = this;
         let res = db.fetchAll("classroom");
 
-        res.then(function(data) {
+        res.then((data) => {
             let organize = form.organize(data, "location", "id");
             let classroomData = organize.data;
             let classroomGroups = organize.groups;
-            let classroomFormGroups = that.getClassroomGroups(classroomGroups);
+            let classroomFormGroups = this.getClassroomGroups(classroomGroups);
 
-            that.setState({
+            this.setState({
                 classroomData: classroomData,
                 classroomGroups: classroomGroups,
                 classroomFormGroups: classroomFormGroups
@@ -100,13 +102,12 @@ class AddDevice extends Component {
 
     // Load Devices - Step 1
     loadDevices() {
-        let that = this;
         let allData = {};
         let groups = {};
         let res = db.fetchAll("device/available");
 
-        res.then(function(data) {
-            that.getDeviceGroups(data);
+        res.then((data) => {
+            this.getDeviceGroups(data);
         });
     }
 
@@ -152,43 +153,36 @@ class AddDevice extends Component {
 
     // Get classroom - Step 2 - Get classroom devices
     loadClassroomDevices(id) {
-        let that = this;
         let res = db.fetchAllWhere("classroom/device", "classroom_id", id);
 
-        res.then(function(data) {
-            that.setState({
+        res.then((data) => {
+            this.setState({
                 classroomDevices: data
-            }, () => that.getClassroomDevices());
+            }, () => this.getClassroomDevices());
         });
     }
 
     // Get classroom - Step 3 - Build classroom devices table rows
     getClassroomDevices() {
-        let count = 0;
-        let that = this;
         let classroomid = this.state.classroom.id;
+        let selection = this.state.selection;
 
-        let classroomDevicesRows = this.state.classroomDevices.map(function(device) {
-            let view = () => utils.redirect(that, "/device", {id: device.id});
-            let del = () => that.removeDevice(classroomid, device.id);
-
-            count++;
-
-            let key = `classroomDevice-${device.id}`;
-            let admin = [
+        let classroomDevicesRows = this.state.classroomDevices.map((device) => {
+            let view = () => utils.redirect(this, "/device", {id: device.id});
+            let del = () => this.removeDevice(classroomid, device.id);
+            let actions = [
                 icon.get("View", view),
                 icon.get("Delete", del),
             ];
 
-            return table.adminRowDevice(key, device, admin);
+            return table.deviceBody(device, selection, actions);
         });
 
         this.setState({
             classroomDevicesTable: {
-                head: table.adminHeadDevice(),
+                head: table.deviceHead(selection),
                 body: classroomDevicesRows
-            },
-            classroomDevicesCount: count
+            }
         });
     }
 
@@ -197,14 +191,15 @@ class AddDevice extends Component {
             let res = this.state.deviceData[id];
             let purchased = new Date(res.purchased).toISOString().substring(0, 10);
             let expires = new Date(res.expires).toISOString().substring(0, 10);
-            let key = `device-${res.id}`;
             let view = () => utils.redirect(this, "/device", {id: res.id});
-            let row = table.adminRowDevice(key, res, icon.get("View", view));
+            let selection = this.state.selection;
+
+            let row = table.deviceBody(res, selection, icon.get("View", view));
 
             this.setState({
                 device: res,
                 deviceTable: {
-                    head: table.adminHeadDevice(),
+                    head: table.deviceHead(selection),
                     body: row
                 },
                 selectedDevice: id
@@ -218,7 +213,6 @@ class AddDevice extends Component {
         e.preventDefault();
         const data = new FormData(e.target);
 
-        let that = this;
         let classroomid = data.get("classroomid");
         let deviceid = data.get("deviceid");
         let classroomDevice = {
@@ -228,10 +222,10 @@ class AddDevice extends Component {
 
         let res = db.insert("classroom/device", classroomDevice);
 
-        res.then(function() {
-            that.reload();
+        res.then(() => {
+            this.reload();
 
-            that.setState({
+            this.setState({
                 device: {},
                 deviceGroups: []
             });
@@ -279,7 +273,7 @@ class AddDevice extends Component {
                     { Object.entries(this.state.classroom).length > 0
                         ?
                         <div>
-                            <h3 class="center">{ `Antal apparater: ${this.state.classroomDevicesCount}` }</h3>
+                            <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevices.length }` }</h3>
                             <table className="results">
                                 <thead>
                                     { this.state.classroomDevicesTable.head }

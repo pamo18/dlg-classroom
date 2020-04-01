@@ -12,14 +12,8 @@ import '../../Admin.css';
 class SwapDevices extends Component {
     constructor(props) {
         super(props);
-        this.getClassroom = this.getClassroom.bind(this);
-        this.loadClassroomDevices = this.loadClassroomDevices.bind(this);
-        this.getClassroomDevices = this.getClassroomDevices.bind(this);
         this.classroom1Handler = this.classroom1Handler.bind(this);
         this.classroom2Handler = this.classroom2Handler.bind(this);
-        this.swapDevice = this.swapDevice.bind(this);
-        this.removeDevice = this.removeDevice.bind(this);
-        this.reload = this.reload.bind(this);
         this.state = {
             title: "Byta utrustning i ett klassrum",
             classroomNameTemplate: "name",
@@ -29,13 +23,27 @@ class SwapDevices extends Component {
             classroom1: {},
             classroom1Selected: null,
             classroom1Devices: [],
-            classroom1DevicesTable: {},
+            classroom1DevicesTable: {
+                head: [],
+                body: []
+            },
             classroom1DevicesCount: null,
             classroom2: {},
             classroom2Selected: null,
             classroom2Devices: [],
-            classroom2DevicesTable: {},
-            classroom2DevicesCount: null
+            classroom2DevicesTable: {
+                head: [],
+                body: []
+            },
+            selection : [
+                ["category", null],
+                ["brand", null],
+                ["model", null],
+                ["serial", null],
+                ["price", null],
+                ["link", null],
+                ["manage", null]
+            ]
         };
     }
 
@@ -146,9 +154,9 @@ class SwapDevices extends Component {
 
     // Get classroom - Step 3 - Build classroom devices table rows
     getClassroomDevices(classroom) {
-        let count = 0;
         let classroomDevices = `${classroom}Devices`;
         let classroomid = this.state[classroom].id;
+        let selection = this.state.selection;
 
         let classroomDevicesRows = this.state[classroomDevices].map((device) => {
             let swap;
@@ -157,30 +165,26 @@ class SwapDevices extends Component {
             let view = () => utils.redirect(this, "/device", {id: device.id});
             let del = () => this.removeDevice(classroomid, device.id);
 
-            count++;
-
             if (classroom === "classroom1") {
                 swap = icon.get("Down", down);
             } else if (classroom === "classroom2") {
                 swap = icon.get("Up", up);
             }
 
-            let key = `${classroom}Device-${device.id}`;
-            let admin = [
+            let actions = [
                 icon.get("View", view),
                 icon.get("Delete", del),
                 swap
             ];
 
-            return table.adminRowDevice(key, device, admin);
+            return table.deviceBody(device, selection, actions);
         });
 
         this.setState({
             [`${classroom}DevicesTable`]: {
-                head: table.adminHeadDevice(),
+                head: table.deviceHead(selection),
                 body: classroomDevicesRows
-            },
-            [`${classroom}DevicesCount`]: count
+            }
         });
     }
 
@@ -238,7 +242,7 @@ class SwapDevices extends Component {
                         Object.entries(this.state.classroom1).length > 0
                         ?
                         <div>
-                            <h3 class="center">{ `Antal apparater: ${this.state.classroom1DevicesCount}` }</h3>
+                            <h3 class="center">{ `Antal apparater: ${ this.state.classroom1Devices.length }` }</h3>
                             <table className={ this.state.type === "Lägg till" ? "results" : "results swap" }>
                                 <thead>
                                     { this.state.classroom1DevicesTable.head }
@@ -262,7 +266,7 @@ class SwapDevices extends Component {
                         Object.entries(this.state.classroom2).length > 0
                         ?
                         <div>
-                            <h3 class="center">{ `Antal apparater: ${this.state.classroom2DevicesCount}` }</h3>
+                            <h3 class="center">{ `Antal apparater: ${ this.state.classroom2Devices.length }` }</h3>
                             <table className="results swap">
                                 <thead>
                                     { this.state.classroom2DevicesTable.head }

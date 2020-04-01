@@ -16,7 +16,7 @@ class ReportDelete extends Component {
             title: "Radera felanmälning",
             reportData: [],
             reportGroups: [],
-            reportTemplate: "classroom_name,device_brand,device_model",
+            reportTemplate: "classroom_name,-name",
             report: null,
         };
     }
@@ -30,7 +30,7 @@ class ReportDelete extends Component {
         let id = this.props.id || null;
 
         res.then((data) => {
-            let organize = form.organize(data, "item", "id");
+            let organize = form.organize(data, "item_group", "id");
             let reportData = organize.data;
             let reportGroups = organize.groups;
             let template = this.state.reportTemplate;

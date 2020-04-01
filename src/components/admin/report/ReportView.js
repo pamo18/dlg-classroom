@@ -20,7 +20,17 @@ class ReportView extends Component {
             data: [],
             column: "location",
             filter: "Alla",
-            reportsTable: {}
+            reportsTable: {
+                head: [],
+                body: []
+            },
+            selection : [
+                ["title", null],
+                ["classroom", null],
+                ["item", null],
+                ["solved", null],
+                ["manage", null]
+            ]
         };
     }
 
@@ -57,10 +67,9 @@ class ReportView extends Component {
     }
 
     getReports() {
-        let count = 0;
+        let selection = this.state.selection;
 
         let reportRows = this.state.data.map((report) => {
-            count++;
             let key = `report-${report.id}`;
             let view = () => utils.redirect(this, "/report/page", { id: report.id });
             let edit = () => this.adminHandler("edit", report.id);
@@ -71,14 +80,13 @@ class ReportView extends Component {
                 icon.get("Delete", del)
             ];
 
-            return table.adminRowReport(key, report, actions, this);
+            return table.reportBody(report, selection, this, actions);
         });
 
         this.setState({
             reportsTable: {
-                head: table.adminHeadReport(),
-                body: reportRows,
-                count: count
+                head: table.reportHead(selection),
+                body: reportRows
             }
         });
     }
@@ -105,7 +113,7 @@ class ReportView extends Component {
                     />
                 </div>
 
-                <h2 class="center">Aktuella Felanmälningar: { this.state.reportsTable.count }st </h2>
+                <h2 class="center">Aktuella Felanmälningar: { this.state.reportsTable.body.length }st </h2>
 
                 <table className="results large-rows">
                     <thead>

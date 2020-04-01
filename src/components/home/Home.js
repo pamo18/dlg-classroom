@@ -25,13 +25,22 @@ class Home extends Component {
             classroomTemplate: "name",
             classroomData: [],
             classroomGroups: [],
-            classroomDevicesTable: {},
-            classroomDevicesCount: null,
+            classroomDevicesTable: {
+                head: [],
+                body: []
+            },
             classroomSelected: null,
             classroom: {},
             name: null,
             devices: [],
-            filter: "Alla"
+            filter: "Alla",
+            selection : [
+                ["category", null],
+                ["brand", null],
+                ["model", null],
+                ["link", null],
+                ["manage", null]
+            ]
         };
     }
 
@@ -130,11 +139,9 @@ class Home extends Component {
     }
 
     getDevices() {
-        let count = 0;
+        let selection = this.state.selection;
 
         let deviceRows = this.state.devices.map(async (device) => {
-            count++;
-            let key = `device-${device.id}`;
             let view = () => utils.redirect(this, "/device", {id: device.id});
             let report = () => utils.redirect(this, "/report", { itemGroup: "device", deviceData: device, image: this.state.classroom.image });
             let status = await db.reportCheck("device", device.id);
@@ -143,15 +150,14 @@ class Home extends Component {
                 icon.reportStatus(report, status)
             ];
 
-            return table.userRowDevice(key, device, actions);
+            return table.deviceBody(device, selection, actions);
         });
 
         Promise.all(deviceRows).then((rows) => {
             this.setState({
                 classroomDevicesTable: {
-                    head: table.userHeadDevice(),
-                    body: rows,
-                    count: count
+                    head: table.deviceHead(selection),
+                    body: rows
                 }
             });
         });
@@ -220,14 +226,14 @@ class Home extends Component {
                             </div>
                         </div>
 
-                        { this.state.classroomDevicesTable.count != null
+                        { this.state.classroomDevicesTable.body.length > 0
                             ?
-                            <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevicesTable.count}` }</h3>
+                            <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevicesTable.body.length}` }</h3>
                             :
                             null
                         }
 
-                        { this.state.classroomDevicesTable.count
+                        { this.state.classroomDevicesTable.body.length > 0
                             ?
                             <table className="results">
                                 <thead>

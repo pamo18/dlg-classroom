@@ -10,14 +10,13 @@ import '../Admin.css';
 class ReportUpdate extends Component {
     constructor(props) {
         super(props);
-        this.getReport = this.getReport.bind(this);
         this.updateReport = this.updateReport.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
         this.state = {
             title: "Uppdatera felanmälning",
             reportData: [],
             reportGroups: [],
-            reportTemplate: "classroom_name,device_brand,device_model",
+            reportTemplate: "classroom_name,-name",
             report: null,
         };
     }
@@ -31,7 +30,7 @@ class ReportUpdate extends Component {
         let id = this.props.id || null;
 
         res.then((data) => {
-            let organize = form.organize(data, "item", "id");
+            let organize = form.organize(data, "item_group", "id");
             let reportData = organize.data;
             let reportGroups = organize.groups;
             let template = this.state.reportTemplate;

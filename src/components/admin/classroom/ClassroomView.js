@@ -5,6 +5,7 @@ import  { withRouter, Redirect, Link } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
 import form from '../../../models/form.js';
+import table from '../../../models/table.js';
 import icon from '../../../models/icon.js';
 import '../Admin.css';
 import Categories from '../../filter/Categories.js';
@@ -16,8 +17,19 @@ class ClassroomView extends Component {
         this.state = {
             title: "Klassrum vy",
             data: [],
+            classroomTable: {
+                head: [],
+                body: []
+            },
             column: "location",
-            filter: "Alla"
+            filter: "Alla",
+            selection: [
+                ["name", null],
+                ["type", null],
+                ["level", null],
+                ["location", null],
+                ["manage", null]
+            ],
         };
     }
 
@@ -25,9 +37,9 @@ class ClassroomView extends Component {
         let state = this.props.restore("classroomViewState");
 
         if (state) {
-            this.setState(state, () => this.loadDevice(this.state.filter));
+            this.setState(state, () => this.loadClassroom(this.state.filter));
         } else {
-            this.loadDevice(this.state.filter);
+            this.loadClassroom(this.state.filter);
         }
     }
 
@@ -35,7 +47,7 @@ class ClassroomView extends Component {
         this.props.save("classroomViewState", this.state);
     }
 
-    loadDevice(filter) {
+    loadClassroom(filter) {
         let column = this.state.column;
         let res;
 
@@ -49,12 +61,29 @@ class ClassroomView extends Component {
             this.setState({
                 data: data,
                 filter: filter
-            });
+            }, () => this.getClassroom());
+        });
+    }
+
+    getClassroom() {
+        let selection = this.state.selection;
+
+        let rows = this.state.data.map(classroom => {
+            let view = icon.get("View", () => utils.redirect(this, "/classroom", {id: classroom.id}));
+
+            return table.classroomBody(classroom, selection, view);
+        });
+
+        this.setState({
+            classroomTable: {
+                head: table.classroomHead(selection),
+                body: rows
+            }
         });
     }
 
     filter(filter) {
-        this.loadDevice(filter);
+        this.loadClassroom(filter);
     }
 
     render() {
@@ -73,26 +102,10 @@ class ClassroomView extends Component {
 
                 <table className="results">
                     <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Typ</th>
-                            <th>Våning</th>
-                            <th>Hus</th>
-                            <th>Hantera</th>
-                        </tr>
+                        { this.state.classroomTable.head }
                     </thead>
                     <tbody>
-                        { this.state.data.map((classroom) => {
-                            return [
-                                <tr>
-                                    <td data-title="Name">{ classroom.name }</td>
-                                    <td data-title="Typ">{ classroom.type }</td>
-                                    <td data-title="Våning">{ classroom.level }</td>
-                                    <td data-title="Hus">{ classroom.location }</td>
-                                    <td data-title="Hantera">{ icon.get("View", () => utils.redirect(this, "/classroom", {id: classroom.id})) }</td>
-                                </tr>
-                            ];
-                        })}
+                        { this.state.classroomTable.body }
                     </tbody>
                 </table>
             </article>

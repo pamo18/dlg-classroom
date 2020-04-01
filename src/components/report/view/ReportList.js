@@ -15,7 +15,12 @@ class ReportList extends Component {
             reports: [],
             reportsTable: {},
             itemGroup: this.props.itemGroup,
-            itemid: this.props.itemid
+            itemid: this.props.itemid,
+            selection : [
+                ["title", "20%"],
+                ["message", "60%"],
+                ["solved", "40%"]
+            ]
         };
     }
 
@@ -40,8 +45,9 @@ class ReportList extends Component {
     }
 
     getReports() {
+        let selection = this.state.selection;
+
         let reportRows = this.state.reports.map((report) => {
-            let key = `report-${report.id}`;
             let view = () => utils.redirect(this, `/report`, { dataType: `report-${report.item_group}`, reportData: report });
             let edit = () => this.adminHandler("edit", report.id);
             let del = () => this.adminHandler("delete", report.id);
@@ -49,12 +55,12 @@ class ReportList extends Component {
                 icon.get("View", view)
             ];
 
-            return table.userRowReport(key, report, actions, this);
+            return table.reportBody(report, selection, this, actions);
         });
 
         this.setState({
             reportsTable: {
-                head: table.userHeadReport(),
+                head: table.reportHead(selection),
                 body: reportRows
             }
         });

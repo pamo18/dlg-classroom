@@ -40,17 +40,16 @@ class ClassroomUpdate extends Component {
     }
 
     loadClassrooms() {
-        let that = this;
         let res = db.fetchAll("classroom");
 
-        res.then(function(data) {
+        res.then((data) => {
             let organize = form.organize(data, "location", "id");
             let classroomData = organize.data;
             let classroomGroups = organize.groups;
-            let template = that.state.classroomTemplate;
+            let template = this.state.classroomTemplate;
             let formGroups = form.group(classroomGroups, "id", template);
 
-            that.setState({
+            this.setState({
                 classroomData: classroomData,
                 classroomGroups: formGroups
             });
