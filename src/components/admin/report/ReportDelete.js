@@ -90,7 +90,7 @@ class ReportDelete extends Component {
                             <input className="form-input" type="hidden" name="id" required value={ this.state.report.id } />
 
                             <label className="form-label">Titel
-                                <input className="form-input" type="text" name="name" required readonly value={ this.state.report.name } />
+                                <input className="form-input" type="text" name="name" readonly value={ this.state.report.name } />
                             </label>
 
                             <label className="form-label check-label">

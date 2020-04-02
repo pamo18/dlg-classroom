@@ -233,7 +233,7 @@ class AddDevice extends Component {
     }
 
     removeDevice(classroomid, deviceid) {
-        let res = db.delete("classroom/device", `${classroomid}&${deviceid}`);
+        let res = db.delete("classroom/device", `${classroomid}/${deviceid}`);
 
         res.then(() => this.reload());
     }

@@ -91,10 +91,11 @@ class ClassroomView extends Component {
             <article>
                 <div className="admin-control category-control">
                     <Categories
+                        title="Hus"
                         filterCb={ this.filter }
                         url="building"
                         categoryName="name"
-                        sourceState="classroomViewState"
+                        stateName="classroomCategory1"
                         save={ this.props.save }
                         restore={ this.props.restore }
                     />

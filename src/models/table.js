@@ -9,6 +9,7 @@ const table = {
     deviceHead: function(selection) {
         let rows = {
             "category": (w) => <th width={w}>Kategori</th>,
+            "name": (w) => <th width={w}>Namn</th>,
             "brand": (w) => <th width={w}>Märke</th>,
             "model": (w) => <th width={w}>Modell</th>,
             "serial": (w) => <th width={w}>Serial Nummer</th>,
@@ -33,6 +34,7 @@ const table = {
     deviceBody: function(device, selection, actions = null) {
         let rows = {
             "category": <td data-title="Kategori">{ icon.get(device.category)}</td>,
+            "name": <td data-title="Namn">{ `${ device.brand } ${ device.model }` }</td>,
             "brand": <td data-title="Märke">{ device.brand }</td>,
             "model": <td data-title="Modell">{ device.model }</td>,
             "serial": <td data-title="Serial">{ device.serialnum }</td>,
@@ -58,6 +60,7 @@ const table = {
     classroomHead: function(selection) {
         let rows = {
             "name": (w) => <th width={w}>Namn</th>,
+            "category": (w) => <th width={w}>Kategori</th>,
             "type": (w) => <th width={w}>Typ</th>,
             "level": (w) => <th width={w}>Våning</th>,
             "location": (w) => <th width={w}>Hus</th>,
@@ -77,7 +80,8 @@ const table = {
     },
     classroomBody: function(classroom, selection, actions = null) {
         let rows = {
-            "name": <td data-title="Name">{ classroom.name }</td>,
+            "name": <td data-title="Namn">{ classroom.name }</td>,
+            "category": <td data-title="Kategori">{ icon.get("Build")}</td>,
             "type": <td data-title="Typ">{ classroom.type }</td>,
             "level": <td data-title="Våning">{ classroom.level }</td>,
             "location": <td data-title="Hus">{ classroom.location }</td>,
@@ -101,6 +105,7 @@ const table = {
             "message": (w) => <th width={w}>Meddeland</th>,
             "classroom": (w) => <th width={w}>Klassrum</th>,
             "item": (w) => <th width={w}>Vad</th>,
+            "created": (w) => <th width={w}>Skapad</th>,
             "action": (w) => <th width={w}>Åtgärdning</th>,
             "solved": (w) => <th width={w}>Åtgärdat</th>,
             "manage": (w) => <th width={w}>Hantera</th>
@@ -145,8 +150,9 @@ const table = {
                     </figure>
                 </td>
             ],
-            "action": <td data-title="Åtgärdat">{ report.action || "-" }</td>,
-            "solved": <td data-title="Åtgärdat">{ report.solved || "-" }</td>,
+            "created": <td data-title="Skapad">{ report.created ? utils.convertSqlDate(report.created) : "-" }</td>,
+            "action": <td data-title="Åtgärdning">{ report.action || "-" }</td>,
+            "solved": <td data-title="Åtgärdat">{ report.solved ? utils.convertSqlDate(report.solved) : "-" }</td>,
             "manage": <td data-title="Hantera">{ actions }</td>
         };
 

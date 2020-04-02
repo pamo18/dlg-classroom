@@ -195,7 +195,7 @@ class SwapDevices extends Component {
 
         let res = db.update(
             "classroom/device",
-            `${classroomFrom}&${deviceid}`,
+            `${classroomFrom}/${deviceid}`,
             classroomDevice
         );
 
@@ -203,7 +203,7 @@ class SwapDevices extends Component {
     }
 
     removeDevice(classroomid, deviceid) {
-        let res = db.delete("classroom/device", `${classroomid}&${deviceid}`);
+        let res = db.delete("classroom/device", `${classroomid}/${deviceid}`);
 
         res.then(() => this.reload());
     }

@@ -58,7 +58,7 @@ class ReportUpdate extends Component {
                     name: res.name,
                     message: res.message,
                     action: res.action,
-                    solved: res.solved
+                    solved: res.solved ? utils.convertSqlDate(res.solved) : null
                 }
             });
         } catch(err) {
@@ -80,7 +80,7 @@ class ReportUpdate extends Component {
         };
 
         if (checkbox) {
-            report.solved = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            report.solved = this.state.report.solved;
         } else {
             report.solved = false;
         }
@@ -96,9 +96,8 @@ class ReportUpdate extends Component {
         let value = e.target.value;
 
         if (key === "solved") {
-            report[key] = report[key] ? false : new Date().toISOString().substring(0, 10);
-        } else {
-            report[key] = value;
+            report[key] = report[key] ? false : utils.getLocalDate();
+            console.log(value);
         }
 
         this.setState({
@@ -136,7 +135,7 @@ class ReportUpdate extends Component {
 
                             <label className="form-label check-label">
                                 <input className="check-input" type="checkbox" name="solved" value={ this.state.report.solved } checked={ this.state.report.solved ? "checked" : false } onChange={ this.inputHandler } />
-                                Åtgärdat { this.state.report.solved ? " - " + new Date(this.state.report.solved).toISOString().substring(0, 10) : null }
+                                Åtgärdat { this.state.report.solved ? " - " + this.state.report.solved : null }
                             </label><br />
 
                             <input className="button center-margin" type="submit" name="create" value="Uppdatera" />

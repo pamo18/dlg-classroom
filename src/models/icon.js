@@ -13,7 +13,9 @@ import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle';
 import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import SelectAllIcon from '@material-ui/icons/SelectAll';
 import ErrorIcon from '@material-ui/icons/Error';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RoomIcon from '@material-ui/icons/Room';
+import BuildIcon from '@material-ui/icons/Build';
 
 import house from '../assets/img/icons/house.png';
 import classroom from '../assets/img/icons/classroom.png';
@@ -23,6 +25,12 @@ import message from '../assets/img/icons/message.png'
 // Icon helper
 const icon = {
     cat: {
+        "Åtgärdat": [
+            <TheatersIcon fontSize="large" />
+        ],
+        "Att göra": [
+            <TheatersIcon fontSize="large" />
+        ],
         "Projektor": [
             <TheatersIcon fontSize="large" />
         ],
@@ -63,13 +71,19 @@ const icon = {
             <SelectAllIcon fontSize="large" />
         ],
         "Report": [
-            <ErrorIcon fontSize="large" color="primary"/>
+            <CheckCircleIcon className="check-icon" fontSize="large" color="disable"/>
         ],
         "Reported": [
             <ErrorIcon fontSize="large" color="error"/>
         ],
         "Room": [
             <RoomIcon fontSize="large" />
+        ],
+        "Classroom2": [
+            <HomeWorkIcon fontSize="large" />
+        ],
+        "Build": [
+            <BuildIcon fontSize="large" />
         ],
         "House": [
             <img src={ house } className="icon" />

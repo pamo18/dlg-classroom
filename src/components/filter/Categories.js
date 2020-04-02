@@ -12,7 +12,7 @@ class Categories extends Component {
         this.categories = this.categories.bind(this);
         this.filter = this.filter.bind(this);
         this.state = {
-            title: "Kategorier",
+            title: this.props.title,
             data: [],
             filterCb: this.props.filterCb,
             url: this.props.url,
@@ -22,8 +22,8 @@ class Categories extends Component {
     }
 
     componentDidMount() {
-        let sourceState = this.props.sourceState;
-        let state = this.props.restore(`${sourceState}Category`);
+        let stateName = this.props.stateName;
+        let state = this.props.restore(`${stateName}`);
 
         if (state) {
             this.setState({
@@ -36,15 +36,16 @@ class Categories extends Component {
     }
 
     componentWillUnmount() {
-        let sourceState = this.props.sourceState;
+        let stateName = this.props.stateName;
 
-        this.props.save(`${sourceState}Category`, this.state);
+        this.props.save(`${stateName}`, this.state);
     }
 
     categories() {
         let res = db.fetchAll(this.state.url);
 
         res.then((data) => {
+            console.log(data);
             this.setState({
                 data: data
             });

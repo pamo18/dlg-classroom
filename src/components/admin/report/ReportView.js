@@ -14,12 +14,15 @@ class ReportView extends Component {
     constructor(props) {
         super(props);
         this.getReports = this.getReports.bind(this);
-        this.filter = this.filter.bind(this);
+        this.filter1 = this.filter1.bind(this);
+        this.filter2 = this.filter2.bind(this);
         this.adminHandler = this.adminHandler.bind(this);
         this.state = {
             data: [],
-            column: "location",
-            filter: "Alla",
+            column1: "location",
+            column2: "solved",
+            filter1: "Alla",
+            filter2: "Alla",
             reportsTable: {
                 head: [],
                 body: []
@@ -48,20 +51,34 @@ class ReportView extends Component {
         this.props.save("reportViewState", this.state);
     }
 
-    loadReports(filter) {
-        let column = this.state.column;
+    loadReports(filter, column) {
         let res;
+        let filter1;
+        let filter2;
+        let column1 = this.state.column1;
+        let column2 = this.state.column2;
 
-        if (filter === "Alla") {
+        if (column === 1) {
+            filter1 = filter;
+            filter2 = this.state.filter2;
+        } else if (column === 2) {
+            filter1 = this.state.filter1;
+            filter2 = filter;
+        } else {
+            filter1 = this.state.filter1;
+            filter2 = this.state.filter2;
+        }
+
+        if (filter1 === "Alla" && filter2 === "Alla") {
             res = db.fetchAll("report");
         } else {
-            res = db.fetchAllWhere("report", column, filter);
+            res = db.fetchAllWhere("report", column1, filter1, column2, filter2);
         }
 
         res.then((data) => {
             this.setState({
                 data: data,
-                filter: filter
+                [`filter${column}`]: filter
             }, () => this.getReports());
         });
     }
@@ -91,8 +108,12 @@ class ReportView extends Component {
         });
     }
 
-    filter(filter) {
-        this.loadReports(filter);
+    filter1(filter) {
+        this.loadReports(filter, 1);
+    }
+
+    filter2(filter) {
+        this.loadReports(filter, 2);
     }
 
     adminHandler(view, id) {
@@ -104,10 +125,23 @@ class ReportView extends Component {
             <article>
                 <div className="admin-control category-control">
                     <Categories
-                        filterCb={ this.filter }
+                        title="Hus"
+                        filterCb={ this.filter1 }
                         url="building"
                         categoryName="name"
-                        sourceState="reportViewState"
+                        stateName="reportCategory1"
+                        save={ this.props.save }
+                        restore={ this.props.restore }
+                    />
+                </div>
+
+                <div className="admin-control category-control">
+                    <Categories
+                        title="Status"
+                        filterCb={ this.filter2 }
+                        url="report/filter"
+                        categoryName="status"
+                        stateName="reportCategory2"
                         save={ this.props.save }
                         restore={ this.props.restore }
                     />

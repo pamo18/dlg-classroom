@@ -38,8 +38,8 @@ i.clickable:not(.icon-text i):hover,
     border-bottom: 2px solid rgb(255, 255, 255, 1);
 }
 
-tr:hover a {
-    color: rgb(0, 33, 107)
+.check-icon {
+    color: green;
 }
 
 main {

@@ -52,6 +52,7 @@ class Home extends Component {
                 if (this.state.classroom.hasOwnProperty("id")) {
                     // Reload classrooms and devices
                     this.loadClassrooms();
+                    this.getClassroom(this.state.classroom.id);
                     this.loadDevices(this.state.classroom.id);
                 }
             });
@@ -105,7 +106,7 @@ class Home extends Component {
         try {
             let classroom = this.state.classroomData[id];
             let name = form.optionName(classroom, this.state.classroomTemplate);
-            let report = () => utils.redirect(this, "/report", { itemGroup: "classroom", classroomData: classroom, image: classroom.image });
+            let report = () => utils.redirect(this, "/report", { itemGroup: "classroom", classroomData: classroom });
             let reportStatus = db.reportCheck("classroom", classroom.id);
 
             reportStatus.then((status) => {
@@ -143,7 +144,7 @@ class Home extends Component {
 
         let deviceRows = this.state.devices.map(async (device) => {
             let view = () => utils.redirect(this, "/device", {id: device.id});
-            let report = () => utils.redirect(this, "/report", { itemGroup: "device", deviceData: device, image: this.state.classroom.image });
+            let report = () => utils.redirect(this, "/report", { itemGroup: "device", deviceData: device });
             let status = await db.reportCheck("device", device.id);
             let actions = [
                 icon.get("View", view),

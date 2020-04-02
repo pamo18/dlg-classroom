@@ -1,7 +1,33 @@
 const utils = {
-    getISODate: function(date) {
+    convertSqlDate: function(date) {
+        date = date.replace(/T/g, " ");
+
+        return date.substring(0, 19);
+    },
+    getLocalDate: function(date = null) {
+        let options = {
+            timeZone: "Europe/Stockholm"
+        };
+
+        let d;
+
         if (date) {
-            return new Date(date).toISOString().substring(0, 10);
+            d = new Date(date).toLocaleString("sv-SWE", options);
+            return d;
+        } else {
+            d = new Date().toLocaleString("sv-SWE", options);
+            return d;
+        }
+    },
+    getISODate: function(date) {
+        let d;
+
+        if (date) {
+            d = new Date(date).toISOString();
+            return d;
+        } else {
+            d = new Date().toISOString();
+            return d;
         }
     },
     dateAddMonths: function(months, start = new Date()) {

@@ -10,24 +10,6 @@
     border-radius: 10px;
 }
 
-.admin-control.category-control {
-    width: 100%;
-}
-
-.admin-control.category-control .control-icon {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.admin-control.category-control .control-icon figure:not(:first-child) {
-    margin-left: 1rem;
-}
-
-.admin-control.category-control .control-icon figure:not(:last-child) {
-    margin-right: 1rem;
-}
-
 .admin-control .filter-categories {
     width: 450px;
     margin: 0 auto;

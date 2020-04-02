@@ -5,7 +5,7 @@ const api = base.api();
 const db = {
     reportCheck: async function(itemGroup, itemid) {
         try {
-            let res = await fetch(`${api}/report/check/${itemGroup}&${itemid}`);
+            let res = await fetch(`${api}/report/check/${itemGroup}/${itemid}`);
 
             let data = await res.json();
 
@@ -23,9 +23,17 @@ const db = {
             console.error(err);
         }
     },
-    fetchAllWhere: async function(table, column, value) {
+    fetchAllWhere: async function(table, column1, value1, column2 = null, value2 = null) {
+        let res;
+
         try {
-            let res = await fetch(`${api}/${table}/view/${column}&${value}`);
+            if (column2 && value2) {
+                res = await fetch(`${api}/${table}/view/${column1}/${value1}/${column2}/${value2}`);
+            } else {
+                res = await fetch(`${api}/${table}/view/${column1}/${value1}`);
+            }
+
+            console.log(res);
 
             return await res.json();
         } catch(err) {
@@ -34,7 +42,7 @@ const db = {
     },
     fetchWhere: async function(table, column, value) {
         try {
-            let res = await fetch(`${api}/${table}/view/${column}&${value}`);
+            let res = await fetch(`${api}/${table}/view/${column}/${value}`);
 
             let data = await res.json();
             return data[0];

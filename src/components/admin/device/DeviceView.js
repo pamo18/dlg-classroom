@@ -96,10 +96,11 @@ class DeviceView extends Component {
             <article>
                 <div className="admin-control category-control">
                     <Categories
+                        title="Kategori"
                         filterCb={ this.filter }
                         url="device/category"
                         categoryName="name"
-                        sourceState="deviceViewState"
+                        stateName="deviceCategory1"
                         save={ this.props.save }
                         restore={ this.props.restore }
                     />

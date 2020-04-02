@@ -28,9 +28,10 @@ class ReportPage extends Component {
         let res = db.fetchWhere("report", "report.id", this.state.id);
 
         res.then((data) => {
+            console.log(data);
             this.setState({
                 report: data,
-                reportList: <ReportList itemGroup={ data.item_group } itemid={ data.item_id } />
+                reportList: <ReportList onRef={ref => (this.list = ref)} itemGroup={ data.item_group } itemid={ data.item_id } />
             });
         });
     }
@@ -44,40 +45,46 @@ class ReportPage extends Component {
                     <img src={ image.get(this.state.report.classroom_image) } alt="Classroom image"/>
                 </div>
 
-                <table className="results-alt">
-                    <tr>
-                        <th>Titel</th>
-                        <td>{ this.state.report.name }</td>
-                    </tr>
-                    <tr>
-                        <th>Skapad</th>
-                        <td>{ utils.getISODate(this.state.report.created) }</td>
-                    </tr>
-                    <tr>
-                        <th>Klassrum</th>
-                        <td>{ this.state.report.classroom_name }</td>
-                    </tr>
-                    <tr>
-                        <th>Hus</th>
-                        <td>{ this.state.report.classroom_location }</td>
-                    </tr>
-                    <tr>
-                        <th>Fel</th>
-                        <td>{ this.state.report.device_id ? this.state.report.brand + " " + this.state.report.model : "Allmänt" }</td>
-                    </tr>
-                    <tr>
-                        <th>Meddeland</th>
-                        <td>{ this.state.report.message }</td>
-                    </tr>
-                    <tr>
-                        <th>Åtgärdning</th>
-                        <td>{ this.state.report.action || "-" }</td>
-                    </tr>
-                    <tr>
-                        <th>Åtgärdat</th>
-                        <td>{ this.state.report.solved || "-" }</td>
-                    </tr>
-                </table>
+                {
+                    Object.entries(this.state.report).length > 0
+                        ?
+                        <table className="results-alt">
+                            <tr>
+                                <th>Titel</th>
+                                <td>{ this.state.report.name }</td>
+                            </tr>
+                            <tr>
+                                <th>Skapad</th>
+                                <td>{ this.state.report.created ? utils.convertSqlDate(this.state.report.created) : "-" }</td>
+                            </tr>
+                            <tr>
+                                <th>Klassrum</th>
+                                <td>{ this.state.report.classroom_name }</td>
+                            </tr>
+                            <tr>
+                                <th>Hus</th>
+                                <td>{ this.state.report.classroom_location }</td>
+                            </tr>
+                            <tr>
+                                <th>Fel</th>
+                                <td>{ this.state.report.device_id ? this.state.report.device_brand + " " + this.state.report.device_model : "Allmänt" }</td>
+                            </tr>
+                            <tr>
+                                <th>Meddeland</th>
+                                <td>{ this.state.report.message }</td>
+                            </tr>
+                            <tr>
+                                <th>Åtgärdning</th>
+                                <td>{ this.state.report.action || "-" }</td>
+                            </tr>
+                            <tr>
+                                <th>Åtgärdat</th>
+                                <td>{ this.state.report.solved ? utils.convertSqlDate(this.state.report.solved) : "-" }</td>
+                            </tr>
+                        </table>
+                        :
+                        null
+                }
 
                 { this.state.reportList }
 

@@ -14,27 +14,27 @@ class Report extends Component {
     constructor(props) {
         super(props);
         this.reportItem = this.reportItem.bind(this);
+        this.formHandler = this.formHandler.bind(this);
         this.state = {
             title: "Felanmäla",
+            name: "",
+            message: "",
             reports: [],
+            reloadList: false,
             reportsTable: {},
             reportList: null,
-            itemGroup: this.props.location.state.itemGroup,
+            itemGroup: this.props.location.state.itemGroup || "",
             classroomData: this.props.location.state.classroomData || {},
             deviceData: this.props.location.state.deviceData || {},
             itemTable: {},
             classroomSelection: [
                 ["name", null],
-                ["type", null],
-                ["level", null],
-                ["location", null],
+                ["category", null],
                 ["manage", null]
             ],
             deviceSelection: [
+                ["name", null],
                 ["category", null],
-                ["brand", null],
-                ["model", null],
-                ["serial", null],
                 ["manage", null]
             ]
         };
@@ -60,7 +60,7 @@ class Report extends Component {
                 actions = icon.get("View", view);
 
                 this.setState({
-                    reportList: <ReportList itemGroup={ itemGroup } itemid={ classroomData.id } />,
+                    reportList: <ReportList onRef={ref => (this.list = ref)} itemGroup={ itemGroup } itemid={ classroomData.id } />,
                     itemTable: {
                         head: table.classroomHead(selection),
                         body: table.classroomBody(classroomData, selection, actions)
@@ -74,7 +74,7 @@ class Report extends Component {
                 actions = icon.get("View", view);
 
                 this.setState({
-                    reportList: <ReportList itemGroup={ itemGroup } itemid={ deviceData.id } />,
+                    reportList: <ReportList onRef={ref => (this.list = ref)} itemGroup={ itemGroup } itemid={ deviceData.id } />,
                     itemTable: {
                         head: table.deviceHead(selection),
                         body: table.deviceBody(deviceData, selection, actions)
@@ -100,6 +100,13 @@ class Report extends Component {
                 };
 
                 res = db.insert("report", classroom);
+                res.then(() => {
+                    this.list.loadReports("classroom", this.state.classroomData.id);
+                    this.setState({
+                        name: "",
+                        message: ""
+                    });
+                });
                 break;
             case (itemGroup === "device"):
                 let device = {
@@ -110,10 +117,21 @@ class Report extends Component {
                 };
 
                 res = db.insert("report", device);
+                res.then(() => {
+                    this.list.loadReports("device", this.state.deviceData.id);
+                    this.setState({
+                        name: "",
+                        message: ""
+                    });
+                });
                 break;
         }
+    }
 
-        res.then(utils.reload(this, "/"));
+    formHandler(e) {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
     }
 
     render() {
@@ -125,13 +143,9 @@ class Report extends Component {
                     { icon.get("Message") }
                 </h2>
 
-                <div className="report-image">
-                    <img src={ image.get(this.props.location.state.image) } alt="Classroom image"/>
-                </div>
+                <h2 className="center">{ this.state.itemGroup === "classroom" ? "Allmänt" : "Utrustning"}:</h2>
 
-                <h2 className="center">Felanmäla följande:</h2>
-
-                <table className="results">
+                <table className="results narrow">
                     <thead>
                         { this.state.itemTable.head }
                     </thead>
@@ -142,11 +156,11 @@ class Report extends Component {
 
                 <form className="form-register" onSubmit={ this.reportItem }>
                     <label className="form-label">Titel
-                        <input className="form-input" type="text" name="name" placeholder="Ett namn som förklare snabbt problemet." />
+                        <input className="form-input" type="text" name="name" value={ this.state.name } onChange={ this.formHandler } required placeholder="Ett namn som förklare snabbt problemet." />
                     </label>
 
                     <label className="form-label">Meddelande
-                        <textarea className="form-input" name="message" placeholder="Skriv något om problemet." />
+                        <textarea className="form-input" name="message" value={ this.state.message } onChange={ this.formHandler } required placeholder="Skriv något om problemet." />
                     </label>
 
                     <input className="button center-margin" type="submit" name="create" value="Felanmäla" />

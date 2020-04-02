@@ -18,14 +18,20 @@ class ReportList extends Component {
             itemid: this.props.itemid,
             selection : [
                 ["title", "20%"],
-                ["message", "60%"],
-                ["solved", "40%"]
+                ["message", "40%"],
+                ["created", "20%"],
+                ["solved", "20%"]
             ]
         };
     }
 
     componentDidMount() {
-        this.loadReports(this.state.itemGroup, this.state.itemid)
+        this.props.onRef(this);
+        this.loadReports(this.state.itemGroup, this.state.itemid);
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(undefined)
     }
 
     loadReports(itemGroup, itemid) {

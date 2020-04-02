@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import ErrorBoundary from './ErrorBoundary.js';
 
 import Header from '../header/Header.js';
 import Footer from '../footer/Footer.js';
@@ -17,16 +18,7 @@ class App extends Component {
         super(props);
         this.state = {
             activeUser: "",
-            register: "",
-            adminState: null,
-            managerState: null,
-            homeState: null,
-            homeStateCategory: null,
-            classroomViewState: null,
-            classroomViewStateCategory: null,
-            deviceViewState: null,
-            deviceViewStateCategory: null,
-            reportViewState: null
+            register: ""
         };
         this.saveState = (page, state) => {
             this.setState({
@@ -85,7 +77,7 @@ class App extends Component {
                             <Route exact path="/about" component={About} />
                             <Route exact path="/device" component={Device} />
                             <Route exact path="/classroom" component={Classroom} />
-                            <Route exact path="/report" component={Report} />
+                            <Route exact path="/report" render={() => <ErrorBoundary><Report /></ErrorBoundary>} />
                             <Route exact path="/report/page" component={ReportPage} />
                             <Route exact path="/admin" render={() => <Admin save={this.saveState} restore={this.restoreState} />} />
                         </Switch>
