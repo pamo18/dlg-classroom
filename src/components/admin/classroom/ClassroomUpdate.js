@@ -41,24 +41,27 @@ class ClassroomUpdate extends Component {
 
     loadClassrooms() {
         let res = db.fetchAll("classroom");
+        let id = this.props.id || null;
 
         res.then((data) => {
             let organize = form.organize(data, "location", "id");
             let classroomData = organize.data;
             let classroomGroups = organize.groups;
             let template = this.state.classroomTemplate;
-            let formGroups = form.group(classroomGroups, "id", template);
+            let formGroups = form.group(classroomGroups, "id", template, (optionId) => optionId === id);
 
             this.setState({
                 classroomData: classroomData,
                 classroomGroups: formGroups
+            }, () => {
+                if (id) {
+                    this.getClassroom(id);
+                }
             });
         });
     }
 
-    getClassroom(e) {
-        let id = e.target.value;
-
+    getClassroom(id) {
         try {
             let res = this.state.classroomData[id];
 
@@ -110,7 +113,7 @@ class ClassroomUpdate extends Component {
             <article>
                 <h2 className="center">Välj klassrum att uppdatera</h2>
                 <form action="/update" className="form-register" onSubmit={this.updateClassroom}>
-                    <select className="form-input" type="text" name="fullname" required onChange={ this.getClassroom }>
+                    <select className="form-input" type="text" name="fullname" required onChange={ (e) => this.getClassroom(e.target.value) }>
                         <option disabled selected value>Klicka här för att välja Klassrum</option>
                         { this.state.classroomGroups }
                     </select>

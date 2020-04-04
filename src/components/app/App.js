@@ -9,6 +9,7 @@ import About from '../about/About.js';
 import Classroom from '../classroom/Classroom.js';
 import Device from '../device/Device.js';
 import Report from '../report/Report.js';
+import ReportList from '../report/view/ReportList.js';
 import ReportPage from '../report/view/ReportPage.js';
 import Admin from '../admin/Admin.js';
 import './App.css';
@@ -78,6 +79,7 @@ class App extends Component {
                             <Route exact path="/device" component={Device} />
                             <Route exact path="/classroom" component={Classroom} />
                             <Route exact path="/report" render={() => <ErrorBoundary><Report /></ErrorBoundary>} />
+                            <Route exact path="/report/list" component={ReportList} />
                             <Route exact path="/report/page" component={ReportPage} />
                             <Route exact path="/admin" render={() => <Admin save={this.saveState} restore={this.restoreState} />} />
                         </Switch>

@@ -16,7 +16,8 @@ class Categories extends Component {
             data: [],
             filterCb: this.props.filterCb,
             url: this.props.url,
-            categoryName: this.props.categoryName,
+            category: this.props.category,
+            filterCategory: this.props.filterCategory,
             filter: "Alla"
         };
     }
@@ -45,18 +46,18 @@ class Categories extends Component {
         let res = db.fetchAll(this.state.url);
 
         res.then((data) => {
-            console.log(data);
             this.setState({
                 data: data
             });
         });
     }
 
-    filter(category) {
-        this.state.filterCb(category);
+    filter(filter) {
+        let category = this.state.filterCategory || this.state.category;
+        this.state.filterCb(category , filter);
 
         this.setState({
-            filter: category
+            filter: filter
         });
     }
 
@@ -71,7 +72,7 @@ class Categories extends Component {
 
                         {
                             this.state.data.map((cat) => {
-                                let category = cat[this.state.categoryName];
+                                let category = cat[this.state.category];
                                 let key = `filter-category-${category}`;
 
                                 return icon.getFigure(category, () => { this.filter(category) }, filter === category)

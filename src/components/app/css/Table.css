@@ -93,7 +93,8 @@ table.results-alt td {
     width: 70%;
 }
 
-table.results i {
+table.results i,
+table.results-home i {
     margin-left: 2px;
     margin-right: 2px;
 }
@@ -114,75 +115,48 @@ table.results tr figure {
     padding: 0;
 }
 
-@media only screen and (max-width: 980px) {
-    table.results.narrow {
-        width: 100%;
-    }
-
-    table.results.large-rows tbody tr {
-        height: auto;
-    }
-
-    table.results.large-rows .table-message {
-        height: auto;
-        display: block;
-    }
-
-    table.results {
-        border: none;
-    }
-
-    table.results tbody {
-        display: block;
-        background-color: #121d26;
-    }
-
-    table.results thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-
-    table.results tr {
-        display: block;
-        border: 2px solid black;
-        border-radius: 10px;
-        padding: 5px;
-    }
-
-    table.results tr:not(:last-child) {
-        margin-bottom: 1rem;
-    }
-
-    table.results-alt tr {
-        font-size: 1em;
-    }
-
-    table.results td {
-        display: block;
-        position: relative;
-        white-space: normal;
-        text-align: right;
-        padding-left: 8rem;
-    }
-
-    table.results td:not(:last-child) {
-        border-bottom: 1px solid rgb(38, 45, 52, 1);
-    }
-
-    table.results td::before {
-        content: attr(data-title);
-        position: absolute;
-        top: 0.33rem;
-        left: 0.33rem;
-        width: 45%;
-        padding-right: 0.55rem;
-        white-space: nowrap;
-        text-align: left;
-        font-weight: bold;
-    }
+/* Home page user table */
+table.results-home {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    text-align: center;
 }
 
-@media only screen and (max-width: 400px) {
+table.results-home tbody {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
 
+table.results-home tr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+}
+
+table.results-home td {
+    background-color: #060d13;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+table.results-home td figure.icon-text {
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+table.results-home td:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: 1px solid rgb(38, 45, 52);
+}
+
+table.results-home td:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }

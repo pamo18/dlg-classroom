@@ -140,7 +140,7 @@ class ReportView extends Component {
                         title="Status"
                         filterCb={ this.filter2 }
                         url="report/filter"
-                        categoryName="status"
+                        categoryName="solved"
                         stateName="reportCategory2"
                         save={ this.props.save }
                         restore={ this.props.restore }

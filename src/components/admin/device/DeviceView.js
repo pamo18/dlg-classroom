@@ -14,6 +14,7 @@ class DeviceView extends Component {
     constructor(props) {
         super(props);
         this.filter = this.filter.bind(this);
+        this.adminHandler = this.adminHandler.bind(this);
         this.state = {
             title: "Utrustning vy",
             data: [],
@@ -24,12 +25,7 @@ class DeviceView extends Component {
             column: "category",
             filter: "Alla",
             selection: [
-                ["category", null],
-                ["brand", null],
-                ["model", null],
-                ["serial", null],
-                ["purchased", null],
-                ["classroom", null],
+                ["category-caption-large", null],
                 ["manage", null]
             ]
         };
@@ -67,11 +63,15 @@ class DeviceView extends Component {
 
         let deviceRows = this.state.data.map(async (device) => {
             let view = () => utils.redirect(this, "/device", { id: device.id });
-            let report = () => utils.redirect(this, "/report", { itemGroup: "device", deviceData: device });
-            let status = await db.reportCheck("device", device.id);
+            let edit = () => this.adminHandler("edit", device.id);
+            let del = () => this.adminHandler("delete", device.id);
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
+            let reportStatus = await db.reportCheck("device", device.id);
             let actions = [
+                icon.reportStatus(reportList, reportStatus),
                 icon.get("View", view),
-                icon.reportStatus(report, status)
+                icon.get("Edit", edit),
+                icon.get("Delete", del)
             ];
 
             return table.deviceBody(device, selection, actions);
@@ -80,15 +80,18 @@ class DeviceView extends Component {
         Promise.all(deviceRows).then((rows) => {
             this.setState({
                 deviceTable: {
-                    head: table.deviceHead(selection),
                     body: rows
                 }
             });
         });
     }
 
-    filter(filter) {
+    filter(category, filter) {
         this.loadDevices(filter);
+    }
+
+    adminHandler(view, id) {
+        this.props.admin(view, id);
     }
 
     render() {
@@ -99,17 +102,14 @@ class DeviceView extends Component {
                         title="Kategori"
                         filterCb={ this.filter }
                         url="device/category"
-                        categoryName="name"
+                        category="name"
                         stateName="deviceCategory1"
                         save={ this.props.save }
                         restore={ this.props.restore }
                     />
                 </div>
 
-                <table className="results">
-                    <thead>
-                        { this.state.deviceTable.head }
-                    </thead>
+                <table className="results-home">
                     <tbody>
                         { this.state.data
                             ?

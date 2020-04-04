@@ -1,0 +1,181 @@
+@media only screen and (max-width: 1000px) {
+    body {
+        width: auto;
+    }
+
+    main {
+        display: block;
+    }
+
+    .form-label,
+    .form-input,
+    .date-picker {
+        width: 100%;
+    }
+/* Table */
+    table.results-home {
+        max-width: 100%;
+    }
+
+    table.results-home tbody {
+        display: block;
+    }
+
+    table.results-home tr {
+        padding: 0;
+    }
+
+    table.results.narrow {
+        width: 100%;
+    }
+
+    table.results.large-rows tbody tr {
+        height: auto;
+    }
+
+    table.results.large-rows .table-message {
+        height: auto;
+        display: block;
+    }
+
+    table.results {
+        border: none;
+    }
+
+    table.results tbody {
+        display: block;
+        background-color: #121d26;
+    }
+
+    table.results thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    table.results tr {
+        display: block;
+        border: 2px solid black;
+        border-radius: 10px;
+        padding: 5px;
+    }
+
+    table.results tr:not(:last-child) {
+        margin-bottom: 1rem;
+    }
+
+    table.results-alt tr {
+        font-size: 1em;
+    }
+
+    table.results td {
+        display: block;
+        position: relative;
+        white-space: normal;
+        text-align: right;
+        padding-left: 8rem;
+    }
+
+    table.results td:not(:last-child) {
+        border-bottom: 1px solid rgb(38, 45, 52, 1);
+    }
+
+    table.results td::before {
+        content: attr(data-title);
+        position: absolute;
+        top: 0.33rem;
+        left: 0.33rem;
+        width: 45%;
+        padding-right: 0.55rem;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+    }
+/* Date Picker */
+    .date-picker {
+        width: 100%;
+    }
+
+/* Classroom view */
+
+    .classroom-view {
+        width: 100%;
+    }
+/* Device view */
+
+    .device-view {
+        width: 100%;
+    }
+/* Report view */
+
+    .report-image {
+        width: 100%;
+    }
+/* User */
+
+    .user {
+        width: 100%;
+        max-width: 100%;
+    }
+/* Home Control Panel */
+
+    .home-control .filter-categories {
+        width: 450px;
+        margin: 0 auto;
+    }
+/* Header */
+
+    .logo {
+        width: 80px;
+    }
+
+    .site-title {
+        padding-left: 10px;
+        font-size: 1.5em;
+    }
+
+    .title {
+        text-align: left;
+    }
+
+/* Nav */
+
+    header .navbar {
+        display: none;
+    }
+
+    footer .navbar {
+        display: flex;
+    }
+
+/* Footer */
+
+    .footer-column {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    /* Date Picker */
+    .date-picker {
+        font-size: 0.8rem;
+    }
+
+    /* User */
+
+    .user {
+        font-size: 1.2rem;
+    }
+
+    /* Home Control Panel */
+
+    .home-control .filter-categories {
+        width: 100%;
+    }
+
+    /* Footer */
+
+    footer .navbar a {
+        font-size: 0.8rem;
+    }
+}

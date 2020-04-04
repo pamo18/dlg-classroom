@@ -9,6 +9,8 @@ const table = {
     deviceHead: function(selection) {
         let rows = {
             "category": (w) => <th width={w}>Kategori</th>,
+            "category-caption": (w) => <th width={w}>Kategori</th>,
+            "category-caption-large": (w) => <th width={w}>Kategori</th>,
             "name": (w) => <th width={w}>Namn</th>,
             "brand": (w) => <th width={w}>Märke</th>,
             "model": (w) => <th width={w}>Modell</th>,
@@ -34,6 +36,30 @@ const table = {
     deviceBody: function(device, selection, actions = null) {
         let rows = {
             "category": <td data-title="Kategori">{ icon.get(device.category)}</td>,
+            "category-caption": [
+                <td data-title="Kategori">
+                    <figure className="icon-text">
+                        { icon.get(device.category)}
+                        <figcaption>
+                            <span className="caption-text">
+                                { device.category }
+                            </span>
+                        </figcaption>
+                    </figure>
+                </td>
+            ],
+            "category-caption-large": [
+                <td data-title="Kategori">
+                    <figure className="icon-text">
+                        { icon.get(`${device.category}-large`)}
+                        <figcaption>
+                            <span className="caption-text">
+                                { device.category }
+                            </span>
+                        </figcaption>
+                    </figure>
+                </td>
+            ],
             "name": <td data-title="Namn">{ `${ device.brand } ${ device.model }` }</td>,
             "brand": <td data-title="Märke">{ device.brand }</td>,
             "model": <td data-title="Modell">{ device.model }</td>,
@@ -60,6 +86,7 @@ const table = {
     classroomHead: function(selection) {
         let rows = {
             "name": (w) => <th width={w}>Namn</th>,
+            "name-caption-large": (w) => <th width={w}>Namn</th>,
             "category": (w) => <th width={w}>Kategori</th>,
             "type": (w) => <th width={w}>Typ</th>,
             "level": (w) => <th width={w}>Våning</th>,
@@ -81,6 +108,18 @@ const table = {
     classroomBody: function(classroom, selection, actions = null) {
         let rows = {
             "name": <td data-title="Namn">{ classroom.name }</td>,
+            "name-caption-large": [
+                <td data-title="Namn">
+                    <figure className="icon-text">
+                        { icon.get("Classroom-large")}
+                        <figcaption>
+                            <span className="caption-text">
+                                { classroom.name }
+                            </span>
+                        </figcaption>
+                    </figure>
+                </td>
+            ],
             "category": <td data-title="Kategori">{ icon.get("Build")}</td>,
             "type": <td data-title="Typ">{ classroom.type }</td>,
             "level": <td data-title="Våning">{ classroom.level }</td>,

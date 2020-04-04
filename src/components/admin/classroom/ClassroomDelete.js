@@ -26,26 +26,28 @@ class ClassroomDelete extends Component {
     }
 
     loadClassrooms() {
-        let that = this;
         let res = db.fetchAll("classroom");
+        let id = this.props.id || null;
 
-        res.then(function(data) {
+        res.then((data) => {
             let organize = form.organize(data, "location", "id");
             let classroomData = organize.data;
             let classroomGroups = organize.groups;
-            let template = that.state.classroomTemplate;
-            let formGroups = form.group(classroomGroups, "id", template);
+            let template = this.state.classroomTemplate;
+            let formGroups = form.group(classroomGroups, "id", template, (optionId) => optionId === id);
 
-            that.setState({
+            this.setState({
                 classroomData: classroomData,
                 classroomGroups: formGroups
+            }, () => {
+                if (id) {
+                    this.getClassroom(id);
+                }
             });
         });
     }
 
-    getClassroom(e) {
-        let id = e.target.value;
-
+    getClassroom(id) {
         try {
             let res = this.state.classroomData[id];
             let name = form.optionName(res, this.state.classroomTemplate);
@@ -77,7 +79,7 @@ class ClassroomDelete extends Component {
             <article>
                 <h2 className="center">Välj klassrum att radera</h2>
                 <form action="/delete" className="form-register" onSubmit={ this.deleteClassroom }>
-                    <select className="form-input" type="text" name="name" required onChange={ this.getClassroom }>
+                    <select className="form-input" type="text" name="name" required onChange={ (e) => this.getClassroom(e.target.value) }>
                         <option disabled selected>Klicka här för att välja Klassrum</option>
                         { this.state.classroomGroups }
                     </select>

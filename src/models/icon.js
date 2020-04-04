@@ -22,6 +22,9 @@ import classroom from '../assets/img/icons/classroom.png';
 import device from '../assets/img/icons/device.png';
 import classroomDevice from '../assets/img/icons/classroom-device.png'
 import message from '../assets/img/icons/message.png'
+import speaker from '../assets/img/icons/speaker.png'
+import projector from '../assets/img/icons/projector.png'
+import tv from '../assets/img/icons/tv.png'
 // Icon helper
 const icon = {
     cat: {
@@ -42,6 +45,15 @@ const icon = {
         ],
         "Skärm": [
             <TvIcon fontSize="large" />
+        ],
+        "Projektor-large": [
+            <img src={ projector } className="icon" />
+        ],
+        "Högtalare-large": [
+            <img src={ speaker } className="icon" />
+        ],
+        "TV-large": [
+            <img src={ tv } className="icon" />
         ],
         "View": [
             <VisibilityIcon fontSize="large" />
@@ -89,6 +101,9 @@ const icon = {
             <img src={ house } className="icon" />
         ],
         "Classroom": [
+            <img src={ classroom } className="icon" />
+        ],
+        "Classroom-large": [
             <img src={ classroom } className="icon" />
         ],
         "Device": [

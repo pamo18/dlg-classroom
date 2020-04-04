@@ -41,29 +41,28 @@ class DeviceUpdate extends Component {
     }
 
     loadDevices() {
-        let that = this;
-        let allData = {};
-        let groups = {};
         let res = db.fetchAll("device");
+        let id = this.props.id || null;
 
-        res.then(function(data) {
+        res.then((data) => {
             let organize = form.organize(data, "category", "id");
             let deviceData = organize.data;
             let deviceGroups = organize.groups;
-            let template = that.state.deviceTemplate;
-            let formGroups = form.group(deviceGroups, "id", template);
+            let template = this.state.deviceTemplate;
+            let formGroups = form.group(deviceGroups, "id", template, (optionId) => optionId === id);
 
-            that.setState({
+            this.setState({
                 deviceData: deviceData,
                 deviceGroups: formGroups
+            }, () => {
+                if (id) {
+                    this.getDevice(id);
+                }
             });
         });
     }
 
-    getDevice(e) {
-        let that = this;
-        let id = e.target.value;
-
+    getDevice(id) {
         try {
             let res = this.state.deviceData[id];
             let purchased = new Date(res.purchased).toISOString().substring(0, 10);
@@ -154,7 +153,7 @@ class DeviceUpdate extends Component {
             <article>
                 <h2 className="center">Välj apparat att uppdatera</h2>
                 <form action="/update" className="form-register" onSubmit={this.updateDevice}>
-                    <select className="form-input" type="text" name="fullname" required onChange={ this.getDevice }>
+                    <select className="form-input" type="text" name="fullname" required onChange={ (e) => this.getDevice(e.target.value) }>
                         <option disabled selected>Klicka för att välja</option>
                             { this.state.deviceGroups }
                     </select>

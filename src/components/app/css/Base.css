@@ -34,7 +34,7 @@ i.clickable {
 }
 
 i.clickable:not(.icon-text i):hover,
-.icon-text:hover .caption-text {
+i.clickable.icon-text:hover .caption-text {
     border-bottom: 2px solid rgb(255, 255, 255, 1);
 }
 
@@ -86,12 +86,18 @@ main {
 
 aside,
 article {
-    padding: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+aside {
+    padding-left: 2rem;
 }
 
 article {
     width: 100%;
     padding-left: 2rem;
+    padding-right: 2rem;
     min-height: 57em;
 }
 
@@ -181,7 +187,7 @@ article {
     color: white;
 }
 
-@media (max-width: 980px) {
+/* @media (max-width: 980px) {
     body {
         width: auto;
     }
@@ -189,4 +195,4 @@ article {
     main {
         display: block;
     }
-}
+} */

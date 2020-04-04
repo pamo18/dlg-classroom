@@ -24,7 +24,7 @@
     align-items: center;
 }
 
-@media (max-width: 980px) {
+/* @media (max-width: 980px) {
     .user {
         width: 100%;
         max-width: 100%;
@@ -35,4 +35,4 @@
     .user {
         font-size: 1.2rem;
     }
-}
+} */

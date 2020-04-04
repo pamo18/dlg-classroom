@@ -33,7 +33,20 @@ const db = {
                 res = await fetch(`${api}/${table}/view/${column1}/${value1}`);
             }
 
-            console.log(res);
+            return await res.json();
+        } catch(err) {
+            console.error(err);
+        }
+    },
+    fetchAllManyWhere: async function(table, data) {
+        try {
+            let res = await fetch(`${api}/${table}/view/where`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
             return await res.json();
         } catch(err) {

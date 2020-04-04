@@ -42,25 +42,44 @@ class Admin extends Component {
 
     componentDidMount () {
         let state = this.props.restore("adminState");
+        let selected;
+        let admin;
+        let id;
 
-        if (state) {
+        if (this.props.location.state) {
+            selected = this.props.location.state.selected;
+            admin = this.props.location.state.admin;
+            id = this.props.location.state.id;
+
+            this.props.history.replace({
+                pathname: this.props.location.pathname,
+                state: {}
+            });
+        }
+
+        if (admin && selected && id) {
+            this.setState({
+                selected: selected,
+                admin: admin
+            }, () => this.adminView(this.state.selected, this.state.admin, id));
+        } else if (state) {
             this.setState(state, () => this.adminView(this.state.selected, this.state.admin));
         }
     }
 
-    adminView(selected, admin) {
+    adminView(selected, admin, id = null) {
         switch(true) {
             case (selected === "classroom"):
-                this.classroomView(admin);
+                this.classroomView(admin, id);
                 break;
             case (selected === "device"):
-                this.deviceView(admin);
+                this.deviceView(admin, id);
                 break;
             case (selected === "classroom-device"):
-                this.classroomDeviceView(admin);
+                this.classroomDeviceView(admin, id);
                 break;
             case (selected === "report"):
-                this.reportView(admin);
+                this.reportView(admin, id);
                 break;
             }
     }
@@ -69,42 +88,42 @@ class Admin extends Component {
         this.props.save("adminState", this.state);
     }
 
-    classroomView(admin) {
+    classroomView(admin, id = null) {
         let view;
 
         switch(true) {
             case (admin === "view"):
-                view = <ClassroomView save={this.props.save} restore={this.props.restore} />;
+                view = <ClassroomView admin={ this.classroomView } save={this.props.save} restore={this.props.restore} />;
                 break;
             case (admin === "add"):
                 view = <ClassroomCreate />;
                 break;
             case (admin === "edit"):
-                view = <ClassroomUpdate />;
+                view = <ClassroomUpdate id={id} />;
                 break;
             case (admin === "delete"):
-                view = <ClassroomDelete />;
+                view = <ClassroomDelete id={id} />;
                 break;
         }
 
         this.change(view, "classroom", admin);
     }
 
-    deviceView(admin) {
+    deviceView(admin, id = null) {
         let view;
 
         switch(true) {
             case (admin === "view"):
-                view = <DeviceView save={this.props.save} restore={this.props.restore} />;
+                view = <DeviceView admin={ this.deviceView } save={this.props.save} restore={this.props.restore} />;
                 break;
             case (admin === "add"):
                 view = <DeviceCreate />;
                 break;
             case (admin === "edit"):
-                view = <DeviceUpdate />;
+                view = <DeviceUpdate id={id} />;
                 break;
             case (admin === "delete"):
-                view = <DeviceDelete />;
+                view = <DeviceDelete id={id} />;
                 break;
         }
 

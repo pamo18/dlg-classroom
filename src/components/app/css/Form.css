@@ -60,10 +60,10 @@
     margin-right: 5px;
 }
 
-@media (max-width: 980px) {
+/* @media (max-width: 980px) {
     .form-label,
     .form-input,
     .date-picker {
         width: 100%;
     }
-}
+} */

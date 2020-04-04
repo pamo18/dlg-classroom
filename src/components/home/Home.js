@@ -33,12 +33,11 @@ class Home extends Component {
             classroom: {},
             name: null,
             devices: [],
-            filter: "Alla",
+            filter: {
+                name: "Alla"
+            },
             selection : [
-                ["category", null],
-                ["brand", null],
-                ["model", null],
-                ["link", null],
+                ["category-caption-large", null],
                 ["manage", null]
             ]
         };
@@ -81,7 +80,7 @@ class Home extends Component {
 
     loadClassrooms() {
         let res = db.fetchAll("classroom");
-        let filter = this.state.filter;
+        let filter = this.state.filter.name;
 
         res.then((data) => {
             let organize = form.organize(data, "location", "id", filter != "Alla" ? filter : null);
@@ -107,6 +106,7 @@ class Home extends Component {
             let classroom = this.state.classroomData[id];
             let name = form.optionName(classroom, this.state.classroomTemplate);
             let report = () => utils.redirect(this, "/report", { itemGroup: "classroom", classroomData: classroom });
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: id });
             let reportStatus = db.reportCheck("classroom", classroom.id);
 
             reportStatus.then((status) => {
@@ -119,7 +119,8 @@ class Home extends Component {
                         location: classroom.location,
                         level: classroom.level,
                         image: classroom.image,
-                        report: icon.reportStatus(report, status)
+                        report: icon.get("Build", report),
+                        status: icon.reportStatus(reportList, status)
                     },
                     selected: classroom.id
                 }, () => this.loadDevices(id));
@@ -145,10 +146,12 @@ class Home extends Component {
         let deviceRows = this.state.devices.map(async (device) => {
             let view = () => utils.redirect(this, "/device", {id: device.id});
             let report = () => utils.redirect(this, "/report", { itemGroup: "device", deviceData: device });
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
             let status = await db.reportCheck("device", device.id);
             let actions = [
-                icon.get("View", view),
-                icon.reportStatus(report, status)
+                icon.reportStatus(reportList, status),
+                icon.get("Build", report),
+                icon.get("View", view)
             ];
 
             return table.deviceBody(device, selection, actions);
@@ -157,7 +160,6 @@ class Home extends Component {
         Promise.all(deviceRows).then((rows) => {
             this.setState({
                 classroomDevicesTable: {
-                    head: table.deviceHead(selection),
                     body: rows
                 }
             });
@@ -172,10 +174,14 @@ class Home extends Component {
         }, () => this.getClassroom(id));
     }
 
-    filterHandler(filter) {
+    filterHandler(category, filter) {
+        let currentFilter = this.state.filter;
+
+        currentFilter[category] = filter;
+
         this.setState({
-            filter: filter
-        }, () => this.loadClassrooms());
+            filter: currentFilter
+        }, () => this.loadClassrooms(this.state.filter));
     }
 
     render() {
@@ -190,7 +196,7 @@ class Home extends Component {
                             <Categories
                                 filterCb={ this.filterHandler }
                                 url="building"
-                                categoryName="name"
+                                category="name"
                                 sourceState="homeState"
                                 save={ this.props.save }
                                 restore={ this.props.restore }
@@ -201,7 +207,7 @@ class Home extends Component {
                             <div className="home-group">
                                 <h2 className="center margin">Välj Klassrum</h2>
                                 <select className="form-input" type="text" name="classroom" required onChange={ this.classroomHandler }>
-                                    <option disabled selected={!this.state.delected ? "selected" : null}>Klassrum</option>
+                                    <option disabled>Klassrum</option>
                                     { this.state.classroomGroups }
                                 </select>
                             </div>
@@ -218,7 +224,7 @@ class Home extends Component {
                                 DLG
                                 { this.state.name
                                     ?
-                                    <span className="classroom-name"> { this.state.name } { this.state.classroom.report }</span>
+                                    <span className="classroom-name"> { this.state.name } { this.state.classroom.status } { this.state.classroom.report }</span>
                                     : null
                                 }
                             </h2>
@@ -229,17 +235,14 @@ class Home extends Component {
 
                         { this.state.classroomDevicesTable.body.length > 0
                             ?
-                            <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevicesTable.body.length}` }</h3>
+                            <h3 class="center">{ `Antal utrustning: ${ this.state.classroomDevicesTable.body.length}` }</h3>
                             :
                             null
                         }
 
                         { this.state.classroomDevicesTable.body.length > 0
                             ?
-                            <table className="results">
-                                <thead>
-                                    { this.state.classroomDevicesTable.head }
-                                </thead>
+                            <table className="results-home">
                                 <tbody>
                                     { this.state.classroomDevicesTable.body }
                                 </tbody>

@@ -37,7 +37,7 @@
     padding: 1em;
 }
 
-@media (max-width: 980px) {
+/* @media (max-width: 980px) {
     .logo {
         width: 80px;
     }
@@ -50,4 +50,4 @@
     .title {
         text-align: left;
     }
-}
+} */

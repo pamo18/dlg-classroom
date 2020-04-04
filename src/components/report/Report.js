@@ -28,13 +28,11 @@ class Report extends Component {
             deviceData: this.props.location.state.deviceData || {},
             itemTable: {},
             classroomSelection: [
-                ["name", null],
-                ["category", null],
+                ["name-caption-large", null],
                 ["manage", null]
             ],
             deviceSelection: [
-                ["name", null],
-                ["category", null],
+                ["category-caption-large", null],
                 ["manage", null]
             ]
         };
@@ -51,34 +49,49 @@ class Report extends Component {
         let data,
             selection,
             view,
+            reportList,
+            reportStatus,
             actions;
 
         switch(true) {
             case (itemGroup === "classroom"):
                 selection = this.state.classroomSelection;
                 view = () => utils.redirect(this, "/classroom", { id: classroomData.id });
-                actions = icon.get("View", view);
+                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: classroomData.id });
+                reportStatus = db.reportCheck("classroom", classroomData.id);
 
-                this.setState({
-                    reportList: <ReportList onRef={ref => (this.list = ref)} itemGroup={ itemGroup } itemid={ classroomData.id } />,
-                    itemTable: {
-                        head: table.classroomHead(selection),
-                        body: table.classroomBody(classroomData, selection, actions)
-                    }
+                reportStatus.then((status) => {
+                    actions = [
+                        icon.reportStatus(reportList, status),
+                        icon.get("View", view)
+                    ];
+
+                    this.setState({
+                        reportList: <ReportList onRef={ref => (this.list = ref)} itemGroup={ itemGroup } itemid={ classroomData.id } />,
+                        itemTable: {
+                            body: table.classroomBody(classroomData, selection, actions)
+                        }
+                    });
                 });
                 break;
-
             case (itemGroup === "device"):
                 selection = this.state.deviceSelection;
                 view = () => utils.redirect(this, "/device", { id: deviceData.id });
-                actions = icon.get("View", view);
+                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: deviceData.id });
+                reportStatus = db.reportCheck("device", deviceData.id);
 
-                this.setState({
-                    reportList: <ReportList onRef={ref => (this.list = ref)} itemGroup={ itemGroup } itemid={ deviceData.id } />,
-                    itemTable: {
-                        head: table.deviceHead(selection),
-                        body: table.deviceBody(deviceData, selection, actions)
-                    }
+                reportStatus.then((status) => {
+                    actions = [
+                        icon.reportStatus(reportList, status),
+                        icon.get("View", view)
+                    ];
+
+                    this.setState({
+                        reportList: <ReportList onRef={ref => (this.list = ref)} itemGroup={ itemGroup } itemid={ deviceData.id } />,
+                        itemTable: {
+                            body: table.deviceBody(deviceData, selection, actions)
+                        }
+                    });
                 });
                 break;
         }
@@ -105,7 +118,7 @@ class Report extends Component {
                     this.setState({
                         name: "",
                         message: ""
-                    });
+                    }, () => this.getItem());
                 });
                 break;
             case (itemGroup === "device"):
@@ -122,7 +135,7 @@ class Report extends Component {
                     this.setState({
                         name: "",
                         message: ""
-                    });
+                    }, () => this.getItem());
                 });
                 break;
         }
@@ -143,12 +156,7 @@ class Report extends Component {
                     { icon.get("Message") }
                 </h2>
 
-                <h2 className="center">{ this.state.itemGroup === "classroom" ? "Allmänt" : "Utrustning"}:</h2>
-
-                <table className="results narrow">
-                    <thead>
-                        { this.state.itemTable.head }
-                    </thead>
+                <table className="results-home">
                     <tbody>
                         { this.state.itemTable.body }
                     </tbody>
