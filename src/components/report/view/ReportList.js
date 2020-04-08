@@ -13,16 +13,20 @@ class ReportList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: this.props.id || null,
             reports: [],
-            reportsTable: {},
+            reportsTable: {
+                head: [],
+                body: []
+            },
             itemGroup: this.props.itemGroup || this.props.location.state.itemGroup,
             itemid: this.props.itemid || this.props.location.state.itemid,
             selection : [
-                ["title", "20%"],
-                ["message", "30%"],
+                ["item-category", "10%"],
+                ["title", "35%"],
                 ["created", "20%"],
-                ["solved", "10%"],
-                ["manage", "10%"]
+                ["solved", "20%"],
+                ["manage", "15%"]
             ]
         };
     }
@@ -81,8 +85,9 @@ class ReportList extends Component {
 
     getReports() {
         let selection = this.state.selection;
+        let otherReports = this.state.reports.filter((report) => report.id != this.state.id);
 
-        let reportRows = this.state.reports.map((report) => {
+        let reportRows = otherReports.map((report) => {
             return table.reportBody(report, selection, this, <ReportAdmin id={ report.id } />);
         });
 
@@ -97,23 +102,27 @@ class ReportList extends Component {
     render() {
         return (
             <div className="report-log">
-                {
-                    this.state.reports.length > 0
-                        ?
-                        <div>
-                            <h2 class="center">Pågående ärenden: { this.state.reports.length }st </h2>
-                            <table className="results large-rows">
-                                <thead>
-                                    { this.state.reportsTable.head }
-                                </thead>
-                                <tbody>
-                                    { this.state.reportsTable.body }
-                                </tbody>
-                            </table>
-                        </div>
-                        :
-                        <h2 class="center">Inga pågående ärenden</h2>
-                }
+                <div className="column-heading">
+                    <h2 class="center">Pågående ärenden - { this.state.reportsTable.body.length }st</h2>
+                </div>
+                <article>
+                    {
+                        this.state.reportsTable.body.length > 0
+                            ?
+                            <div>
+                                <table className="results large-rows">
+                                    <thead>
+                                        { this.state.reportsTable.head }
+                                    </thead>
+                                    <tbody>
+                                        { this.state.reportsTable.body }
+                                    </tbody>
+                                </table>
+                            </div>
+                            :
+                            <h2 className="column-heading">Inga fler pågående ärenden</h2>
+                    }
+                </article>
             </div>
         );
     }

@@ -115,10 +115,10 @@ table.results tr figure {
     padding: 0;
 }
 
-/* Home page user table */
+/* Card table */
 table.results-home {
     width: 100%;
-    max-width: 850px;
+    max-width: 1000px;
     margin: 0 auto;
     text-align: center;
 }
@@ -126,7 +126,8 @@ table.results-home {
 table.results-home tbody {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
 }
 
@@ -146,6 +147,7 @@ table.results-home td {
 }
 
 table.results-home td figure.icon-text {
+    width: 125px;
     margin-left: 2rem;
     margin-right: 2rem;
 }

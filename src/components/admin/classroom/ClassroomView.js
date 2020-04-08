@@ -14,9 +14,11 @@ class ClassroomView extends Component {
     constructor(props) {
         super(props);
         this.filter = this.filter.bind(this);
+        this.toggleFilter = this.toggleFilter.bind(this);
         this.adminHandler = this.adminHandler.bind(this);
         this.state = {
             title: "Klassrum vy",
+            toggle: "close",
             data: [],
             classroomTable: {
                 head: [],
@@ -95,6 +97,12 @@ class ClassroomView extends Component {
         }, () => this.loadClassroom(this.state.filter));
     }
 
+    toggleFilter() {
+        this.setState({
+            toggle: this.state.toggle === "close" ? "open" : "close"
+        });
+    }
+
     adminHandler(view, id) {
         this.props.admin(view, id);
     }
@@ -102,29 +110,35 @@ class ClassroomView extends Component {
     render() {
         return (
             <article>
-                <div className="admin-control category-control">
-                    <Categories
-                        title="Hus"
-                        filterCb={ this.filter }
-                        url="building"
-                        category="name"
-                        filterCategory="location"
-                        stateName="classroomCategory1"
-                        save={ this.props.save }
-                        restore={ this.props.restore }
-                    />
-                </div>
 
-                <div className="admin-control category-control">
-                    <Categories
-                        title="Status"
-                        filterCb={ this.filter }
-                        url="report/filter"
-                        category="solved"
-                        stateName="classroomCategory2"
-                        save={ this.props.save }
-                        restore={ this.props.restore }
-                    />
+
+                <div className={`filter-panel ${ this.state.toggle }`}>
+                    <div className="dropdown">
+                        { icon.get(this.state.toggle === "close" ? "Drop-down" : "Drop-up", this.toggleFilter) }
+                    </div>
+                    <div className="admin-control category-control">
+                        <Categories
+                            title="Hus"
+                            filterCb={ this.filter }
+                            url="classroom/building"
+                            category="location"
+                            stateName="classroomCategory1"
+                            save={ this.props.save }
+                            restore={ this.props.restore }
+                        />
+                    </div>
+
+                    <div className="admin-control category-control">
+                        <Categories
+                            title="Status"
+                            filterCb={ this.filter }
+                            url="report/filter"
+                            category="solved"
+                            stateName="classroomCategory2"
+                            save={ this.props.save }
+                            restore={ this.props.restore }
+                        />
+                    </div>
                 </div>
 
                 <table className="results-home">

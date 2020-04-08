@@ -149,34 +149,36 @@ class Report extends Component {
 
     render() {
         return (
-            <article>
-                <h2 className="center">
-                    { this.state.title }
-                    <br />
-                    { icon.get("Message") }
-                </h2>
+            <div className="main-column">
+                <div className="column-heading">
+                    <h1>{ this.state.title }</h1>
+                </div>
+                <article>
+                    <table className="results-home">
+                        <tbody>
+                            { this.state.itemTable.body }
+                        </tbody>
+                    </table>
 
-                <table className="results-home">
-                    <tbody>
-                        { this.state.itemTable.body }
-                    </tbody>
-                </table>
+                    <h2 className="center">
+                        { icon.get("Message") }<br />
+                        Formulär
+                    </h2>
 
-                <form className="form-register" onSubmit={ this.reportItem }>
-                    <label className="form-label">Titel
-                        <input className="form-input" type="text" name="name" value={ this.state.name } onChange={ this.formHandler } required placeholder="Ett namn som förklare snabbt problemet." />
-                    </label>
+                    <form className="form-register" onSubmit={ this.reportItem }>
+                        <label className="form-label">Titel
+                            <input className="form-input" type="text" name="name" value={ this.state.name } onChange={ this.formHandler } required placeholder="Ett namn som förklare snabbt problemet." />
+                        </label>
 
-                    <label className="form-label">Meddelande
-                        <textarea className="form-input" name="message" value={ this.state.message } onChange={ this.formHandler } required placeholder="Skriv något om problemet." />
-                    </label>
+                        <label className="form-label">Meddelande
+                            <textarea className="form-input" name="message" value={ this.state.message } onChange={ this.formHandler } required placeholder="Skriv något om problemet." />
+                        </label>
 
-                    <input className="button center-margin" type="submit" name="create" value="Felanmäla" />
-                </form>
-
+                        <input className="button center-margin" type="submit" name="create" value="Felanmäla" />
+                    </form>
+                </article>
                 { this.state.reportList }
-
-            </article>
+            </div>
         );
     }
 }

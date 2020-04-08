@@ -14,16 +14,19 @@ class DeviceView extends Component {
     constructor(props) {
         super(props);
         this.filter = this.filter.bind(this);
+        this.toggleFilter = this.toggleFilter.bind(this);
         this.adminHandler = this.adminHandler.bind(this);
         this.state = {
             title: "Utrustning vy",
+            toggle: "close",
             data: [],
             deviceTable: {
                 head: [],
                 body: []
             },
-            column: "category",
-            filter: "Alla",
+            filter: {
+                location: "Alla"
+            },
             selection: [
                 ["category-caption-large", null],
                 ["manage", null]
@@ -46,11 +49,9 @@ class DeviceView extends Component {
     }
 
     loadDevices(filter) {
-        let column = this.state.column;
-        let res = db.fetchAllWhere("device", column, filter);
+        let res = db.fetchAllManyWhere("device", filter);
 
         res.then((data) => {
-            console.log(data);
             this.setState({
                 data: data,
                 filter: filter
@@ -87,7 +88,19 @@ class DeviceView extends Component {
     }
 
     filter(category, filter) {
-        this.loadDevices(filter);
+        let currentFilter = this.state.filter;
+
+        currentFilter[category] = filter;
+
+        this.setState({
+            filter: currentFilter
+        }, () => this.loadDevices(this.state.filter));
+    }
+
+    toggleFilter() {
+        this.setState({
+            toggle: this.state.toggle === "close" ? "open" : "close"
+        });
     }
 
     adminHandler(view, id) {
@@ -97,16 +110,33 @@ class DeviceView extends Component {
     render() {
         return (
             <article>
-                <div className="admin-control category-control">
-                    <Categories
-                        title="Kategori"
-                        filterCb={ this.filter }
-                        url="device/category"
-                        category="name"
-                        stateName="deviceCategory1"
-                        save={ this.props.save }
-                        restore={ this.props.restore }
-                    />
+                <div className={`filter-panel ${ this.state.toggle }`}>
+                    <div className="dropdown">
+                        { icon.get(this.state.toggle === "close" ? "Drop-down" : "Drop-up", this.toggleFilter) }
+                    </div>
+                    <div className="admin-control category-control">
+                        <Categories
+                            title="Kategori"
+                            filterCb={ this.filter }
+                            url="device/category"
+                            category="category"
+                            stateName="deviceCategory1"
+                            save={ this.props.save }
+                            restore={ this.props.restore }
+                        />
+                    </div>
+
+                    <div className="admin-control category-control">
+                        <Categories
+                            title="Status"
+                            filterCb={ this.filter }
+                            url="report/filter"
+                            category="solved"
+                            stateName="deviceCategory2"
+                            save={ this.props.save }
+                            restore={ this.props.restore }
+                        />
+                    </div>
                 </div>
 
                 <table className="results-home">

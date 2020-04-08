@@ -105,10 +105,10 @@ class DeviceCreate extends Component {
                     <label className="form-label">Kategori
                         <select className="form-input" type="text" name="category" required>
                             {
-                                this.state.categories.map(function(cat) {
-                                    let name = cat.name;
+                                this.state.categories.map(function(device) {
+                                    let category = device.category;
                                     return [
-                                        <option key={ name } value={ name }>{ name }</option>
+                                        <option key={ category } value={ category }>{ category }</option>
                                     ]
                                 })
                             }

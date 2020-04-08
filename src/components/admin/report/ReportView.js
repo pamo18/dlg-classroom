@@ -14,25 +14,26 @@ class ReportView extends Component {
     constructor(props) {
         super(props);
         this.getReports = this.getReports.bind(this);
-        this.filter1 = this.filter1.bind(this);
-        this.filter2 = this.filter2.bind(this);
+        this.filter = this.filter.bind(this);
+        this.toggleFilter = this.toggleFilter.bind(this);
         this.adminHandler = this.adminHandler.bind(this);
         this.state = {
+            title: "Report vy",
+            toggle: "close",
             data: [],
-            column1: "location",
-            column2: "solved",
-            filter1: "Alla",
-            filter2: "Alla",
             reportsTable: {
                 head: [],
                 body: []
             },
+            filter: {
+                location: "Alla"
+            },
             selection : [
-                ["title", null],
-                ["classroom", null],
-                ["item", null],
-                ["solved", null],
-                ["manage", null]
+                ["item-category", "15%"],
+                ["title", "35%"],
+                ["created", "15%"],
+                ["solved", "15%"],
+                ["manage", "20%"]
             ]
         };
     }
@@ -51,34 +52,13 @@ class ReportView extends Component {
         this.props.save("reportViewState", this.state);
     }
 
-    loadReports(filter, column) {
-        let res;
-        let filter1;
-        let filter2;
-        let column1 = this.state.column1;
-        let column2 = this.state.column2;
-
-        if (column === 1) {
-            filter1 = filter;
-            filter2 = this.state.filter2;
-        } else if (column === 2) {
-            filter1 = this.state.filter1;
-            filter2 = filter;
-        } else {
-            filter1 = this.state.filter1;
-            filter2 = this.state.filter2;
-        }
-
-        if (filter1 === "Alla" && filter2 === "Alla") {
-            res = db.fetchAll("report");
-        } else {
-            res = db.fetchAllWhere("report", column1, filter1, column2, filter2);
-        }
+    loadReports(filter) {
+        let res = db.fetchAllManyWhere("report", filter);
 
         res.then((data) => {
             this.setState({
                 data: data,
-                [`filter${column}`]: filter
+                filter: filter
             }, () => this.getReports());
         });
     }
@@ -108,12 +88,20 @@ class ReportView extends Component {
         });
     }
 
-    filter1(filter) {
-        this.loadReports(filter, 1);
+    filter(category, filter) {
+        let currentFilter = this.state.filter;
+
+        currentFilter[category] = filter;
+
+        this.setState({
+            filter: currentFilter
+        }, () => this.loadReports(this.state.filter));
     }
 
-    filter2(filter) {
-        this.loadReports(filter, 2);
+    toggleFilter() {
+        this.setState({
+            toggle: this.state.toggle === "close" ? "open" : "close"
+        });
     }
 
     adminHandler(view, id) {
@@ -123,28 +111,33 @@ class ReportView extends Component {
     render() {
         return (
             <article>
-                <div className="admin-control category-control">
-                    <Categories
-                        title="Hus"
-                        filterCb={ this.filter1 }
-                        url="building"
-                        categoryName="name"
-                        stateName="reportCategory1"
-                        save={ this.props.save }
-                        restore={ this.props.restore }
-                    />
-                </div>
+                <div className={`filter-panel ${ this.state.toggle }`}>
+                    <div className="dropdown">
+                        { icon.get(this.state.toggle === "close" ? "Drop-down" : "Drop-up", this.toggleFilter) }
+                    </div>
+                    <div className="admin-control category-control">
+                        <Categories
+                            title="Hus"
+                            filterCb={ this.filter }
+                            url="classroom/building"
+                            category="location"
+                            stateName="reportCategory1"
+                            save={ this.props.save }
+                            restore={ this.props.restore }
+                        />
+                    </div>
 
-                <div className="admin-control category-control">
-                    <Categories
-                        title="Status"
-                        filterCb={ this.filter2 }
-                        url="report/filter"
-                        categoryName="solved"
-                        stateName="reportCategory2"
-                        save={ this.props.save }
-                        restore={ this.props.restore }
-                    />
+                    <div className="admin-control category-control">
+                        <Categories
+                            title="Status"
+                            filterCb={ this.filter }
+                            url="report/filter"
+                            category="solved"
+                            stateName="reportCategory2"
+                            save={ this.props.save }
+                            restore={ this.props.restore }
+                        />
+                    </div>
                 </div>
 
                 <h2 class="center">Aktuella Felanmälningar: { this.state.reportsTable.body.length }st </h2>

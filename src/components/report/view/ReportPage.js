@@ -6,7 +6,6 @@ import ReportList from './ReportList.js';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
 import icon from '../../../models/icon.js';
-import image from '../../../models/image.js';
 import table from '../../../models/table.js';
 import '../Report.css';
 
@@ -16,7 +15,19 @@ class ReportPage extends Component {
         this.state = {
             title: "Felanmälning",
             id: this.props.location.state.id,
-            report: {}
+            report: {},
+            item: {},
+            itemTable: {
+                body: []
+            },
+            classroomSelection: [
+                ["name-caption-large", null],
+                ["manage", null]
+            ],
+            deviceSelection: [
+                ["category-caption-large", null],
+                ["manage", null]
+            ]
         };
     }
 
@@ -28,67 +39,142 @@ class ReportPage extends Component {
         let res = db.fetchWhere("report", "report.id", this.state.id);
 
         res.then((data) => {
-            console.log(data);
             this.setState({
                 report: data,
-                reportList: <ReportList onRef={ref => (this.list = ref)} itemGroup={ data.item_group } itemid={ data.item_id } />
-            });
+                reportList: <ReportList onRef={ref => (this.list = ref)} id={ data.id } itemGroup={ data.item_group } itemid={ data.item_id } />
+            }, () => this.loadItem());
         });
+    }
+
+    loadItem() {
+        let itemGroup = this.state.report.item_group;
+        let res;
+
+        switch(true) {
+            case (itemGroup === "classroom"):
+                res = db.fetchWhere("classroom", "id", this.state.report.classroom_id);
+                break;
+            case (itemGroup === "device"):
+                res = db.fetchWhere("device", "id", this.state.report.device_id);
+                break;
+        }
+
+        if (res) {
+            res.then((data) => {
+                this.setState({
+                    item: data
+                }, () => this.getItem());
+            });
+        }
+    }
+
+    getItem() {
+        let item = this.state.item;
+        let itemGroup = this.state.report.item_group;
+        let data,
+            selection,
+            view,
+            reportList,
+            reportStatus,
+            actions;
+
+        switch(true) {
+            case (itemGroup === "classroom"):
+                selection = this.state.classroomSelection;
+                view = () => utils.redirect(this, "/classroom", { id: item.id });
+                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: item.id });
+                reportStatus = db.reportCheck("classroom", item.id);
+
+                reportStatus.then((status) => {
+                    actions = [
+                        icon.reportStatus(reportList, status),
+                        icon.get("View", view)
+                    ];
+
+                    this.setState({
+                        itemTable: {
+                            body: table.classroomBody(item, selection, actions)
+                        }
+                    });
+                });
+                break;
+            case (itemGroup === "device"):
+                selection = this.state.deviceSelection;
+                view = () => utils.redirect(this, "/device", { id: item.id });
+                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: item.id });
+                reportStatus = db.reportCheck("device", item.id);
+
+                reportStatus.then((status) => {
+                    actions = [
+                        icon.reportStatus(reportList, status),
+                        icon.get("View", view)
+                    ];
+
+                    this.setState({
+                        itemTable: {
+                            body: table.deviceBody(item, selection, actions)
+                        }
+                    });
+                });
+                break;
+        }
     }
 
     render() {
         return (
-            <article>
-                <h1 className="center">{ this.state.title }</h1>
-
-                <div className="report-image">
-                    <img src={ image.get(this.state.report.classroom_image) } alt="Classroom image"/>
+            <div className="main-column">
+                <div className="column-heading">
+                    <h1>{ this.state.title }</h1>
                 </div>
+                <article>
+                    {
+                        Object.entries(this.state.report).length > 0
+                            ?
+                            <div>
+                                <table className="results-home">
+                                    <tbody>
+                                        { this.state.itemTable.body }
+                                    </tbody>
+                                </table>
 
-                {
-                    Object.entries(this.state.report).length > 0
-                        ?
-                        <table className="results-alt">
-                            <tr>
-                                <th>Titel</th>
-                                <td>{ this.state.report.name }</td>
-                            </tr>
-                            <tr>
-                                <th>Skapad</th>
-                                <td>{ this.state.report.created ? utils.convertSqlDate(this.state.report.created) : "-" }</td>
-                            </tr>
-                            <tr>
-                                <th>Klassrum</th>
-                                <td>{ this.state.report.classroom_name }</td>
-                            </tr>
-                            <tr>
-                                <th>Hus</th>
-                                <td>{ this.state.report.classroom_location }</td>
-                            </tr>
-                            <tr>
-                                <th>Fel</th>
-                                <td>{ this.state.report.device_id ? this.state.report.device_brand + " " + this.state.report.device_model : "Allmänt" }</td>
-                            </tr>
-                            <tr>
-                                <th>Meddeland</th>
-                                <td>{ this.state.report.message }</td>
-                            </tr>
-                            <tr>
-                                <th>Åtgärdning</th>
-                                <td>{ this.state.report.action || "-" }</td>
-                            </tr>
-                            <tr>
-                                <th>Åtgärdat</th>
-                                <td>{ this.state.report.solved ? utils.convertSqlDate(this.state.report.solved) : "-" }</td>
-                            </tr>
-                        </table>
-                        :
-                        null
-                }
+                                <h2 className="center margin">
+                                    { icon.get("Maintenance") }<br />
+                                    Rapport
+                                </h2>
 
+                                <table className="results-alt">
+                                    <tr>
+                                        <th>Titel</th>
+                                        <td>{ this.state.report.name }</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Vad</th>
+                                        <td>{ this.state.report.device_id ? this.state.report.device_brand + " " + this.state.report.device_model : "Allmänt" }</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Meddeland</th>
+                                        <td>{ this.state.report.message }</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Åtgärdning</th>
+                                        <td>{ this.state.report.action || "-" }</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Åtgärdat</th>
+                                        <td>{ this.state.report.solved ? utils.convertSqlDate(this.state.report.solved) : "-" }</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Skapad</th>
+                                        <td>{ this.state.report.created ? utils.convertSqlDate(this.state.report.created) : "-" }</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            :
+                            null
+                    }
+                </article>
                 { this.state.reportList }
-
-            </article>
+            </div>
         );
     }
 }

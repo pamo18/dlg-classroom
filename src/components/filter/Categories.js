@@ -17,7 +17,6 @@ class Categories extends Component {
             filterCb: this.props.filterCb,
             url: this.props.url,
             category: this.props.category,
-            filterCategory: this.props.filterCategory,
             filter: "Alla"
         };
     }
@@ -53,7 +52,7 @@ class Categories extends Component {
     }
 
     filter(filter) {
-        let category = this.state.filterCategory || this.state.category;
+        let category = this.state.category;
         this.state.filterCb(category , filter);
 
         this.setState({

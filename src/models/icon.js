@@ -16,12 +16,15 @@ import ErrorIcon from '@material-ui/icons/Error';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RoomIcon from '@material-ui/icons/Room';
 import BuildIcon from '@material-ui/icons/Build';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 
 import house from '../assets/img/icons/house.png';
 import classroom from '../assets/img/icons/classroom.png';
 import device from '../assets/img/icons/device.png';
 import classroomDevice from '../assets/img/icons/classroom-device.png'
 import message from '../assets/img/icons/message.png'
+import maintenance from '../assets/img/icons/maintenance.png'
 import speaker from '../assets/img/icons/speaker.png'
 import projector from '../assets/img/icons/projector.png'
 import tv from '../assets/img/icons/tv.png'
@@ -97,6 +100,12 @@ const icon = {
         "Build": [
             <BuildIcon fontSize="large" />
         ],
+        "Drop-down": [
+            <ArrowDropDownIcon fontSize="large" />
+        ],
+        "Drop-up": [
+            <ArrowDropUpIcon fontSize="large" />
+        ],
         "House": [
             <img src={ house } className="icon" />
         ],
@@ -114,6 +123,9 @@ const icon = {
         ],
         "Message": [
             <img src={ message } className="icon" />
+        ],
+        "Maintenance": [
+            <img src={ maintenance } className="icon" />
         ]
     },
     get: function(name, callback = null, selected = null) {

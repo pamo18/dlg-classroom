@@ -21,7 +21,7 @@ class ClassroomCreate extends Component {
     }
 
     buildings() {
-        let res = db.fetchAll("building");
+        let res = db.fetchAll("classroom/building");
         let that = this;
 
         res.then(function(data) {
@@ -65,9 +65,9 @@ class ClassroomCreate extends Component {
                         <select className="form-input" type="text" name="location" required>
                             {
                                 this.state.buildings.map(function(building) {
-                                    let name = building.name;
+                                    let location = building.location;
                                     return [
-                                        <option key={ name } value={ name }>{ name }</option>
+                                        <option key={ location } value={ location }>{ location }</option>
                                     ]
                                 })
                             }

@@ -1,7 +1,11 @@
 /* Report page */
+.report-heading {
+    padding: 5px;
+    background-color: #060d13;
+}
 
 .report-log {
-    margin-top: 4rem;
+    width: 100%;
 }
 
 .report-image {

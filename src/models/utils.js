@@ -44,11 +44,15 @@ const utils = {
         that.props.history.push(url);
         window.location.reload(false);
     },
-    redirect: function(that, dest, state) {
+    redirect: function(that, dest, state, reload = null) {
         that.props.history.push({
             pathname: dest,
             state: state
         });
+
+        if (reload != null) {
+            window.location.reload(reload);
+        }
     },
     slugify: function(text) {
         return text.toString().toLowerCase()

@@ -25,6 +25,18 @@ a:hover {
     text-decoration: underline;
 }
 
+.dropdown {
+    text-align: center;
+    font-weight: bold;
+}
+
+.dropdown i {
+    /* padding: 0.5rem; */
+}
+
+.dropdown i:hover {
+}
+
 .clickable {
     cursor: pointer;
 }
@@ -33,7 +45,7 @@ i.clickable {
     border-bottom: 2px solid rgb(255, 255, 255, 0);
 }
 
-i.clickable:not(.icon-text i):hover,
+i.clickable:not(.icon-text i, .dropdown i):hover,
 i.clickable.icon-text:hover .caption-text {
     border-bottom: 2px solid rgb(255, 255, 255, 1);
 }
@@ -98,7 +110,7 @@ article {
     width: 100%;
     padding-left: 2rem;
     padding-right: 2rem;
-    min-height: 57em;
+    /* min-height: 57em; */
 }
 
 .center {

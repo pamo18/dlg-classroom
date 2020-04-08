@@ -1,30 +1,5 @@
 @media only screen and (max-width: 1000px) {
-    body {
-        width: auto;
-    }
-
-    main {
-        display: block;
-    }
-
-    .form-label,
-    .form-input,
-    .date-picker {
-        width: 100%;
-    }
-/* Table */
-    table.results-home {
-        max-width: 100%;
-    }
-
-    table.results-home tbody {
-        display: block;
-    }
-
-    table.results-home tr {
-        padding: 0;
-    }
-
+    /* Table */
     table.results.narrow {
         width: 100%;
     }
@@ -91,40 +66,88 @@
         text-align: left;
         font-weight: bold;
     }
-/* Date Picker */
+}
+
+@media only screen and (max-width: 900px) {
+    body {
+        width: auto;
+    }
+
+    main {
+        display: block;
+    }
+
+    aside {
+        padding: 0;
+    }
+
+    /* Poster Table */
+    table.results-home {
+        max-width: 100%;
+    }
+
+    table.results-home tbody {
+        display: block;
+    }
+
+    table.results-home tr {
+        padding: 0;
+    }
+
+    table.results-home td figure.icon-text {
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Form */
+    .form-label,
+    .form-input,
     .date-picker {
         width: 100%;
     }
 
-/* Classroom view */
+    /* Control panels */
+    .admin-control:not(.category-control),
+    .home-control {
+        border-radius: 0;
+        margin-bottom: 0;
+        border-bottom: 1px solid rgb(38, 45, 52);
+    }
+
+    /* Date Picker */
+    .date-picker {
+        width: 100%;
+    }
+
+    /* Classroom view */
 
     .classroom-view {
         width: 100%;
     }
-/* Device view */
+    /* Device view */
 
     .device-view {
         width: 100%;
     }
-/* Report view */
+    /* Report view */
 
     .report-image {
         width: 100%;
     }
-/* User */
+    /* User */
 
     .user {
         width: 100%;
         max-width: 100%;
     }
-/* Home Control Panel */
 
+    /* Home Control Panel */
     .home-control .filter-categories {
         width: 450px;
         margin: 0 auto;
     }
-/* Header */
 
+    /* Header */
     .logo {
         width: 80px;
     }
@@ -138,8 +161,7 @@
         text-align: left;
     }
 
-/* Nav */
-
+    /* Nav */
     header .navbar {
         display: none;
     }
@@ -148,8 +170,7 @@
         display: flex;
     }
 
-/* Footer */
-
+    /* Footer */
     .footer-column {
         display: none;
     }
@@ -162,19 +183,16 @@
     }
 
     /* User */
-
     .user {
         font-size: 1.2rem;
     }
 
     /* Home Control Panel */
-
     .home-control .filter-categories {
         width: 100%;
     }
 
     /* Footer */
-
     footer .navbar a {
         font-size: 0.8rem;
     }

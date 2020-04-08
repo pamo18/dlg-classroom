@@ -54,7 +54,7 @@ const table = {
                         { icon.get(`${device.category}-large`)}
                         <figcaption>
                             <span className="caption-text">
-                                { device.category }
+                                { `${ device.brand } ${ device.model }` }
                             </span>
                         </figcaption>
                     </figure>
@@ -140,10 +140,11 @@ const table = {
     reportHead: function(selection) {
         let len = selection.length;
         let rows = {
+            "item": (w) => <th width={w}>Vad</th>,
+            "item-category": (w) => <th width={w}>Vad</th>,
             "title": (w) => <th width={w}>Titel</th>,
             "message": (w) => <th width={w}>Meddeland</th>,
             "classroom": (w) => <th width={w}>Klassrum</th>,
-            "item": (w) => <th width={w}>Vad</th>,
             "created": (w) => <th width={w}>Skapad</th>,
             "action": (w) => <th width={w}>Åtgärdning</th>,
             "solved": (w) => <th width={w}>Åtgärdat</th>,
@@ -163,6 +164,30 @@ const table = {
     },
     reportBody: function(report, selection, that, actions = null) {
         let rows = {
+            "item": [
+                <td data-title="Vad">
+                    <figure className="icon-text">
+                        { icon.get("View", () => utils.redirect(that, `/${ report.item_group }`, { id: report.item_id })) }
+                        <figcaption>
+                            <span className="caption-text">
+                                { report.item_group === "device" ? `${ report.classroom_name } - ${ report.device_brand } ${ report.device_model }` : `${ report.classroom_name } - Allämnt` }
+                            </span>
+                        </figcaption>
+                    </figure>
+                </td>
+            ],
+            "item-category": [
+                <td data-title="Vad">
+                    <figure className="icon-text">
+                        { icon.get(report.device_category || "Build")}
+                        <figcaption>
+                            <span className="caption-text">
+                                { report.device_id ? `${report.device_brand } ${ report.device_model }` : report.classroom_name }
+                            </span>
+                        </figcaption>
+                    </figure>
+                </td>
+            ],
             "title": <td data-title="Titel">{ report.name }</td>,
             "message": <td data-title="Meddelande">{ report.message }</td>,
             "classroom": [
@@ -177,21 +202,9 @@ const table = {
                     </figure>
                 </td>
             ],
-            "item": [
-                <td data-title="Vad">
-                    <figure className="icon-text">
-                        { icon.get("View", () => utils.redirect(that, `/${ report.item_group }`, { id: report.item_id })) }
-                        <figcaption>
-                            <span className="caption-text">
-                                { report.item_group === "device" ? `${ report.device_brand } ${ report.device_model }` : "Allämnt" }
-                            </span>
-                        </figcaption>
-                    </figure>
-                </td>
-            ],
-            "created": <td data-title="Skapad">{ report.created ? utils.convertSqlDate(report.created) : "-" }</td>,
+            "created": <td data-title="Skapad">{ report.created ? utils.convertSqlDate(report.created).substring(0, 10) : "-" }</td>,
             "action": <td data-title="Åtgärdning">{ report.action || "-" }</td>,
-            "solved": <td data-title="Åtgärdat">{ report.solved ? utils.convertSqlDate(report.solved) : "-" }</td>,
+            "solved": <td data-title="Åtgärdat">{ report.solved ? utils.convertSqlDate(report.solved).substring(0, 10) : "-" }</td>,
             "manage": <td data-title="Hantera">{ actions }</td>
         };
 

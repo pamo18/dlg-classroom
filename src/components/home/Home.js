@@ -19,8 +19,10 @@ class Home extends Component {
         this.getDevices = this.getDevices.bind(this);
         this.classroomHandler = this.classroomHandler.bind(this);
         this.filterHandler = this.filterHandler.bind(this);
+        this.toggleFilter = this.toggleFilter.bind(this);
         this.state = {
             title: "Klassrum vy",
+            toggle: "close",
             buildings: [],
             classroomTemplate: "name",
             classroomData: [],
@@ -34,7 +36,7 @@ class Home extends Component {
             name: null,
             devices: [],
             filter: {
-                name: "Alla"
+                location: "Alla"
             },
             selection : [
                 ["category-caption-large", null],
@@ -68,7 +70,7 @@ class Home extends Component {
     }
 
     buildings() {
-        let res = db.fetchAll("building");
+        let res = db.fetchAll("classroom/building");
 
         res.then((data) => {
             this.setState({
@@ -80,7 +82,7 @@ class Home extends Component {
 
     loadClassrooms() {
         let res = db.fetchAll("classroom");
-        let filter = this.state.filter.name;
+        let filter = this.state.filter.location;
 
         res.then((data) => {
             let organize = form.organize(data, "location", "id", filter != "Alla" ? filter : null);
@@ -184,20 +186,30 @@ class Home extends Component {
         }, () => this.loadClassrooms(this.state.filter));
     }
 
+    toggleFilter() {
+        this.setState({
+            toggle: this.state.toggle === "close" ? "open" : "close"
+        });
+    }
+
     render() {
         return (
             <main>
-                <div className="left-column">
+                <div className={`left-column ${ this.state.toggle }`}>
                     <div className="column-heading">
                         <h2>Kontrollpanel</h2>
                     </div>
-                    <aside className="home-panel">
-                        <div className="home-control category-control">
+                    <aside className={`home-panel ${ this.state.toggle }`}>
+                        <div className={`home-control category-control ${ this.state.toggle }`}>
+                            <div className="dropdown">
+                                { icon.get(this.state.toggle === "close" ? "Drop-down" : "Drop-up", this.toggleFilter) }
+                            </div>
                             <Categories
+                                title="Hus"
                                 filterCb={ this.filterHandler }
-                                url="building"
-                                category="name"
-                                sourceState="homeState"
+                                url="classroom/building"
+                                category="location"
+                                stateName="homeCategory1"
                                 save={ this.props.save }
                                 restore={ this.props.restore }
                             />

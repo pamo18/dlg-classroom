@@ -10,9 +10,13 @@
     border-radius: 10px;
 }
 
-.admin-control .filter-categories {
-    width: 450px;
-    margin: 0 auto;
+.admin-control img.icon {
+    width: 100px;
+    height: 100px;
+}
+
+.admin-control h2 {
+    margin: 0.5rem;
 }
 
 .admin-group {
@@ -45,13 +49,4 @@
     border-radius: 10px;
     border: 2px solid black;
     width: 100%;
-}
-
-@media (max-width: 980px) {
-}
-
-@media (max-width: 500px) {
-    .admin-control .filter-categories {
-        width: 100%;
-    }
 }
