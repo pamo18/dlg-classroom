@@ -1,8 +1,7 @@
 /* Top column */
-
 .filter-panel {
     width: 100%;
-    background-color: #060d13;
+    background-color: rgb(6, 13, 19);
     border-radius: 10px;
     margin-bottom: 2rem;
 }
@@ -21,45 +20,39 @@
     will-change: transform;
 }
 
-.filter-panel.admin-control.category-control {
-    background-color: #121d26;
+.filter-panel .controller h2 {
+    margin: 0;
 }
 
-.admin-control.category-control h2,
-.admin-control.category-control {
-    margin-bottom: 0;
-}
-
-.admin-control.category-control .control-icon {
+.filter-panel .control-icon {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-.admin-control.category-control .control-icon figure:not(:first-child) {
+.filter-panel .controller .control-icon figure:not(:first-child) {
     margin-left: 1rem;
 }
 
-.admin-control.category-control .control-icon figure:not(:last-child) {
+.filter-panel .controller .control-icon figure:not(:last-child) {
     margin-right: 1rem;
 }
 
-.admin-control .filter-categories {
-    width: 450px;
+.filter-panel .controller .filter-categories {
     margin: 0 auto;
 }
 
-.control-icon figure {
+.filter-panel .control-icon figure {
     text-align: center;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid rgb(6, 13, 19);
     margin-left: 2px;
     margin-right: 2px;
 }
 
-.control-icon figure:not(.selected):hover {
+.filter-panel .control-icon figure:not(.selected):hover {
     border-bottom: 2px solid rgb(46, 174, 52);
 }
 
-.control-icon figure.selected {
+.filter-panel .control-icon figure.selected {
     border-bottom: 2px solid rgb(14, 125, 255);
 }

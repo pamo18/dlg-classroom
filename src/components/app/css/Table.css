@@ -94,7 +94,7 @@ table.results-alt td {
 }
 
 table.results i,
-table.results-home i {
+table.results-card i {
     margin-left: 2px;
     margin-right: 2px;
 }
@@ -115,15 +115,15 @@ table.results tr figure {
     padding: 0;
 }
 
-/* Card table */
-table.results-home {
+/* Table Card View */
+table.results-card {
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
     text-align: center;
 }
 
-table.results-home tbody {
+table.results-card tbody {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -131,7 +131,11 @@ table.results-home tbody {
     flex-wrap: wrap;
 }
 
-table.results-home tr {
+table.results-card.single-card tbody {
+    justify-content: center;
+}
+
+table.results-card tr {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -140,25 +144,25 @@ table.results-home tr {
     padding-right: 0.85rem;
 }
 
-table.results-home td {
+table.results-card td {
     background-color: #060d13;
     padding: 0.5rem;
     width: 100%;
 }
 
-table.results-home td figure.icon-text {
+table.results-card td figure.icon-text {
     width: 125px;
     margin-left: 2rem;
     margin-right: 2rem;
 }
 
-table.results-home td:first-child {
+table.results-card td:first-child {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom: 1px solid rgb(38, 45, 52);
 }
 
-table.results-home td:last-child {
+table.results-card td:last-child {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }

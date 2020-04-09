@@ -1,40 +1,44 @@
 /* Left column */
-.admin-panel {
+.panel {
     width: 100%;
 }
 
-.admin-control {
-    background-color: #060d13;
+.panel .controller {
+
     margin-bottom: 2rem;
     padding: 0.5rem;
     border-radius: 10px;
 }
 
-.admin-control img.icon {
-    width: 100px;
-    height: 100px;
+.panel .controller {
+    background-color: rgb(6, 13, 19);
 }
 
-.admin-control h2 {
-    margin: 0.5rem;
-}
-
-.admin-group {
+.panel .control-group {
     width: 100%;
     text-align: center;
     margin: 0 auto;
 }
 
-.control-icon i {
+.panel .controller img.icon {
+    width: 100px;
+    height: 100px;
+}
+
+.panel .controller h2 {
+    margin: 0.5rem;
+}
+
+.panel .control-icon i {
     margin-left: 2px;
     margin-right: 2px;
 }
 
-.control-icon i:not(.selected):hover {
+.panel .control-icon i:not(.selected):hover {
     border-bottom: 2px solid rgb(46, 174, 52);
 }
 
-.control-icon i.selected {
+.panel .control-icon i.selected {
     border-bottom: 2px solid rgb(14, 125, 255);
 }
 

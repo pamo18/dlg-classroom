@@ -42,6 +42,10 @@ class Report extends Component {
         this.getItem();
     }
 
+    componentWillUnmount() {
+        window.scrollTo(0, 0);
+    }
+
     getItem() {
         let itemGroup = this.state.itemGroup;
         let classroomData = this.state.classroomData;
@@ -154,7 +158,7 @@ class Report extends Component {
                     <h1>{ this.state.title }</h1>
                 </div>
                 <article>
-                    <table className="results-home">
+                    <table className="results-card single-card">
                         <tbody>
                             { this.state.itemTable.body }
                         </tbody>

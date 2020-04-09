@@ -55,6 +55,8 @@ class ReportUpdate extends Component {
             this.setState({
                 report: {
                     id: res.id,
+                    itemGroup: res.item_group,
+                    itemid: res.item_id,
                     name: res.name,
                     message: res.message,
                     action: res.action,
@@ -87,7 +89,7 @@ class ReportUpdate extends Component {
 
         let res = db.update("report", id, report);
 
-        res.then(utils.reload(this, "/admin"));
+        res.then(() => utils.goBack(this));
     }
 
     inputHandler(e) {
@@ -97,7 +99,6 @@ class ReportUpdate extends Component {
 
         if (key === "solved") {
             report[key] = report[key] ? false : utils.getLocalDate();
-            console.log(value);
         }
 
         this.setState({

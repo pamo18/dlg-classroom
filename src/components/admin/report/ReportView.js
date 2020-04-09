@@ -115,29 +115,25 @@ class ReportView extends Component {
                     <div className="dropdown">
                         { icon.get(this.state.toggle === "close" ? "Drop-down" : "Drop-up", this.toggleFilter) }
                     </div>
-                    <div className="admin-control category-control">
-                        <Categories
-                            title="Hus"
-                            filterCb={ this.filter }
-                            url="classroom/building"
-                            category="location"
-                            stateName="reportCategory1"
-                            save={ this.props.save }
-                            restore={ this.props.restore }
-                        />
-                    </div>
+                    <Categories
+                        title="Filter Hus"
+                        filterCb={ this.filter }
+                        url="classroom/building"
+                        category="location"
+                        stateName="reportCategory1"
+                        save={ this.props.save }
+                        restore={ this.props.restore }
+                    />
 
-                    <div className="admin-control category-control">
-                        <Categories
-                            title="Status"
-                            filterCb={ this.filter }
-                            url="report/filter"
-                            category="solved"
-                            stateName="reportCategory2"
-                            save={ this.props.save }
-                            restore={ this.props.restore }
-                        />
-                    </div>
+                    <Categories
+                        title="Filter Status"
+                        filterCb={ this.filter }
+                        url="report/filter"
+                        category="solved"
+                        stateName="reportCategory2"
+                        save={ this.props.save }
+                        restore={ this.props.restore }
+                    />
                 </div>
 
                 <h2 class="center">Aktuella Felanmälningar: { this.state.reportsTable.body.length }st </h2>

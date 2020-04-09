@@ -44,6 +44,9 @@ const utils = {
         that.props.history.push(url);
         window.location.reload(false);
     },
+    goBack: function(that) {
+        that.props.history.goBack();
+    },
     redirect: function(that, dest, state, reload = null) {
         that.props.history.push({
             pathname: dest,

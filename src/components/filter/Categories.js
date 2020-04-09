@@ -63,23 +63,25 @@ class Categories extends Component {
     render() {
         let filter = this.state.filter;
         return (
-            <figure className="admin-group">
-                <h2 className="center">{ this.state.title }</h2>
-                <figcaption>
-                    <div className="control-icon filter-categories">
-                        { icon.getFigure("Alla", () => { this.filter("Alla") }, filter === "Alla") }
+            <div className="controller">
+                <figure className="control-group">
+                    <h2 className="center">{ this.state.title }</h2>
+                    <figcaption>
+                        <div className="control-icon filter-categories">
+                            { icon.getFigure("Alla", () => { this.filter("Alla") }, filter === "Alla") }
 
-                        {
-                            this.state.data.map((cat) => {
-                                let category = cat[this.state.category];
-                                let key = `filter-category-${category}`;
+                            {
+                                this.state.data.map((cat) => {
+                                    let category = cat[this.state.category];
+                                    let key = `filter-category-${category}`;
 
-                                return icon.getFigure(category, () => { this.filter(category) }, filter === category)
-                            })
-                        }
-                    </div>
-                </figcaption>
-            </figure>
+                                    return icon.getFigure(category, () => { this.filter(category) }, filter === category)
+                                })
+                            }
+                        </div>
+                    </figcaption>
+                </figure>
+            </div>
         );
     }
 }

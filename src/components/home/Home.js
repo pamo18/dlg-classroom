@@ -14,6 +14,7 @@ import Categories from '../filter/Categories.js';
 class Home extends Component {
     constructor(props) {
         super(props);
+        this.ref = React.createRef();
         this.getClassroom = this.getClassroom.bind(this);
         this.loadDevices = this.loadDevices.bind(this);
         this.getDevices = this.getDevices.bind(this);
@@ -67,6 +68,7 @@ class Home extends Component {
 
     componentWillUnmount() {
         this.props.save("homeState", this.state);
+        window.scrollTo(0, 0);
     }
 
     buildings() {
@@ -164,7 +166,7 @@ class Home extends Component {
                 classroomDevicesTable: {
                     body: rows
                 }
-            });
+            }, () => this.scroll());
         });
     }
 
@@ -192,20 +194,30 @@ class Home extends Component {
         });
     }
 
+    scroll() {
+        if (this.ref.current) {
+            this.ref.current.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "nearest"
+            })
+        }
+    }
+
     render() {
         return (
             <main>
-                <div className={`left-column ${ this.state.toggle }`}>
+                <div className="left-column">
                     <div className="column-heading">
                         <h2>Kontrollpanel</h2>
                     </div>
-                    <aside className={`home-panel ${ this.state.toggle }`}>
-                        <div className={`home-control category-control ${ this.state.toggle }`}>
+                    <aside className="panel home-panel">
+                        <div className={`filter-panel ${ this.state.toggle }`}>
                             <div className="dropdown">
                                 { icon.get(this.state.toggle === "close" ? "Drop-down" : "Drop-up", this.toggleFilter) }
                             </div>
                             <Categories
-                                title="Hus"
+                                title="Filter Hus"
                                 filterCb={ this.filterHandler }
                                 url="classroom/building"
                                 category="location"
@@ -215,8 +227,8 @@ class Home extends Component {
                             />
                         </div>
 
-                        <div className="home-control">
-                            <div className="home-group">
+                        <div ref={ this.ref } className="controller">
+                            <div className="control-group">
                                 <h2 className="center margin">Välj Klassrum</h2>
                                 <select className="form-input" type="text" name="classroom" required onChange={ this.classroomHandler }>
                                     <option disabled>Klassrum</option>
@@ -254,7 +266,7 @@ class Home extends Component {
 
                         { this.state.classroomDevicesTable.body.length > 0
                             ?
-                            <table className="results-home">
+                            <table className="results-card">
                                 <tbody>
                                     { this.state.classroomDevicesTable.body }
                                 </tbody>

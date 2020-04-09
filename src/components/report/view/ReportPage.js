@@ -35,6 +35,10 @@ class ReportPage extends Component {
         this.loadReport();
     }
 
+    componentWillUnmount() {
+        window.scrollTo(0, 0);
+    }
+
     loadReport() {
         let res = db.fetchWhere("report", "report.id", this.state.id);
 
@@ -131,7 +135,7 @@ class ReportPage extends Component {
                         Object.entries(this.state.report).length > 0
                             ?
                             <div>
-                                <table className="results-home">
+                                <table className="results-card single-card">
                                     <tbody>
                                         { this.state.itemTable.body }
                                     </tbody>

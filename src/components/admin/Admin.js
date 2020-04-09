@@ -1,6 +1,6 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import  { withRouter } from 'react-router-dom';
 // import auth from '../../models/auth.js';
 import utils from '../../models/utils.js';
@@ -25,14 +25,22 @@ import ReportDelete from './report/ReportDelete.js';
 class Admin extends Component {
     constructor(props) {
         super(props);
+        this.ref = React.createRef();
         this.adminView = this.adminView.bind(this);
         this.classroomView = this.classroomView.bind(this);
         this.deviceView = this.deviceView.bind(this);
         this.classroomDeviceView = this.classroomDeviceView.bind(this);
         this.reportView = this.reportView.bind(this);
         this.change = this.change.bind(this);
+        this.toggleFilter = this.toggleFilter.bind(this);
         this.state = {
             title: "Admin",
+            toggle: {
+                classroom: "close",
+                device: "close",
+                classroomDevice: "close",
+                report: "close"
+            },
             image: image,
             view: null,
             selected: "",
@@ -67,6 +75,11 @@ class Admin extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.props.save("adminState", this.state);
+        window.scrollTo(0, 0);
+    }
+
     adminView(selected, admin, id = null) {
         switch(true) {
             case (selected === "classroom"):
@@ -82,10 +95,6 @@ class Admin extends Component {
                 this.reportView(admin, id);
                 break;
             }
-    }
-
-    componentWillUnmount() {
-        this.props.save("adminState", this.state);
     }
 
     classroomView(admin, id = null) {
@@ -164,10 +173,48 @@ class Admin extends Component {
     }
 
     change(view, selected, admin) {
+        let title = "Admin";
+
+        switch(true) {
+            case (selected === "classroom"):
+                title = "Admin Klassrum";
+                break;
+            case (selected === "device"):
+                title = "Admin Utrustning";
+                break;
+            case (selected === "classroom-device"):
+                title = "Admin Koppla";
+                break;
+            case (selected === "report"):
+                title = "Admin Felanmälningar";
+                break;
+            }
+
         this.setState({
+            title: title,
             view: view,
             selected: selected,
             admin: admin
+        }, () => this.scroll());
+    }
+
+    scroll() {
+        if (this.ref.current && this.state.selected) {
+            this.ref.current.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "nearest"
+            })
+        }
+    }
+
+    toggleFilter(selected) {
+        let toggle = this.state.toggle;
+
+        toggle[selected] = toggle[selected] === "close" ? "open" : "close"
+
+        this.setState({
+            toggle: toggle
         });
     }
 
@@ -177,13 +224,16 @@ class Admin extends Component {
         return (
             <main>
                 <div className="left-column">
-                    <div className="column-heading">
+                    <div className="column-heading left-heading">
                         <h2>Kontrollpanel</h2>
                     </div>
-                    <aside className="admin-panel">
-                        <div className="admin-control">
-                            <figure className="admin-group">
+                    <aside className="panel admin-panel">
+                        <div className={`controller ${ this.state.toggle.classroom }`}>
+                            <figure className="control-group">
                                 <h2 className="center">Klassrum</h2>
+                                <div className="dropdown mobile-only">
+                                    { icon.get(this.state.toggle.classroom === "close" ? "Drop-down" : "Drop-up", () => this.toggleFilter("classroom")) }
+                                </div>
                                 { icon.get("Classroom") }
                                 <figcaption>
                                     <div className="control-icon">
@@ -196,9 +246,12 @@ class Admin extends Component {
                             </figure>
                         </div>
 
-                        <div className="admin-control">
-                            <figure className="admin-group">
+                        <div className={`controller ${ this.state.toggle.device }`}>
+                            <figure className="control-group">
                                 <h2 className="center">Utrustning</h2>
+                                <div className="dropdown mobile-only">
+                                    { icon.get(this.state.toggle.device === "close" ? "Drop-down" : "Drop-up", () => this.toggleFilter("device")) }
+                                </div>
                                 { icon.get("Device") }
                                 <figcaption>
                                     <div className="control-icon">
@@ -211,9 +264,12 @@ class Admin extends Component {
                             </figure>
                         </div>
 
-                        <div className="admin-control">
-                            <figure className="admin-group">
+                        <div className={`controller ${ this.state.toggle.classroomDevice }`}>
+                            <figure className="control-group">
                                 <h2 className="center">Koppla</h2>
+                                <div className="dropdown mobile-only">
+                                    { icon.get(this.state.toggle.classroomDevice === "close" ? "Drop-down" : "Drop-up", () => this.toggleFilter("classroomDevice")) }
+                                </div>
                                 { icon.get("classroomDevice") }
                                 <figcaption>
                                     <div className="control-icon">
@@ -224,9 +280,12 @@ class Admin extends Component {
                             </figure>
                         </div>
 
-                        <div className="admin-control">
-                            <figure className="admin-group">
+                        <div className={`controller ${ this.state.toggle.report }`}>
+                            <figure className="control-group">
                                 <h2 className="center">Felanmälningar</h2>
+                                <div className="dropdown mobile-only">
+                                    { icon.get(this.state.toggle.report === "close" ? "Drop-down" : "Drop-up", () => this.toggleFilter("report")) }
+                                </div>
                                 { icon.get("Message") }
                                 <figcaption>
                                     <div className="control-icon">
@@ -241,8 +300,8 @@ class Admin extends Component {
                 </div>
 
                 <div className="main-column">
-                    <div className="column-heading">
-                        <h1>{ this.state.title }</h1>
+                    <div className="column-heading main-heading">
+                        <h1 ref={ this.ref }>{ this.state.title }</h1>
                     </div>
                     { this.state.view
                         ?

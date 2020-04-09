@@ -55,6 +55,8 @@ class ReportDelete extends Component {
             this.setState({
                 report: {
                     id: res.id,
+                    itemGroup: res.item_group,
+                    itemid: res.item_id,
                     name: res.name
                 }
             });
@@ -71,7 +73,7 @@ class ReportDelete extends Component {
 
         let res = db.delete("report", id);
 
-        res.then(utils.reload(this, "/"));
+        res.then(() => utils.goBack(this));
     }
 
     render() {

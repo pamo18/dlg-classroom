@@ -27,6 +27,10 @@ class Classroom extends Component {
         }
     }
 
+    componentWillUnmount() {
+        window.scrollTo(0, 0);
+    }
+
     loadDevice() {
         let that = this;
         let res = db.fetchWhere("classroom", "id", this.state.id);

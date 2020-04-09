@@ -13,9 +13,14 @@ class ReportList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            title: "Pågående ärenden",
             id: this.props.id || null,
             reports: [],
-            reportsTable: {
+            unsolvedTable: {
+                head: [],
+                body: []
+            },
+            solvedTable: {
                 head: [],
                 body: []
             },
@@ -43,6 +48,8 @@ class ReportList extends Component {
         if (this.props.onRef) {
             this.props.onRef(undefined);
         }
+
+        window.scrollTo(0, 0);
     }
 
     loadReports(itemGroup, itemid) {
@@ -86,15 +93,25 @@ class ReportList extends Component {
     getReports() {
         let selection = this.state.selection;
         let otherReports = this.state.reports.filter((report) => report.id != this.state.id);
+        let unsolvedReports = otherReports.filter((report) => !report.solved);
+        let solvedReports = otherReports.filter((report) => report.solved);
 
-        let reportRows = otherReports.map((report) => {
+        let unsolvedReportRows = unsolvedReports.map((report) => {
+            return table.reportBody(report, selection, this, <ReportAdmin id={ report.id } />);
+        });
+
+        let solvedReportRows = solvedReports.map((report) => {
             return table.reportBody(report, selection, this, <ReportAdmin id={ report.id } />);
         });
 
         this.setState({
-            reportsTable: {
+            unsolvedTable: {
                 head: table.reportHead(selection),
-                body: reportRows
+                body: unsolvedReportRows
+            },
+            solvedTable: {
+                head: table.reportHead(selection),
+                body: solvedReportRows
             }
         });
     }
@@ -102,25 +119,56 @@ class ReportList extends Component {
     render() {
         return (
             <div className="report-log">
-                <div className="column-heading">
-                    <h2 class="center">Pågående ärenden - { this.state.reportsTable.body.length }st</h2>
+                <div className="column-heading main-heading">
+                    <h2 class="center">{ this.state.title }</h2>
                 </div>
                 <article>
                     {
-                        this.state.reportsTable.body.length > 0
+                        this.state.unsolvedTable.body.length > 0
                             ?
                             <div>
+                                <div className="column-heading table-heading">
+                                    <h2 className="center">{ `Kvar att göra: ${this.state.unsolvedTable.body.length}st`} { icon.get("Reported") }</h2>
+                                </div>
                                 <table className="results large-rows">
                                     <thead>
-                                        { this.state.reportsTable.head }
+                                        { this.state.unsolvedTable.head }
                                     </thead>
                                     <tbody>
-                                        { this.state.reportsTable.body }
+                                        { this.state.unsolvedTable.body }
                                     </tbody>
                                 </table>
                             </div>
                             :
-                            <h2 className="column-heading">Inga fler pågående ärenden</h2>
+                            null
+                    }
+
+                    {
+                        this.state.solvedTable.body.length > 0
+                        ?
+                        <div>
+                            <div className="column-heading table-heading">
+                                <h2 className="center">{ `Klar: ${this.state.solvedTable.body.length}st`} { icon.get("Report") }</h2>
+                            </div>
+                            <table className="results large-rows">
+                                <thead>
+                                    { this.state.solvedTable.head }
+                                </thead>
+                                <tbody>
+                                    { this.state.solvedTable.body }
+                                </tbody>
+                            </table>
+                        </div>
+                        :
+                        null
+                    }
+
+                    {
+                        this.state.unsolvedTable.body.length + this.state.solvedTable.body.length === 0
+                        ?
+                        <h2 className="center">Inga fler pågående ärenden</h2>
+                        :
+                        null
                     }
                 </article>
             </div>

@@ -114,32 +114,28 @@ class DeviceView extends Component {
                     <div className="dropdown">
                         { icon.get(this.state.toggle === "close" ? "Drop-down" : "Drop-up", this.toggleFilter) }
                     </div>
-                    <div className="admin-control category-control">
-                        <Categories
-                            title="Kategori"
-                            filterCb={ this.filter }
-                            url="device/category"
-                            category="category"
-                            stateName="deviceCategory1"
-                            save={ this.props.save }
-                            restore={ this.props.restore }
-                        />
-                    </div>
+                    <Categories
+                        title="Filter Kategori"
+                        filterCb={ this.filter }
+                        url="device/category"
+                        category="category"
+                        stateName="deviceCategory1"
+                        save={ this.props.save }
+                        restore={ this.props.restore }
+                    />
 
-                    <div className="admin-control category-control">
-                        <Categories
-                            title="Status"
-                            filterCb={ this.filter }
-                            url="report/filter"
-                            category="solved"
-                            stateName="deviceCategory2"
-                            save={ this.props.save }
-                            restore={ this.props.restore }
-                        />
-                    </div>
+                    <Categories
+                        title="Filter Status"
+                        filterCb={ this.filter }
+                        url="report/filter"
+                        category="solved"
+                        stateName="deviceCategory2"
+                        save={ this.props.save }
+                        restore={ this.props.restore }
+                    />
                 </div>
 
-                <table className="results-home">
+                <table className="results-card">
                     <tbody>
                         { this.state.data
                             ?

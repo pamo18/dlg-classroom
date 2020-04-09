@@ -110,38 +110,32 @@ class ClassroomView extends Component {
     render() {
         return (
             <article>
-
-
                 <div className={`filter-panel ${ this.state.toggle }`}>
                     <div className="dropdown">
                         { icon.get(this.state.toggle === "close" ? "Drop-down" : "Drop-up", this.toggleFilter) }
                     </div>
-                    <div className="admin-control category-control">
-                        <Categories
-                            title="Hus"
-                            filterCb={ this.filter }
-                            url="classroom/building"
-                            category="location"
-                            stateName="classroomCategory1"
-                            save={ this.props.save }
-                            restore={ this.props.restore }
-                        />
-                    </div>
+                    <Categories
+                        title="Filter Hus"
+                        filterCb={ this.filter }
+                        url="classroom/building"
+                        category="location"
+                        stateName="classroomCategory1"
+                        save={ this.props.save }
+                        restore={ this.props.restore }
+                    />
 
-                    <div className="admin-control category-control">
-                        <Categories
-                            title="Status"
-                            filterCb={ this.filter }
-                            url="report/filter"
-                            category="solved"
-                            stateName="classroomCategory2"
-                            save={ this.props.save }
-                            restore={ this.props.restore }
-                        />
-                    </div>
+                    <Categories
+                        title="Filter Status"
+                        filterCb={ this.filter }
+                        url="report/filter"
+                        category="solved"
+                        stateName="classroomCategory2"
+                        save={ this.props.save }
+                        restore={ this.props.restore }
+                    />
                 </div>
 
-                <table className="results-home">
+                <table className="results-card">
                     <tbody>
                         { this.state.classroomTable.body }
                     </tbody>

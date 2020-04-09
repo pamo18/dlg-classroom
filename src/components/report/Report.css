@@ -20,13 +20,7 @@
     border: 2px solid black;
 }
 
-
-/* @media only screen and (max-width: 980px) {
-    .report-image {
-        width: 100%;
-    }
+.table-heading i {
+    position: relative;
+    top: 7px;
 }
-
-@media (max-width: 500px) {
-
-} */

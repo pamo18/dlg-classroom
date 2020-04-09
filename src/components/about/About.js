@@ -11,6 +11,10 @@ class About extends Component {
         };
     }
 
+    componentWillUnmount() {
+        window.scrollTo(0, 0);
+    }
+
     render() {
         return (
             <main>

@@ -66,9 +66,14 @@
         text-align: left;
         font-weight: bold;
     }
+
+    .table-heading {
+        border-radius: 10px;
+    }
 }
 
 @media only screen and (max-width: 900px) {
+    /* Base elements */
     body {
         width: auto;
     }
@@ -81,22 +86,9 @@
         padding: 0;
     }
 
-    /* Poster Table */
-    table.results-home {
-        max-width: 100%;
-    }
-
-    table.results-home tbody {
-        display: block;
-    }
-
-    table.results-home tr {
-        padding: 0;
-    }
-
-    table.results-home td figure.icon-text {
-        width: 100%;
-        margin: 0;
+    article:last-child {
+        min-height: 1190px;
+        margin-bottom: 2rem;
     }
 
     /* Form */
@@ -107,11 +99,50 @@
     }
 
     /* Control panels */
-    .admin-control:not(.category-control),
-    .home-control {
+    .panel .controller {
         border-radius: 0;
         margin-bottom: 0;
         border-bottom: 1px solid rgb(38, 45, 52);
+    }
+
+    .admin-panel .controller {
+        padding-top: 0;
+    }
+
+    .home-panel .filter-panel {
+        margin-bottom: 0;
+    }
+
+    /* Admin Panel dropdown */
+    .dropdown.mobile-only {
+        display: block;
+    }
+
+    .admin-panel .controller h2 {
+        margin-bottom: 0;
+    }
+
+    .admin-panel .controller {
+        padding-top: 0;
+    }
+
+    .admin-panel .controller.close {
+        overflow: hidden;
+        max-height: 70px;
+        transition: all 0.5s ease;
+        will-change: transform;
+    }
+
+    .admin-panel .controller.open {
+        max-height: 500px;
+        overflow: hidden;
+        transition: all 0.5s ease;
+        will-change: transform;
+    }
+
+    .filter-panel,
+    .panel .controller:not(.filter-panel .controller) {
+        background-color: rgb(6, 13, 19, 0.7);
     }
 
     /* Date Picker */
@@ -141,12 +172,6 @@
         max-width: 100%;
     }
 
-    /* Home Control Panel */
-    .home-control .filter-categories {
-        width: 450px;
-        margin: 0 auto;
-    }
-
     /* Header */
     .logo {
         width: 80px;
@@ -174,9 +199,33 @@
     .footer-column {
         display: none;
     }
+
+    /* Columns */
+    .column-heading.main-heading {
+        /* margin-top: 2rem; */
+    }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 550px) {
+    /* Poster Table */
+    table.results-card {
+        max-width: 100%;
+    }
+
+    table.results-card tbody {
+        display: block;
+    }
+
+    table.results-card tr {
+        padding: 0;
+    }
+
+    table.results-card td figure.icon-text {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
     /* Date Picker */
     .date-picker {
         font-size: 0.8rem;
@@ -185,11 +234,6 @@
     /* User */
     .user {
         font-size: 1.2rem;
-    }
-
-    /* Home Control Panel */
-    .home-control .filter-categories {
-        width: 100%;
     }
 
     /* Footer */
