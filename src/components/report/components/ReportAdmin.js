@@ -22,8 +22,8 @@ class ReportAdmin extends Component {
     admin() {
         let id = this.state.id;
         let view = () => utils.redirect(this, "/report/page", { id: id }, false);
-        let edit = () => utils.redirect(this, "/admin", { selected: "report", admin:"edit", id: id });
-        let del = () => utils.redirect(this, "/admin", { selected: "report", admin:"delete", id: id });
+        let edit = () => utils.redirect(this, `/admin/report/edit/${ id }`, {});
+        let del = () => utils.redirect(this, `/admin/report/delete/${ id }`, {});
 
         let actions = [
             icon.get("View", view),

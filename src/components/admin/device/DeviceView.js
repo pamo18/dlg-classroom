@@ -15,7 +15,6 @@ class DeviceView extends Component {
         super(props);
         this.filter = this.filter.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
-        this.adminHandler = this.adminHandler.bind(this);
         this.state = {
             title: "Utrustning vy",
             toggle: "close",
@@ -64,9 +63,9 @@ class DeviceView extends Component {
 
         let deviceRows = this.state.data.map(async (device) => {
             let view = () => utils.redirect(this, "/device", { id: device.id });
-            let edit = () => this.adminHandler("edit", device.id);
-            let del = () => this.adminHandler("delete", device.id);
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
+            let edit = () => utils.redirect(this, `/admin/device/edit/${ device.id }`, {});
+            let del = () => utils.redirect(this, `/admin/device/delete/${ device.id }`, {});
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemData: device });
             let reportStatus = await db.reportCheck("device", device.id);
             let actions = [
                 icon.reportStatus(reportList, reportStatus),
@@ -101,10 +100,6 @@ class DeviceView extends Component {
         this.setState({
             toggle: this.state.toggle === "close" ? "open" : "close"
         });
-    }
-
-    adminHandler(view, id) {
-        this.props.admin(view, id);
     }
 
     render() {

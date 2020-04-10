@@ -3,14 +3,12 @@
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import ReportItem from './components/ReportItem.js';
-import ReportForm from './components/ReportForm.js';
 import ReportList from './components/ReportList.js';
 import './Report.css';
 
-class Report extends Component {
+class ReportListView extends Component {
     constructor(props) {
         super(props);
-        this.listHandler = this.listHandler.bind(this);
         this.state = {
             title: "Felanmäla",
             itemGroup: this.props.location.state.itemGroup || "",
@@ -20,10 +18,6 @@ class Report extends Component {
 
     componentWillUnmount() {
         window.scrollTo(0, 0);
-    }
-
-    listHandler(itemGroup, itemData) {
-        this.list.loadReports(itemGroup, itemData);
     }
 
     render() {
@@ -36,12 +30,6 @@ class Report extends Component {
                     <ReportItem
                         itemGroup={ this.state.itemGroup }
                         itemData={ this.state.itemData }
-                    />
-
-                    <ReportForm
-                        itemGroup={ this.state.itemGroup }
-                        itemData={ this.state.itemData }
-                        callback={ this.listHandler }
                     />
 
                     <ReportList
@@ -57,4 +45,4 @@ class Report extends Component {
     }
 }
 
-export default withRouter(Report);
+export default withRouter(ReportListView);

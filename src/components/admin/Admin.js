@@ -1,7 +1,7 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component, useEffect } from 'react';
-import  { withRouter } from 'react-router-dom';
+import  { Redirect, withRouter } from 'react-router-dom';
 // import auth from '../../models/auth.js';
 import utils from '../../models/utils.js';
 import db from '../../models/db.js';
@@ -43,36 +43,44 @@ class Admin extends Component {
             },
             image: image,
             view: null,
-            selected: "",
-            admin: ""
+            selected: this.props.match.params.selected || "",
+            admin: this.props.match.params.admin || "",
+            id: this.props.match.params.id || null
         };
     }
 
     componentDidMount () {
         let state = this.props.restore("adminState");
-        let selected;
-        let admin;
-        let id;
+        let selected = this.state.selected;
+        let admin = this.state.admin;
+        let id = this.state.id;
 
-        if (this.props.location.state) {
-            selected = this.props.location.state.selected;
-            admin = this.props.location.state.admin;
-            id = this.props.location.state.id;
-
-            this.props.history.replace({
-                pathname: this.props.location.pathname,
-                state: {}
+        if (selected && admin) {
+            this.adminView(selected, admin, id)
+        }
+        else if (state) {
+            this.setState(state, () => {
+                if (this.state.id) {
+                    utils.redirect(this, `/admin/${ this.state.selected }/${ this.state.admin }/${ this.state.id }`);
+                } else {
+                    utils.redirect(this, `/admin/${ this.state.selected }/${ this.state.admin }`);
+                }
             });
         }
+    }
 
-        if (admin && selected && id) {
-            this.setState({
-                selected: selected,
-                admin: admin
-            }, () => this.adminView(this.state.selected, this.state.admin, id));
-        } else if (state) {
-            this.setState(state, () => this.adminView(this.state.selected, this.state.admin));
-        }
+    componentDidUpdate(prevProps) {
+        try {
+            let selected = this.props.match.params.selected;
+            let admin = this.props.match.params.admin;
+            let id = this.props.match.params.id || null;
+
+            if (prevProps.match.params != this.props.match.params) {
+                this.adminView(selected, admin, id);
+            }
+        } catch(err) {
+            console.log(err)
+        };
     }
 
     componentWillUnmount() {
@@ -102,7 +110,7 @@ class Admin extends Component {
 
         switch(true) {
             case (admin === "view"):
-                view = <ClassroomView admin={ this.classroomView } save={this.props.save} restore={this.props.restore} />;
+                view = <ClassroomView save={this.props.save} restore={this.props.restore} />;
                 break;
             case (admin === "add"):
                 view = <ClassroomCreate />;
@@ -115,7 +123,7 @@ class Admin extends Component {
                 break;
         }
 
-        this.change(view, "classroom", admin);
+        this.change(view, "classroom", admin, id);
     }
 
     deviceView(admin, id = null) {
@@ -123,7 +131,7 @@ class Admin extends Component {
 
         switch(true) {
             case (admin === "view"):
-                view = <DeviceView admin={ this.deviceView } save={this.props.save} restore={this.props.restore} />;
+                view = <DeviceView save={this.props.save} restore={this.props.restore} />;
                 break;
             case (admin === "add"):
                 view = <DeviceCreate />;
@@ -136,7 +144,7 @@ class Admin extends Component {
                 break;
         }
 
-        this.change(view, "device", admin);
+        this.change(view, "device", admin, id);
     }
 
     classroomDeviceView(admin) {
@@ -159,7 +167,7 @@ class Admin extends Component {
 
         switch(true) {
             case (admin === "view"):
-                view = <ReportView admin={ this.reportView } save={this.props.save} restore={this.props.restore } />;
+                view = <ReportView save={this.props.save} restore={this.props.restore } />;
                 break;
             case (admin === "edit"):
                 view = <ReportUpdate id={id} />;
@@ -169,10 +177,10 @@ class Admin extends Component {
                 break;
         }
 
-        this.change(view, "report", admin);
+        this.change(view, "report", admin, id);
     }
 
-    change(view, selected, admin) {
+    change(view, selected, admin, id = null) {
         let title = "Admin";
 
         switch(true) {
@@ -194,7 +202,8 @@ class Admin extends Component {
             title: title,
             view: view,
             selected: selected,
-            admin: admin
+            admin: admin,
+            id: id
         }, () => this.scroll());
     }
 
@@ -237,10 +246,10 @@ class Admin extends Component {
                                 { icon.get("Classroom") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { this.classroomView("view") }, selected === "classroom" && admin === "view") }
-                                        { icon.get("Add", () => { this.classroomView("add") }, selected === "classroom" && admin === "add") }
-                                        { icon.get("Edit", () => { this.classroomView("edit") }, selected === "classroom" && admin === "edit") }
-                                        { icon.get("Delete", () => { this.classroomView("delete") }, selected === "classroom" && admin === "delete") }
+                                        { icon.get("View", () => { utils.redirect(this, "/admin/classroom/view") }, selected === "classroom" && admin === "view") }
+                                        { icon.get("Add", () => { utils.redirect(this, "/admin/classroom/add") }, selected === "classroom" && admin === "add") }
+                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/classroom/edit") }, selected === "classroom" && admin === "edit") }
+                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/classroom/delete") }, selected === "classroom" && admin === "delete") }
                                     </div>
                                 </figcaption>
                             </figure>
@@ -255,10 +264,10 @@ class Admin extends Component {
                                 { icon.get("Device") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { this.deviceView("view") }, selected === "device" && admin === "view") }
-                                        { icon.get("Add", () => { this.deviceView("add") }, selected === "device" && admin === "add") }
-                                        { icon.get("Edit", () => { this.deviceView("edit") }, selected === "device" && admin === "edit") }
-                                        { icon.get("Delete", () => { this.deviceView("delete") }, selected === "device" && admin === "delete") }
+                                        { icon.get("View", () => { utils.redirect(this, "/admin/device/view") }, selected === "device" && admin === "view") }
+                                        { icon.get("Add", () => { utils.redirect(this, "/admin/device/add") }, selected === "device" && admin === "add") }
+                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/device/edit") }, selected === "device" && admin === "edit") }
+                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/device/delete") }, selected === "device" && admin === "delete") }
                                     </div>
                                 </figcaption>
                             </figure>
@@ -273,8 +282,8 @@ class Admin extends Component {
                                 { icon.get("classroomDevice") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("Add", () => { this.classroomDeviceView("add") }, selected === "classroom-device" && admin === "add") }
-                                        { icon.get("Swap", () => { this.classroomDeviceView("swap") }, selected === "classroom-device" && admin === "swap") }
+                                        { icon.get("Add", () => { utils.redirect(this, "/admin/classroom-device/add") }, selected === "classroom-device" && admin === "add") }
+                                        { icon.get("Swap", () => { utils.redirect(this, "/admin/classroom-device/swap") }, selected === "classroom-device" && admin === "swap") }
                                     </div>
                                 </figcaption>
                             </figure>
@@ -289,9 +298,9 @@ class Admin extends Component {
                                 { icon.get("Message") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { this.reportView("view") }, selected === "report" && admin === "view") }
-                                        { icon.get("Edit", () => { this.reportView("edit") }, selected === "report" && admin === "edit") }
-                                        { icon.get("Delete", () => { this.reportView("delete") }, selected === "report" && admin === "delete") }
+                                        { icon.get("View", () => { utils.redirect(this, "/admin/report/view") }, selected === "report" && admin === "view") }
+                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/report/edit") }, selected === "report" && admin === "edit") }
+                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/report/delete") }, selected === "report" && admin === "delete") }
                                     </div>
                                 </figcaption>
                             </figure>

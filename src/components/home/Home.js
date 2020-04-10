@@ -109,8 +109,8 @@ class Home extends Component {
         try {
             let classroom = this.state.classroomData[id];
             let name = form.optionName(classroom, this.state.classroomTemplate);
-            let report = () => utils.redirect(this, "/report", { itemGroup: "classroom", classroomData: classroom });
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: id });
+            let report = () => utils.redirect(this, "/report", { itemGroup: "classroom", itemData: classroom });
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemData: classroom });
             let reportStatus = db.reportCheck("classroom", classroom.id);
 
             reportStatus.then((status) => {
@@ -149,8 +149,8 @@ class Home extends Component {
 
         let deviceRows = this.state.devices.map(async (device) => {
             let view = () => utils.redirect(this, "/device", {id: device.id});
-            let report = () => utils.redirect(this, "/report", { itemGroup: "device", deviceData: device });
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
+            let report = () => utils.redirect(this, "/report", { itemGroup: "device", itemData: device });
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemData: device });
             let status = await db.reportCheck("device", device.id);
             let actions = [
                 icon.reportStatus(reportList, status),

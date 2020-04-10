@@ -34,7 +34,7 @@ class DeviceDelete extends Component {
             let deviceData = organize.data;
             let deviceGroups = organize.groups;
             let template = this.state.deviceTemplate;
-            let formGroups = form.group(deviceGroups, "id", template, (optionId) => optionId === id);
+            let formGroups = form.group(deviceGroups, "id", template, (optionId) => optionId == id);
 
             this.setState({
                 deviceData: deviceData,
@@ -71,7 +71,7 @@ class DeviceDelete extends Component {
 
         let res = db.delete("device", id);
 
-        res.then(utils.reload(this, "/"));
+        res.then(utils.goBack(this));
     }
 
     render() {

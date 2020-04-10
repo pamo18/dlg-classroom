@@ -48,7 +48,7 @@ class ClassroomUpdate extends Component {
             let classroomData = organize.data;
             let classroomGroups = organize.groups;
             let template = this.state.classroomTemplate;
-            let formGroups = form.group(classroomGroups, "id", template, (optionId) => optionId === id);
+            let formGroups = form.group(classroomGroups, "id", template, (optionId) => optionId == id);
 
             this.setState({
                 classroomData: classroomData,
@@ -95,7 +95,7 @@ class ClassroomUpdate extends Component {
 
         let res = db.update("classroom", id, classroom);
 
-        res.then(utils.reload(this, "/"));
+        res.then(utils.goBack(this));
     }
 
     inputHandler(e) {

@@ -13,8 +13,7 @@ class ReportList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: "Pågående ärenden",
-            id: this.props.id || null,
+            title: "Felanmälningar",
             reports: [],
             unsolvedTable: {
                 head: [],
@@ -25,14 +24,14 @@ class ReportList extends Component {
                 body: []
             },
             itemGroup: this.props.itemGroup || this.props.location.state.itemGroup,
-            itemid: this.props.itemid || this.props.location.state.itemid,
+            itemData: this.props.itemData || this.props.location.state.itemData,
             selection : [
-                ["item-category", "10%"],
-                ["title", "35%"],
-                ["created", "20%"],
-                ["solved", "20%"],
-                ["manage", "15%"]
-            ]
+               ["item-category", "10%"],
+               ["title", "35%"],
+               ["created", "20%"],
+               ["solved", "20%"],
+               ["manage", "15%"]
+           ]
         };
     }
 
@@ -41,7 +40,11 @@ class ReportList extends Component {
             this.props.onRef(this);
         }
 
-        this.loadReports(this.state.itemGroup, this.state.itemid);
+        try {
+            this.loadReports(this.state.itemGroup, this.state.itemData.id);
+        } catch(err) {
+            console.log(err);
+        }
     }
 
     componentWillUnmount() {
@@ -52,16 +55,16 @@ class ReportList extends Component {
         window.scrollTo(0, 0);
     }
 
-    loadReports(itemGroup, itemid) {
+    loadReports(itemGroup, id) {
         let res;
         let res2;
         let deviceRes;
 
         if (itemGroup === "classroom") {
-            res = db.fetchAllWhere("report/classroom", "item_id", itemid);
+            res = db.fetchAllWhere("report/classroom", "item_id", id);
 
             res.then((data) => {
-                res2 = db.fetchAllWhere("classroom/device", "classroom_id", itemid);
+                res2 = db.fetchAllWhere("classroom/device", "classroom_id", id);
 
                 res2.then((data2) => {
                     data2.forEach((device) => {
@@ -80,7 +83,7 @@ class ReportList extends Component {
                 });
             });
         } else {
-            res = db.fetchAllWhere("report/device", "item_id", itemid);
+            res = db.fetchAllWhere("report/device", "item_id", id);
 
             res.then((data) => {
                 this.setState({
@@ -92,9 +95,8 @@ class ReportList extends Component {
 
     getReports() {
         let selection = this.state.selection;
-        let otherReports = this.state.reports.filter((report) => report.id != this.state.id);
-        let unsolvedReports = otherReports.filter((report) => !report.solved);
-        let solvedReports = otherReports.filter((report) => report.solved);
+        let unsolvedReports = this.state.reports.filter((report) => !report.solved);
+        let solvedReports = this.state.reports.filter((report) => report.solved);
 
         let unsolvedReportRows = unsolvedReports.map((report) => {
             return table.reportBody(report, selection, this, <ReportAdmin id={ report.id } />);
@@ -120,7 +122,7 @@ class ReportList extends Component {
         return (
             <div className="report-log">
                 <div className="column-heading main-heading">
-                    <h2 class="center">{ this.state.title }</h2>
+                    <h1 class="center">{ this.state.title }</h1>
                 </div>
                 <article>
                     {
@@ -166,7 +168,7 @@ class ReportList extends Component {
                     {
                         this.state.unsolvedTable.body.length + this.state.solvedTable.body.length === 0
                         ?
-                        <h2 className="center">Inga fler pågående ärenden</h2>
+                        <h2 className="center">Inga fler ärenden</h2>
                         :
                         null
                     }

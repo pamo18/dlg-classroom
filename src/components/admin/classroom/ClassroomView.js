@@ -15,7 +15,6 @@ class ClassroomView extends Component {
         super(props);
         this.filter = this.filter.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
-        this.adminHandler = this.adminHandler.bind(this);
         this.state = {
             title: "Klassrum vy",
             toggle: "close",
@@ -64,9 +63,9 @@ class ClassroomView extends Component {
 
         let classroomRows = this.state.data.map(async classroom => {
             let view = () => utils.redirect(this, "/classroom", {id: classroom.id});
-            let edit = () => this.adminHandler("edit", classroom.id);
-            let del = () => this.adminHandler("delete", classroom.id);
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: classroom.id });
+            let edit = () => utils.redirect(this, `/admin/classroom/edit/${ classroom.id }`);
+            let del = () => utils.redirect(this, `/admin/classroom/delete/${ classroom.id }`);
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemData: classroom });
             let reportStatus = await db.reportCheck("classroom", classroom.id);
             let actions = [
                 icon.reportStatus(reportList, reportStatus),
@@ -101,10 +100,6 @@ class ClassroomView extends Component {
         this.setState({
             toggle: this.state.toggle === "close" ? "open" : "close"
         });
-    }
-
-    adminHandler(view, id) {
-        this.props.admin(view, id);
     }
 
     render() {

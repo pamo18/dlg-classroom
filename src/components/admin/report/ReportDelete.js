@@ -34,7 +34,7 @@ class ReportDelete extends Component {
             let reportData = organize.data;
             let reportGroups = organize.groups;
             let template = this.state.reportTemplate;
-            let formGroups = form.group(reportGroups, "id", template, (optionId) => optionId === id);
+            let formGroups = form.group(reportGroups, "id", template, (optionId) => optionId == id);
 
             this.setState({
                 reportData: reportData,

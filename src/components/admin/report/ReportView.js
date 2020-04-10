@@ -16,7 +16,6 @@ class ReportView extends Component {
         this.getReports = this.getReports.bind(this);
         this.filter = this.filter.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
-        this.adminHandler = this.adminHandler.bind(this);
         this.state = {
             title: "Report vy",
             toggle: "close",
@@ -69,8 +68,8 @@ class ReportView extends Component {
         let reportRows = this.state.data.map((report) => {
             let key = `report-${report.id}`;
             let view = () => utils.redirect(this, "/report/page", { id: report.id });
-            let edit = () => this.adminHandler("edit", report.id);
-            let del = () => this.adminHandler("delete", report.id);
+            let edit = () => utils.redirect(this, `/admin/report/edit/${ report.id }`, {});
+            let del = () => utils.redirect(this, `/admin/report/delete/${ report.id }`, {});
             let actions = [
                 icon.get("View", view),
                 icon.get("Edit", edit),
@@ -102,10 +101,6 @@ class ReportView extends Component {
         this.setState({
             toggle: this.state.toggle === "close" ? "open" : "close"
         });
-    }
-
-    adminHandler(view, id) {
-        this.props.admin(view, id);
     }
 
     render() {

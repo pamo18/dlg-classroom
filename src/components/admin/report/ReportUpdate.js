@@ -34,7 +34,7 @@ class ReportUpdate extends Component {
             let reportData = organize.data;
             let reportGroups = organize.groups;
             let template = this.state.reportTemplate;
-            let formGroups = form.group(reportGroups, "id", template, (optionId) => optionId === id);
+            let formGroups = form.group(reportGroups, "id", template, (optionId) => optionId == id);
 
             this.setState({
                 reportData: reportData,
@@ -110,7 +110,7 @@ class ReportUpdate extends Component {
         return (
             <article>
                 <h2 className="center">Välj felanmälning att uppdatera</h2>
-                <form action="/update" className="form-register" onSubmit={this.updateReport}>
+                <form className="form-register" onSubmit={this.updateReport}>
                     <select className="form-input" type="text" name="fullname" required onChange={ (e) => this.getReport(e.target.value) }>
                         <option disabled selected value>Klicka här</option>
                         { this.state.reportGroups }

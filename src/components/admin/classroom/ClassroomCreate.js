@@ -45,7 +45,7 @@ class ClassroomCreate extends Component {
 
         let res = db.insert("classroom", classroom);
 
-        res.then(utils.reload(this, "/"));
+        res.then(utils.reload(this, "/admin/classroom/view"));
     }
 
     render() {

@@ -62,7 +62,7 @@ class DeviceCreate extends Component {
 
         let res = db.insert("device", device);
 
-        res.then(utils.reload(this, "/"));
+        res.then(utils.reload(this, "/admin/device/view"));
     }
 
     inputHandler(e) {

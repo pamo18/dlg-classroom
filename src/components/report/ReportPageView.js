@@ -2,14 +2,14 @@
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
-import ReportList from './ReportList.js';
-import db from '../../../models/db.js';
-import utils from '../../../models/utils.js';
-import icon from '../../../models/icon.js';
-import table from '../../../models/table.js';
-import '../Report.css';
+import ReportList from './components/ReportList.js';
+import db from '../../models/db.js';
+import utils from '../../models/utils.js';
+import icon from '../../models/icon.js';
+import table from '../../models/table.js';
+import './Report.css';
 
-class ReportPage extends Component {
+class ReportPageView extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,8 +44,7 @@ class ReportPage extends Component {
 
         res.then((data) => {
             this.setState({
-                report: data,
-                reportList: <ReportList onRef={ref => (this.list = ref)} id={ data.id } itemGroup={ data.item_group } itemid={ data.item_id } />
+                report: data
             }, () => this.loadItem());
         });
     }
@@ -66,13 +65,15 @@ class ReportPage extends Component {
         if (res) {
             res.then((data) => {
                 this.setState({
-                    item: data
+                    item: data,
+                    reportList: <ReportList onRef={ref => (this.list = ref)} itemGroup={ itemGroup } itemData={ data } />
                 }, () => this.getItem());
             });
         }
     }
 
     getItem() {
+        let report = this.state.report;
         let item = this.state.item;
         let itemGroup = this.state.report.item_group;
         let data,
@@ -87,7 +88,7 @@ class ReportPage extends Component {
                 selection = this.state.classroomSelection;
                 view = () => utils.redirect(this, "/classroom", { id: item.id });
                 reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: item.id });
-                reportStatus = db.reportCheck("classroom", item.id);
+                reportStatus = db.reportCheck("report", report.id);
 
                 reportStatus.then((status) => {
                     actions = [
@@ -183,4 +184,4 @@ class ReportPage extends Component {
     }
 }
 
-export default withRouter(ReportPage);
+export default withRouter(ReportPageView);

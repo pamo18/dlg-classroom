@@ -49,7 +49,7 @@ class DeviceUpdate extends Component {
             let deviceData = organize.data;
             let deviceGroups = organize.groups;
             let template = this.state.deviceTemplate;
-            let formGroups = form.group(deviceGroups, "id", template, (optionId) => optionId === id);
+            let formGroups = form.group(deviceGroups, "id", template, (optionId) => optionId == id);
 
             this.setState({
                 deviceData: deviceData,
@@ -109,7 +109,7 @@ class DeviceUpdate extends Component {
 
         let res = db.update("device", id, device);
 
-        res.then(utils.reload(this, "/"));
+        res.then(utils.goBack(this));
     }
 
     inputHandler(e) {

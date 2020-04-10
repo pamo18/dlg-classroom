@@ -34,7 +34,7 @@ class ClassroomDelete extends Component {
             let classroomData = organize.data;
             let classroomGroups = organize.groups;
             let template = this.state.classroomTemplate;
-            let formGroups = form.group(classroomGroups, "id", template, (optionId) => optionId === id);
+            let formGroups = form.group(classroomGroups, "id", template, (optionId) => optionId == id);
 
             this.setState({
                 classroomData: classroomData,
@@ -71,7 +71,7 @@ class ClassroomDelete extends Component {
 
         let res = db.delete("classroom", id);
 
-        res.then(utils.reload(this, "/"));
+        res.then(utils.goBack(this));
     }
 
     render() {
