@@ -4,6 +4,8 @@ import ErrorBoundary from './ErrorBoundary.js';
 
 import Header from '../header/Header.js';
 import Footer from '../footer/Footer.js';
+import Register from '../auth/Register.js';
+import Login from '../auth/Login.js';
 import Home from '../home/Home.js';
 import About from '../about/About.js';
 import Classroom from '../classroom/Classroom.js';
@@ -46,7 +48,7 @@ class App extends Component {
     //             }
     //         });
     // }
-
+    //
     // adminRoutes() {
     //     this.setState({
     //         activeUser: [
@@ -56,7 +58,7 @@ class App extends Component {
     //         ]
     //     });
     // }
-
+    //
     // registerRoute() {
     //     this.setState({
     //         register: [
@@ -75,6 +77,8 @@ class App extends Component {
                     <div className="page-wrapper">
                         <Switch>
                             <Route exact path="/" render={() => <Home save={this.saveState} restore={this.restoreState} />} />
+                            <Route exact path="/register" component={Register} />
+                            <Route exact path="/login" component={Login} />
                             <Route exact path="/about" component={About} />
                             <Route exact path="/device" component={Device} />
                             <Route exact path="/classroom" component={Classroom} />

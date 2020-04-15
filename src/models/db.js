@@ -3,6 +3,36 @@ const api = base.api();
 
 // Database helper
 const db = {
+    register: async function(data) {
+        try {
+            let res = await fetch(`${api}/register`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            return res.json();
+        } catch(err) {
+            console.log(err);
+        }
+    },
+    login: async function(data) {
+        try {
+            let res = await fetch(`${api}/login`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            return res.json();
+        } catch(err) {
+            console.log(err);
+        }
+    },
     reportCheck: async function(itemGroup, itemid) {
         try {
             let res = await fetch(`${api}/report/check/${itemGroup}/${itemid}`);

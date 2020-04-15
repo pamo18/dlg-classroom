@@ -1,17 +1,11 @@
 /*eslint max-len: ["error", { "code": 200 }]*/
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import base from '../../config/api.js';
-import io from 'socket.io-client';
-let api = base.api();
+import  { withRouter } from 'react-router-dom';
+import db from '../../models/db.js';
+import utils from '../../models/utils.js';
 
 class Login extends Component {
-    static propTypes = {
-        match: PropTypes.object.isRequired,
-        location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired
-    };
     constructor(props) {
         super(props);
         this.registerSubmit = this.registerSubmit.bind(this);
@@ -26,111 +20,115 @@ class Login extends Component {
             username: ""
         };
     }
-    registerSubmit(event) {
-        let that = this;
 
-        event.preventDefault();
-        const data = new FormData(event.target);
+    registerSubmit(e) {
+        e.preventDefault();
+        const data = new FormData(e.target);
 
         let person = {
-            "name": data.get('name'),
-            "password": data.get('password')
+            "email": data.get("email"),
+            "password": data.get("password")
         };
 
-        fetch(api + "/login", {
-            method: 'POST',
-            body: JSON.stringify(person),
-            headers: {
-                'Content-Type': 'application/json'
+        let res = db.login(person);
+
+        res.then((data) => {
+            console.log(data);
+            let invalid = false,
+                person,
+                token;
+
+            switch(true) {
+                case (!data.email):
+                    invalid = "Ogiltid epost!";
+                    break;
+                case (data.email && !data.password):
+                    invalid = "Ogiltid lösenord";
+                    break;
+                case (data.email && data.password):
+                    person = data.person;
+                    token = data.token;
+                    localStorage.setItem("user", JSON.stringify(person));
+                    localStorage.setItem("token", JSON.stringify(token));
+                    utils.reload(this, "/");
+                    break;
             }
-        })
-            .then(res => res.json())
-            .then(function (res) {
-                if (res.data.result) {
-                    localStorage.setItem("activeUser", JSON.stringify(res.data.user));
-                    localStorage.setItem("token", JSON.stringify(res.data.token));
-                    that.props.history.push('/');
-                    window.location.reload(false);
-                } else {
-                    that.setState({
-                        invalid: <p className="center invalid">{res.data.user}</p>
-                    });
-                }
-            });
+
+            if (invalid) {
+                this.setState({
+                    invalid: <p className="center invalid">{ invalid }</p>
+                });
+            }
+        });
     }
+
     toggleShowPassword() {
         this.setState({
             hidden: !this.state.hidden,
             button: !this.state.button
         });
     }
+
     logoff() {
         localStorage.clear();
         this.setState({
             user: ""
         });
-        this.props.history.push('/login');
-        window.location.reload(false);
+
+        utils.reload(this, "/login", true);
     }
+
     render() {
-        let user = localStorage.getItem("activeUser");
+        let user = localStorage.getItem("user");
 
         if (user === null) {
             return (
                 <main>
-                    <div className="page-heading">
-                        <h1>Logga in</h1>
-                    </div>
-                    <article>
-                        <div className="column">
-                            <div className="column-1">
-                                <div className="form-wrapper">
-                                    <p className="center">För att använda DLG Classroom måste du först logga in.</p>
-                                    <form action="/profile" className="form-register" onSubmit={this.registerSubmit}>
-                                        <label className="form-label">Användernamn
-                                            <input className="form-input" type="text" name="name" required placeholder="Ditt användernamn" />
-                                        </label>
-
-                                        <label className="form-label">Lösenord
-                                            <input
-                                                className="form-input password"
-                                                type={this.state.hidden ? "password" : "text"}
-                                                name="password"
-                                                placeholder="Your password"
-                                                required
-                                            />
-                                            <p><input type="checkbox" className="show-password" onClick={this.toggleShowPassword} /> {this.state.button ? "Visa" : "Dölja"} Lösenord</p>
-                                        </label>
-                                        <input className="button center" type="submit" name="login" value="Login" />
-                                    </form>
-                                    {this.state.invalid}
-                                </div>
-                            </div>
+                    <div className="single-column">
+                        <div className="column-heading">
+                            <h1>Logga in</h1>
                         </div>
-                    </article>
+                        <article>
+                            <form action="/profile" className="form-register" onSubmit={this.registerSubmit}>
+                                <p className="center">För att använda DLG Classroom måste du först logga in.</p>
+                                <label className="form-label">Epost
+                                    <input className="form-input" type="email" name="email" required placeholder="Din epost" />
+                                </label>
+
+                                <label className="form-label">Lösenord
+                                    <input
+                                        className="form-input password"
+                                        type={this.state.hidden ? "password" : "text"}
+                                        name="password"
+                                        placeholder="Din lösenord"
+                                        required
+                                    />
+                                    <p><input type="checkbox" className="show-password" onClick={this.toggleShowPassword} /> {this.state.button ? "Visa" : "Dölja"} Lösenord</p>
+                                </label>
+                                <input className="button center-margin" type="submit" name="login" value="Logga in" />
+                                { this.state.invalid }
+                            </form>
+                        </article>
+                    </div>
                 </main>
             );
         } else {
             return (
                 <main>
-                    <div className="page-heading">
-                        <h1>Goodbye?</h1>
-                    </div>
-                    <article>
-                        <div className="column">
-                            <div className="column-1">
-                                <div className="form-wrapper">
-                                    <p>
-                                        <button name="logoff" className="button center" onClick={this.logoff}>Logoff</button>
-                                    </p>
-                                </div>
-                            </div>
+                    <div className="single-column">
+                        <div className="column-heading">
+                            <h1>Logga ut?</h1>
                         </div>
-                    </article>
+                        <article>
+                            <p>
+                                <button name="logoff" className="button center-margin" onClick={this.logoff}>Logga ut</button>
+                            </p>
+                        </article>
+                    </div>
                 </main>
             );
         }
     }
 }
 
-export default Login;
+export default withRouter(Login);

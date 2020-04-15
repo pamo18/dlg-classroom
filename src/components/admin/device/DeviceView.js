@@ -23,9 +23,7 @@ class DeviceView extends Component {
                 head: [],
                 body: []
             },
-            filter: {
-                location: "Alla"
-            },
+            filter: {},
             selection: [
                 ["category-caption-large", null],
                 ["manage", null]

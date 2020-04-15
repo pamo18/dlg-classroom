@@ -36,9 +36,7 @@ class Home extends Component {
             classroom: {},
             name: null,
             devices: [],
-            filter: {
-                location: "Alla"
-            },
+            filter: {},
             selection : [
                 ["category-caption-large", null],
                 ["manage", null]
@@ -84,10 +82,10 @@ class Home extends Component {
 
     loadClassrooms() {
         let res = db.fetchAll("classroom");
-        let filter = this.state.filter.location;
+        let filter = this.state.filter.building;
 
         res.then((data) => {
-            let organize = form.organize(data, "location", "id", filter != "Alla" ? filter : null);
+            let organize = form.organize(data, "building", "id", filter != "Alla" ? filter : null);
             let classroomData = organize.data;
             let classroomGroups = organize.groups;
 
@@ -120,7 +118,7 @@ class Home extends Component {
                         id: classroom.id,
                         name: classroom.name,
                         type: classroom.type,
-                        location: classroom.location,
+                        building: classroom.building,
                         level: classroom.level,
                         image: classroom.image,
                         report: icon.get("Build", report),
@@ -220,7 +218,7 @@ class Home extends Component {
                                 title="Filter Hus"
                                 filterCb={ this.filterHandler }
                                 url="classroom/building"
-                                category="location"
+                                category="building"
                                 stateName="homeCategory1"
                                 save={ this.props.save }
                                 restore={ this.props.restore }

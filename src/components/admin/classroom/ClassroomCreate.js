@@ -38,7 +38,7 @@ class ClassroomCreate extends Component {
         let classroom = {
             name: data.get("name"),
             type: data.get("type"),
-            location: data.get("location"),
+            building: data.get("building"),
             level: data.get("level"),
             image: data.get("image")
         };
@@ -62,12 +62,12 @@ class ClassroomCreate extends Component {
                     </label>
 
                     <label className="form-label">Hus
-                        <select className="form-input" type="text" name="location" required>
+                        <select className="form-input" type="text" name="building" required>
                             {
-                                this.state.buildings.map(function(building) {
-                                    let location = building.location;
+                                this.state.buildings.map(function(row) {
+                                    let building = row.building;
                                     return [
-                                        <option key={ location } value={ location }>{ location }</option>
+                                        <option key={ building } value={ building }>{ building }</option>
                                     ]
                                 })
                             }

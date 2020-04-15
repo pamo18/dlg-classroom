@@ -90,7 +90,7 @@ const table = {
             "category": (w) => <th width={w}>Kategori</th>,
             "type": (w) => <th width={w}>Typ</th>,
             "level": (w) => <th width={w}>Våning</th>,
-            "location": (w) => <th width={w}>Hus</th>,
+            "building": (w) => <th width={w}>Hus</th>,
             "manage": (w) => <th width={w}>Hantera</th>
         }
 
@@ -123,7 +123,7 @@ const table = {
             "category": <td data-title="Kategori">{ icon.get("Build")}</td>,
             "type": <td data-title="Typ">{ classroom.type }</td>,
             "level": <td data-title="Våning">{ classroom.level }</td>,
-            "location": <td data-title="Hus">{ classroom.location }</td>,
+            "building": <td data-title="Hus">{ classroom.building }</td>,
             "manage": <td data-title="Hantera">{ actions }</td>
         };
 

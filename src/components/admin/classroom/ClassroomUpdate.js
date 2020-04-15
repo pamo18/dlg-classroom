@@ -44,7 +44,7 @@ class ClassroomUpdate extends Component {
         let id = this.props.id || null;
 
         res.then((data) => {
-            let organize = form.organize(data, "location", "id");
+            let organize = form.organize(data, "building", "id");
             let classroomData = organize.data;
             let classroomGroups = organize.groups;
             let template = this.state.classroomTemplate;
@@ -70,7 +70,7 @@ class ClassroomUpdate extends Component {
                     id: res.id,
                     name: res.name,
                     type: res.type,
-                    location: res.location,
+                    building: res.building,
                     level: res.level,
                     image: res.image
                 }
@@ -88,7 +88,7 @@ class ClassroomUpdate extends Component {
         let classroom = {
             name: data.get("name"),
             type: data.get("type"),
-            location: data.get("location"),
+            building: data.get("building"),
             level: data.get("level"),
             image: data.get("image")
         };
@@ -133,12 +133,12 @@ class ClassroomUpdate extends Component {
                             </label>
 
                             <label className="form-label">Hus
-                                <select className="form-input" type="text" name="location" required value={ this.state.classroom.location } onChange={ this.inputHandler } >
+                                <select className="form-input" type="text" name="building" required value={ this.state.classroom.building } onChange={ this.inputHandler } >
                                     {
-                                        this.state.buildings.map(function(building) {
-                                            let location = building.location;
+                                        this.state.buildings.map(function(row) {
+                                            let building = row.building;
                                             return [
-                                                <option key={ location } value={ location }>{ location }</option>
+                                                <option key={ building } value={ building }>{ building }</option>
                                             ]
                                         })
                                     }

@@ -70,7 +70,7 @@ class SwapDevices extends Component {
         let res = db.fetchAll("classroom");
 
         res.then((data) => {
-            let organize = form.organize(data, "location", "id");
+            let organize = form.organize(data, "building", "id");
             let classroomData = organize.data;
             let classroomGroups = organize.groups;
             let classroom1Groups = this.getClassroom1Groups(classroomGroups);
@@ -127,7 +127,7 @@ class SwapDevices extends Component {
                 id: res.id,
                 name: res.name,
                 type: res.type,
-                location: res.location,
+                building: res.building,
                 level: res.level,
                 image: res.image
             }

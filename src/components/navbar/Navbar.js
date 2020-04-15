@@ -53,6 +53,8 @@ class Navbar extends Component {
                 <NavLink to="/" activeClassName="selected" isActive={checkActive}>Start</NavLink >
                 <NavLink to="/about" activeClassName="selected">Om</NavLink >
                 <NavLink to="/admin" activeClassName="selected">Admin</NavLink >
+                <NavLink to="/register" className="admin" activeClassName="selected">Registrera</NavLink >
+                <NavLink to="/login" className="admin" activeClassName="selected">Logga in</NavLink >
             </nav>
         );
     }

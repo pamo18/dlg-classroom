@@ -23,9 +23,7 @@ class ClassroomView extends Component {
                 head: [],
                 body: []
             },
-            filter: {
-                location: "Alla"
-            },
+            filter: {},
             selection: [
                 ["name-caption-large", null],
                 ["manage", null]
@@ -113,7 +111,7 @@ class ClassroomView extends Component {
                         title="Filter Hus"
                         filterCb={ this.filter }
                         url="classroom/building"
-                        category="location"
+                        category="building"
                         stateName="classroomCategory1"
                         save={ this.props.save }
                         restore={ this.props.restore }

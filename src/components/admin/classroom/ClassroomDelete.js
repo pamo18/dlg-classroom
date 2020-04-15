@@ -30,7 +30,7 @@ class ClassroomDelete extends Component {
         let id = this.props.id || null;
 
         res.then((data) => {
-            let organize = form.organize(data, "location", "id");
+            let organize = form.organize(data, "building", "id");
             let classroomData = organize.data;
             let classroomGroups = organize.groups;
             let template = this.state.classroomTemplate;

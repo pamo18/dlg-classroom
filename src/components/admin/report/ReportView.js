@@ -24,9 +24,7 @@ class ReportView extends Component {
                 head: [],
                 body: []
             },
-            filter: {
-                location: "Alla"
-            },
+            filter: {},
             selection : [
                 ["item-category", "15%"],
                 ["title", "35%"],
@@ -114,7 +112,7 @@ class ReportView extends Component {
                         title="Filter Hus"
                         filterCb={ this.filter }
                         url="classroom/building"
-                        category="location"
+                        category="building"
                         stateName="reportCategory1"
                         save={ this.props.save }
                         restore={ this.props.restore }

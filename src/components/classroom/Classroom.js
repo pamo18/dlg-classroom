@@ -55,7 +55,7 @@ class Classroom extends Component {
                                 ?
                                 <div>
                                     <h2 className="center margin">
-                                        { icon.get(this.state.classroom.location) }<br />
+                                        { icon.get(this.state.classroom.building) }<br />
                                         { this.state.classroom.name }
                                     </h2>
                                     <div className="classroom-view-image">
@@ -72,7 +72,7 @@ class Classroom extends Component {
                                         </tr>
                                         <tr>
                                             <th>Hus</th>
-                                            <td>{ this.state.classroom.location }</td>
+                                            <td>{ this.state.classroom.building }</td>
                                         </tr>
                                         <tr>
                                             <th>Våning</th>
