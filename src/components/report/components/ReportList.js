@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import ReportAdmin from './ReportAdmin';
+import { AuthContext, AdminContext } from "../../auth/auth.js";
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
@@ -30,7 +31,7 @@ class ReportList extends Component {
                ["title", "35%"],
                ["created", "20%"],
                ["solved", "20%"],
-               ["manage", "15%"]
+               ["manage", "25%"]
            ]
         };
     }
@@ -97,13 +98,33 @@ class ReportList extends Component {
         let selection = this.state.selection;
         let unsolvedReports = this.state.reports.filter((report) => !report.solved);
         let solvedReports = this.state.reports.filter((report) => report.solved);
+        let actions,
+            view;
 
         let unsolvedReportRows = unsolvedReports.map((report) => {
-            return table.reportBody(report, selection, this, <ReportAdmin id={ report.id } />);
+            view = () => utils.redirect(this, "/report/page", { id: report.id }, false);
+            actions = [
+                icon.get("View", view),
+                <AuthContext.Provider value={ true }>
+                    <AdminContext.Provider value={ true }>
+                        <ReportAdmin that={ this } id={ report.id } />
+                    </AdminContext.Provider>
+                </AuthContext.Provider>
+            ];
+            return table.reportBody(report, selection, this, actions);
         });
 
         let solvedReportRows = solvedReports.map((report) => {
-            return table.reportBody(report, selection, this, <ReportAdmin id={ report.id } />);
+            view = () => utils.redirect(this, "/report/page", { id: report.id }, false);
+            actions = [
+                icon.get("View", view),
+                <AuthContext.Provider value={ true }>
+                    <AdminContext.Provider value={ true }>
+                        <ReportAdmin that={ this } id={ report.id } />
+                    </AdminContext.Provider>
+                </AuthContext.Provider>
+            ];
+            return table.reportBody(report, selection, this, actions);
         });
 
         this.setState({

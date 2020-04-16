@@ -5,18 +5,12 @@ import { NavLink } from 'react-router-dom';
 import Navbar from '../navbar/Navbar.js';
 import logo from '../../assets/img/classroom.jpeg';
 import './Header.css';
-// import auth from '../../models/auth.js';
 
 class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: "DLG | Classroom",
-            wallet: "",
-            orders: "",
-            profile: "",
-            register: "",
-            logstatus: "Logga in"
+            title: "DLG | Classroom"
         };
     }
 
@@ -27,7 +21,7 @@ class Header extends Component {
                     <img src={logo} className="site-logo" alt="logo" />
                     <NavLink to="/">{ this.state.title }</NavLink >
                 </div>
-                <Navbar />
+                <Navbar auth={ this.props.auth } admin={ this.props.admin } />
             </header>
         );
     }

@@ -60,9 +60,9 @@ class Admin extends Component {
         }
         else if (state) {
             this.setState(state, () => {
-                if (this.state.id) {
+                if (this.state.selected && this.state.admin && this.state.id) {
                     utils.redirect(this, `/admin/${ this.state.selected }/${ this.state.admin }/${ this.state.id }`);
-                } else {
+                } else if (this.state.selected && this.state.admin) {
                     utils.redirect(this, `/admin/${ this.state.selected }/${ this.state.admin }`);
                 }
             });

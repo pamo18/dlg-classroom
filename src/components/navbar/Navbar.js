@@ -2,60 +2,40 @@
 
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import PrivateNav from './PrivateNav.js';
+import AdminNav from './AdminNav.js';
+import { AuthContext, AdminContext } from "../auth/auth.js";
 import './Navbar.css';
 
 class Navbar extends Component {
     constructor(props) {
         super(props);
+        this.checkActiveRoot = this.checkActiveRoot.bind(this);
         this.state = {};
     }
 
-    // componentDidMount() {
-    //     let that = this;
-    //
-    //     auth.isactive()
-    //         .then(function(res) {
-    //             if (res.data.active) {
-    //                 that.adminNav();
-    //             } else {
-    //                 that.registerNav();
-    //             }
-    //         });
-    // }
+    checkActiveRoot(match, location) {
+        if (!location) {
+            return false;
+        }
+        const {pathname} = location;
 
-    // adminNav() {
-    //     this.setState({
-    //         logstatus: "Logga ut",
-    //         wallet: <NavLink to="/wallet" className="admin" activeClassName="selected">My Wallet</NavLink >,
-    //         orders: <NavLink to="/orders" activeClassName="selected">My Orders</NavLink >,
-    //         profile: <NavLink to="/profile" activeClassName="selected">My Profile</NavLink >
-    //     });
-    // }
-
-    // registerNav() {
-    //     this.setState({
-    //         register: <NavLink to="/register" className="admin" activeClassName="selected">Registrera</NavLink >
-    //     });
-    // }
+        return pathname === "/";
+    };
 
     render() {
-        const checkActive = (match, location) => {
-            if (!location) {
-                return false;
-            }
-            const {pathname} = location;
-
-            return pathname === "/";
-        };
-
         return (
-            <nav className="navbar">
-                <NavLink to="/" activeClassName="selected" isActive={checkActive}>Start</NavLink >
-                <NavLink to="/about" activeClassName="selected">Om</NavLink >
-                <NavLink to="/admin" activeClassName="selected">Admin</NavLink >
-                <NavLink to="/register" className="admin" activeClassName="selected">Registrera</NavLink >
-                <NavLink to="/login" className="admin" activeClassName="selected">Logga in</NavLink >
-            </nav>
+            <AuthContext.Provider value={ this.props.auth }>
+                <AdminContext.Provider value={ this.props.admin }>
+                    <nav className="navbar">
+                        <PrivateNav to="/" activeClassName="selected-nav" isActive={ this.checkActiveRoot } name="Start" />
+                        <PrivateNav to="/about" activeClassName="selected-nav" name="Om" />
+                        <AdminNav to="/admin" activeClassName="selected-nav" name="Admin" />
+                        <NavLink to="/login" className="admin" activeClassName="selected-nav">{ !this.props.auth ? "Logga in" : "Logga ut" }</NavLink >
+                        { !this.props.auth ? <NavLink to="/register" activeClassName="selected-nav">Registrera</NavLink >: null }
+                    </nav>
+                </AdminContext.Provider>
+            </AuthContext.Provider>
         );
     }
 }

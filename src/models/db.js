@@ -3,6 +3,21 @@ const api = base.api();
 
 // Database helper
 const db = {
+    auth: async function(token) {
+        try {
+            let res = await fetch(`${api}/auth`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': token
+                }
+            });
+
+            return res.json();
+        } catch(err) {
+            console.log(err);
+        }
+    },
     register: async function(data) {
         try {
             let res = await fetch(`${api}/register`, {

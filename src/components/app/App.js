@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary.js';
 
@@ -14,14 +14,19 @@ import Report from '../report/Report.js';
 import ReportListView from '../report/ReportListView.js';
 import ReportPageView from '../report/ReportPageView.js';
 import Admin from '../admin/Admin.js';
+import PrivateRoute from './PrivateRoute.js';
+import AdminRoute from './AdminRoute.js';
+import { AuthContext, AdminContext, getAuth, isAdmin } from "../auth/auth.js";
+import utils from '../../models/utils.js';
 import './App.css';
 
 class App extends Component {
     constructor(props) {
         super(props);
+        this.authCheck = this.authCheck.bind(this);
         this.state = {
-            activeUser: "",
-            register: ""
+            auth: null,
+            admin: null
         };
         this.saveState = (page, state) => {
             this.setState({
@@ -33,64 +38,47 @@ class App extends Component {
         };
     }
 
-    // componentDidMount() {
-    //     let that = this;
-    //
-    //     auth.isactive()
-    //         .then(function(res) {
-    //             if (res.data.active) {
-    //                 console.log("Successfully Authenticated");
-    //                 that.adminRoutes();
-    //             } else {
-    //                 that.registerRoute();
-    //                 console.log("Authentication failed");
-    //                 localStorage.clear();
-    //             }
-    //         });
-    // }
-    //
-    // adminRoutes() {
-    //     this.setState({
-    //         activeUser: [
-    //             <div key="adminRouter">
-    //                 <Route exact path="/profile" component={Profile} />
-    //             </div>
-    //         ]
-    //     });
-    // }
-    //
-    // registerRoute() {
-    //     this.setState({
-    //         register: [
-    //             <div key="registerRoute">
-    //                 <Route exact path="/register" component={Register} />
-    //             </div>
-    //         ]
-    //     });
-    // }
+    componentDidMount() {
+        this.authCheck();
+    }
+
+    authCheck(redirect = false) {
+        let res = getAuth();
+
+        res.then(data => {
+            this.setState({
+                auth: data.active,
+                admin: isAdmin()
+            }, () => redirect && window.location.replace(redirect));
+        });
+    };
 
     render() {
         return (
-            <Router>
-                <div className="App">
-                    <Header />
-                    <div className="page-wrapper">
-                        <Switch>
-                            <Route exact path="/" render={() => <Home save={this.saveState} restore={this.restoreState} />} />
-                            <Route exact path="/register" component={Register} />
-                            <Route exact path="/login" component={Login} />
-                            <Route exact path="/about" component={About} />
-                            <Route exact path="/device" component={Device} />
-                            <Route exact path="/classroom" component={Classroom} />
-                            <Route exact path="/report" render={() => <ErrorBoundary><Report /></ErrorBoundary>} />
-                            <Route exact path="/report/list" component={ReportListView} />
-                            <Route exact path="/report/page" component={ReportPageView} />
-                            <Route exact path="/admin/:selected?/:admin?/:id?" render={() => <Admin save={this.saveState} restore={this.restoreState} />} />
-                        </Switch>
-                    </div>
-                    <Footer />
-                </div>
-            </Router>
+            <AuthContext.Provider value={ this.state.auth }>
+                <AdminContext.Provider value={ this.state.admin }>
+                    <Router>
+                        <div className="App">
+                            <Header auth={ this.state.auth } admin={ this.state.admin } />
+                            <div className="page-wrapper">
+                                <Switch>
+                                    <PrivateRoute exact path="/" component={Home} save={this.saveState} restore={this.restoreState} />
+                                    <Route exact path="/register" component={Register} />
+                                    <Route exact path="/login" render={ () => <Login authCheck={ this.authCheck } /> } />
+                                    <PrivateRoute exact path="/about" component={About} />
+                                    <PrivateRoute exact path="/device" component={Device} />
+                                    <PrivateRoute exact path="/classroom" component={Classroom} />
+                                    <PrivateRoute exact path="/report" component={Report} />
+                                    <PrivateRoute exact path="/report/list" component={ReportListView} />
+                                    <PrivateRoute path="/report/page" component={ReportPageView} />
+                                    <AdminRoute path="/admin/:selected?/:admin?/:id?" component={Admin} save={this.saveState} restore={this.restoreState} />
+                                </Switch>
+                            </div>
+                            <Footer auth={ this.state.auth } admin={ this.state.admin } />
+                        </div>
+                    </Router>
+                </AdminContext.Provider>
+            </AuthContext.Provider>
         );
     }
 }

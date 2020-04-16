@@ -33,7 +33,6 @@ class Login extends Component {
         let res = db.login(person);
 
         res.then((data) => {
-            console.log(data);
             let invalid = false,
                 person,
                 token;
@@ -48,17 +47,14 @@ class Login extends Component {
                 case (data.email && data.password):
                     person = data.person;
                     token = data.token;
-                    localStorage.setItem("user", JSON.stringify(person));
+                    localStorage.setItem("person", JSON.stringify(person));
                     localStorage.setItem("token", JSON.stringify(token));
-                    utils.reload(this, "/");
-                    break;
+                    return this.props.authCheck("/");
             }
 
-            if (invalid) {
-                this.setState({
-                    invalid: <p className="center invalid">{ invalid }</p>
-                });
-            }
+            this.setState({
+                invalid: <p className="center invalid">{ invalid }</p>
+            });
         });
     }
 
@@ -71,17 +67,13 @@ class Login extends Component {
 
     logoff() {
         localStorage.clear();
-        this.setState({
-            user: ""
-        });
-
-        utils.reload(this, "/login", true);
+        return this.props.authCheck("/login");
     }
 
     render() {
-        let user = localStorage.getItem("user");
+        let person = localStorage.getItem("person");
 
-        if (user === null) {
+        if (person === null) {
             return (
                 <main>
                     <div className="single-column">

@@ -1,48 +1,30 @@
-import React, { Component } from 'react';
-import  { withRouter } from 'react-router-dom';
-import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
 import icon from '../../../models/icon.js';
 import table from '../../../models/table.js';
-import '../Report.css';
+import { useAuth, useAdmin } from "../../auth/auth.js";
 
-class ReportAdmin extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: this.props.id,
-            actions: []
-        };
-    }
+function ReportAdmin({
+    that: that,
+    id: id
+    }) {
+    const isAuthenticated = useAuth();
+    const isAdmin = useAdmin();
 
-    componentDidMount() {
-        this.admin();
-    }
+    let edit = () => utils.redirect(that, `/admin/report/edit/${ id }`, {});
+    let del = () => utils.redirect(that, `/admin/report/delete/${ id }`, {});
 
-    admin() {
-        let id = this.state.id;
-        let view = () => utils.redirect(this, "/report/page", { id: id }, false);
-        let edit = () => utils.redirect(this, `/admin/report/edit/${ id }`, {});
-        let del = () => utils.redirect(this, `/admin/report/delete/${ id }`, {});
+    let actions = [
+        icon.get("Edit", edit),
+        icon.get("Delete", del)
+    ];
 
-        let actions = [
-            icon.get("View", view),
-            icon.get("Edit", edit),
-            icon.get("Delete", del)
-        ];
-
-        this.setState({
-            actions: actions
-        })
-    }
-
-    render() {
-        return (
-            <div>
-                { this.state.actions }
-            </div>
-        );
-    }
+    return (
+        isAuthenticated && isAdmin
+            ?
+            actions
+            :
+            null
+    );
 }
 
-export default withRouter(ReportAdmin);
+export default ReportAdmin;

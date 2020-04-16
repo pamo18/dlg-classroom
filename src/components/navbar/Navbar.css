@@ -1,3 +1,15 @@
+/* Nav */
+header .navbar {
+    display: flex;
+    justify-content: flex-start;
+    width: calc(100% - 280px);
+    border-top: 1px solid black;
+}
+
+header .navbar a.admin {
+    margin-left: auto;
+}
+
 .navbar a {
     position: relative;
     display: flex;
@@ -11,29 +23,18 @@
     width: 110px;
     border-left: 1px solid rgb(38, 45, 52);
     border-right: 1px solid rgb(38, 45, 52);
+    border-bottom: 2px solid #060d13;
     color: grey;
 }
 
-.navbar .selected {
+.navbar a.selected-nav {
     color: white;
     border-bottom: 2px solid rgb(14, 125, 255);
 }
 
-.navbar a:not(.selected):hover {
-    background-color: rgb(18, 29, 39, 0.5);
+.navbar a:not(.selected-nav):hover {
     color: white;
-}
-
-.admin {
-    margin-left: auto;
-}
-
-header .navbar {
-    width: calc(100% - 280px);
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    border-top: 1px solid black;
+    background-color: rgb(18, 29, 39, 0.5);
 }
 
 footer .navbar {
@@ -51,19 +52,3 @@ footer .navbar {
 footer .navbar a {
     width: 100%;
 }
-
-/* @media (max-width: 980px) {
-    header .navbar {
-        display: none;
-    }
-
-    footer .navbar {
-        display: flex;
-    }
-}
-
-@media (max-width: 500px) {
-    footer .navbar a {
-        font-size: 0.8rem;
-    }
-} */
