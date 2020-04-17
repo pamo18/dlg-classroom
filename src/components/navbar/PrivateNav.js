@@ -8,14 +8,14 @@ function PrivateNav({
     activeClassName: activeClassName,
     name: name
     }) {
-    const isAuthenticated = useAuth();
+    const { isAuth } = useAuth()
 
-    if (isAuthenticated === null) {
+    if (isAuth === null) {
         return null;
     };
 
     return (
-        isAuthenticated
+        isAuth
             ?
             <NavLink to={ to } isActive={ isActive || null } activeClassName={ activeClassName }>{ name }</NavLink >
             :

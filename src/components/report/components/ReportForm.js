@@ -23,6 +23,7 @@ class ReportForm extends Component {
         e.preventDefault();
         const data = new FormData(e.target);
         let itemGroup = this.state.itemGroup;
+        const person = JSON.parse(localStorage.getItem("person"));
         let res;
 
         switch(true) {
@@ -31,7 +32,8 @@ class ReportForm extends Component {
                     name:  data.get("name"),
                     item_group: "classroom",
                     item_id: this.state.itemData.id,
-                    message: data.get("message")
+                    message: data.get("message"),
+                    person_id: person.id
                 };
 
                 res = db.insert("report", classroom);
@@ -42,7 +44,8 @@ class ReportForm extends Component {
                     name:  data.get("name"),
                     item_group: "device",
                     item_id: this.state.itemData.id,
-                    message: data.get("message")
+                    message: data.get("message"),
+                    person_id: person.id
                 };
 
                 res = db.insert("report", device);

@@ -28,6 +28,8 @@ import maintenance from '../assets/img/icons/maintenance.png'
 import speaker from '../assets/img/icons/speaker.png'
 import projector from '../assets/img/icons/projector.png'
 import tv from '../assets/img/icons/tv.png'
+import user from '../assets/img/icons/user.png'
+
 // Icon helper
 const icon = {
     cat: {
@@ -126,6 +128,9 @@ const icon = {
         ],
         "Maintenance": [
             <img src={ maintenance } className="icon" />
+        ],
+        "User": [
+            <img src={ user } className="icon" />
         ]
     },
     get: function(name, callback = null, selected = null) {

@@ -1,7 +1,6 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
-import ReportFilter from '../../report/components/ReportFilter.js';
 import  { withRouter, Redirect, Link } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
@@ -11,79 +10,77 @@ import icon from '../../../models/icon.js';
 import '../Admin.css';
 import Categories from '../../filter/Categories.js';
 
-class ReportView extends Component {
+class PersonView extends Component {
     constructor(props) {
         super(props);
-        this.getReports = this.getReports.bind(this);
         this.filter = this.filter.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
         this.state = {
-            title: "Report vy",
+            title: "Utrustning vy",
             toggle: "close",
             data: [],
-            reportsTable: {
+            deviceTable: {
                 head: [],
                 body: []
             },
             filter: {},
-            actions: ["view", "edit", "delete"],
-            selection : [
-                ["item-category", "15%"],
-                ["title", "35%"],
-                ["created", "15%"],
-                ["solved", "15%"],
-                ["manage", "20%"]
+            selection: [
+                ["category-caption-large", null],
+                ["manage", null]
             ]
         };
     }
 
     componentDidMount() {
-        let state = this.props.restore("reportViewState");
+        let state = this.props.restore("deviceViewState");
 
         if (state) {
-            this.setState(state, () => this.loadReports(this.state.filter));
+            this.setState(state, () => this.loadDevices(this.state.filter));
         } else {
-            this.loadReports(this.state.filter);
+            this.loadDevices(this.state.filter);
         }
     }
 
     componentWillUnmount() {
-        this.props.save("reportViewState", this.state);
+        this.props.save("deviceViewState", this.state);
     }
 
-    loadReports(filter) {
-        let res = db.fetchAllManyWhere("report", filter);
+    loadDevices(filter) {
+        let res = db.fetchAllManyWhere("device", filter);
 
         res.then((data) => {
             this.setState({
                 data: data,
                 filter: filter
-            }, () => this.getReports());
+            }, () => this.getDevices());
         });
     }
 
-    getReports() {
+    getDevices() {
         let selection = this.state.selection;
 
-        let reportRows = this.state.data.map((report) => {
-            let key = `report-${report.id}`;
-            let view = () => utils.redirect(this, "/report/page", { id: report.id });
-            let edit = () => utils.redirect(this, `/admin/report/edit/${ report.id }`, {});
-            let del = () => utils.redirect(this, `/admin/report/delete/${ report.id }`, {});
+        let deviceRows = this.state.data.map(async (device) => {
+            let view = () => utils.redirect(this, "/device", { id: device.id });
+            let edit = () => utils.redirect(this, `/admin/device/edit/${ device.id }`, {});
+            let del = () => utils.redirect(this, `/admin/device/delete/${ device.id }`, {});
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemData: device });
+            let reportStatus = await db.reportCheck("device", device.id);
             let actions = [
+                icon.reportStatus(reportList, reportStatus),
                 icon.get("View", view),
                 icon.get("Edit", edit),
                 icon.get("Delete", del)
             ];
 
-            return table.reportBody(report, selection, this, actions);
+            return table.deviceBody(device, selection, actions);
         });
 
-        this.setState({
-            reportsTable: {
-                head: table.reportHead(selection),
-                body: reportRows
-            }
+        Promise.all(deviceRows).then((rows) => {
+            this.setState({
+                deviceTable: {
+                    body: rows
+                }
+            });
         });
     }
 
@@ -94,7 +91,7 @@ class ReportView extends Component {
 
         this.setState({
             filter: currentFilter
-        }, () => this.list.loadReports());
+        }, () => this.loadDevices(this.state.filter));
     }
 
     toggleFilter() {
@@ -111,11 +108,11 @@ class ReportView extends Component {
                         { icon.get(this.state.toggle === "close" ? "Drop-down" : "Drop-up", this.toggleFilter) }
                     </div>
                     <Categories
-                        title="Filter Hus"
+                        title="Filter Kategori"
                         filterCb={ this.filter }
-                        url="classroom/building"
-                        category="building"
-                        stateName="reportCategory1"
+                        url="device/category"
+                        category="category"
+                        stateName="deviceCategory1"
                         save={ this.props.save }
                         restore={ this.props.restore }
                     />
@@ -125,22 +122,25 @@ class ReportView extends Component {
                         filterCb={ this.filter }
                         url="report/filter"
                         category="solved"
-                        stateName="reportCategory2"
+                        stateName="deviceCategory2"
                         save={ this.props.save }
                         restore={ this.props.restore }
                     />
                 </div>
 
-                <ReportFilter
-                    onRef={ref => (this.list = ref)}
-                    title="Aktuella Felanmälningar"
-                    filter={ this.state.filter }
-                    selection={ this.state.selection }
-                    actions={ this.state.actions }
-                />
+                <table className="results-card">
+                    <tbody>
+                        { this.state.data
+                            ?
+                            this.state.deviceTable.body
+                            :
+                            null
+                        }
+                    </tbody>
+                </table>
             </article>
         );
     }
 }
 
-export default withRouter(ReportView);
+export default withRouter(PersonView);

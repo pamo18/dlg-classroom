@@ -148,6 +148,7 @@ const table = {
             "created": (w) => <th width={w}>Skapad</th>,
             "action": (w) => <th width={w}>Åtgärdning</th>,
             "solved": (w) => <th width={w}>Åtgärdat</th>,
+            "person": (w) => <th width={w}>Person</th>,
             "manage": (w) => <th width={w}>Hantera</th>
         };
 
@@ -205,6 +206,7 @@ const table = {
             "created": <td data-title="Skapad">{ report.created ? utils.convertSqlDate(report.created).substring(0, 10) : "-" }</td>,
             "action": <td data-title="Åtgärdning">{ report.action || "-" }</td>,
             "solved": <td data-title="Åtgärdat">{ report.solved ? utils.convertSqlDate(report.solved).substring(0, 10) : "-" }</td>,
+            "person": <td data-title="Person">{ report.person }</td>,
             "manage": <td data-title="Hantera">{ actions }</td>
         };
 

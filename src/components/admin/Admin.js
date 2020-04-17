@@ -21,6 +21,7 @@ import SwapDevices from './classroom/devices/SwapDevices.js';
 import ReportView from './report/ReportView.js';
 import ReportUpdate from './report/ReportUpdate.js';
 import ReportDelete from './report/ReportDelete.js';
+import PersonDelete from './person/PersonDelete.js';
 
 class Admin extends Component {
     constructor(props) {
@@ -39,7 +40,8 @@ class Admin extends Component {
                 classroom: "close",
                 device: "close",
                 classroomDevice: "close",
-                report: "close"
+                report: "close",
+                person: "close"
             },
             image: image,
             view: null,
@@ -101,6 +103,9 @@ class Admin extends Component {
                 break;
             case (selected === "report"):
                 this.reportView(admin, id);
+                break;
+            case (selected === "person"):
+                this.personView(admin, id);
                 break;
             }
     }
@@ -180,6 +185,18 @@ class Admin extends Component {
         this.change(view, "report", admin, id);
     }
 
+    personView(admin, id = null) {
+        let view;
+
+        switch(true) {
+            case (admin === "delete"):
+                view = <PersonDelete id={id} />;
+                break;
+        }
+
+        this.change(view, "person", admin, id);
+    }
+
     change(view, selected, admin, id = null) {
         let title = "Admin";
 
@@ -195,6 +212,9 @@ class Admin extends Component {
                 break;
             case (selected === "report"):
                 title = "Admin Felanmälningar";
+                break;
+            case (selected === "person"):
+                title = "Admin Personer";
                 break;
             }
 
@@ -301,6 +321,21 @@ class Admin extends Component {
                                         { icon.get("View", () => { utils.redirect(this, "/admin/report/view") }, selected === "report" && admin === "view") }
                                         { icon.get("Edit", () => { utils.redirect(this, "/admin/report/edit") }, selected === "report" && admin === "edit") }
                                         { icon.get("Delete", () => { utils.redirect(this, "/admin/report/delete") }, selected === "report" && admin === "delete") }
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <div className={`controller ${ this.state.toggle.person }`}>
+                            <figure className="control-group">
+                                <h2 className="center">Användare</h2>
+                                <div className="dropdown mobile-only">
+                                    { icon.get(this.state.toggle.person === "close" ? "Drop-down" : "Drop-up", () => this.toggleFilter("person")) }
+                                </div>
+                                { icon.get("User") }
+                                <figcaption>
+                                    <div className="control-icon">
+                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/person/delete") }, selected === "person" && admin === "delete") }
                                     </div>
                                 </figcaption>
                             </figure>

@@ -13,12 +13,28 @@ class Register extends Component {
         this.toggleShowPassword = this.toggleShowPassword.bind(this);
         this.state = {
             title: "Registrera",
+            departments: [],
             showing: false,
             password: "",
             hidden: true,
             button: true,
             strength: 0
         };
+    }
+
+    componentDidMount() {
+        // Load departments
+        this.departments();
+    }
+
+    departments() {
+        let res = db.fetchAll("person/department");
+
+        res.then((data) => {
+            this.setState({
+                departments: data
+            });
+        });
     }
 
     registerSubmit(event) {
@@ -72,6 +88,20 @@ class Register extends Component {
 
                             <label className="form-label">Efternamn
                                 <input className="form-input" type="text" name="lastname" required placeholder="Ditt efternamn" />
+                            </label>
+
+                            <label className="form-label">Avdelning
+                                <select className="form-input" type="text" name="department" required>
+                                    <option disable selected>Välj</option>
+                                    {
+                                        this.state.departments.map(function(row) {
+                                            let department = row.department;
+                                            return [
+                                                <option key={ department } value={ department }>{ department }</option>
+                                            ]
+                                        })
+                                    }
+                                </select>
                             </label>
 
                             <label className="form-label">Epost

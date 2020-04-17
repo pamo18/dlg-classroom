@@ -8,17 +8,17 @@ function PrivateRoute({
     save: save,
     restore: restore
     }) {
-    const isAuthenticated = useAuth();
+    const { isAuth } = useAuth();
 
-    if (isAuthenticated === null) {
+    if (isAuth === null) {
         return null;
     };
 
     return (
-        <Route exact path={ path } render={ () => (
-            isAuthenticated
+        <Route exact path={ path } render={ props => (
+            isAuth
                 ?
-                <Component save={ save } restore={ restore } />
+                <Component save={ save } restore={ restore } {...props} />
                 :
                 <Redirect to="/login" />
             )}

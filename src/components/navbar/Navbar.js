@@ -2,12 +2,13 @@
 
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import { AuthContext } from "../auth/auth.js";
 import PrivateNav from './PrivateNav.js';
 import AdminNav from './AdminNav.js';
-import { AuthContext, AdminContext } from "../auth/auth.js";
 import './Navbar.css';
 
 class Navbar extends Component {
+    static contextType = AuthContext;
     constructor(props) {
         super(props);
         this.checkActiveRoot = this.checkActiveRoot.bind(this);
@@ -25,17 +26,13 @@ class Navbar extends Component {
 
     render() {
         return (
-            <AuthContext.Provider value={ this.props.auth }>
-                <AdminContext.Provider value={ this.props.admin }>
-                    <nav className="navbar">
-                        <PrivateNav to="/" activeClassName="selected-nav" isActive={ this.checkActiveRoot } name="Start" />
-                        <PrivateNav to="/about" activeClassName="selected-nav" name="Om" />
-                        <AdminNav to="/admin" activeClassName="selected-nav" name="Admin" />
-                        <NavLink to="/login" className="admin" activeClassName="selected-nav">{ !this.props.auth ? "Logga in" : "Logga ut" }</NavLink >
-                        { !this.props.auth ? <NavLink to="/register" activeClassName="selected-nav">Registrera</NavLink >: null }
-                    </nav>
-                </AdminContext.Provider>
-            </AuthContext.Provider>
+            <nav className="navbar">
+                <PrivateNav to="/" activeClassName="selected-nav" isActive={ this.checkActiveRoot } name="Start" />
+                <PrivateNav to="/me" activeClassName="selected-nav" name="Min Sida" />
+                <AdminNav to="/admin" activeClassName="selected-nav" name="Admin" />
+                <NavLink to="/login" className="admin" activeClassName="selected-nav">{ !this.context.isAuth ? "Logga in" : "Logga ut" }</NavLink >
+                { !this.context.isAuth ? <NavLink to="/register" activeClassName="selected-nav">Registrera</NavLink >: null }
+            </nav>
         );
     }
 }

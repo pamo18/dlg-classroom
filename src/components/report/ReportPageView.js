@@ -172,6 +172,10 @@ class ReportPageView extends Component {
                                         <th>Skapad</th>
                                         <td>{ this.state.report.created ? utils.convertSqlDate(this.state.report.created) : "-" }</td>
                                     </tr>
+                                    <tr>
+                                        <th>Person</th>
+                                        <td>{ this.state.report.person }</td>
+                                    </tr>
                                 </table>
                             </div>
                             :

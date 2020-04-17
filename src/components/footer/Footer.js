@@ -15,7 +15,7 @@ class Footer extends Component {
         return (
             <footer className="site-footer">
                 <div className="copyright">Copyright 2019 Paul Moreland</div>
-                <Navbar auth={ this.props.auth } admin={ this.props.admin } />
+                <Navbar />
             </footer>
         );
     }

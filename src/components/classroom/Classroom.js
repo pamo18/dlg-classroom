@@ -23,7 +23,7 @@ class Classroom extends Component {
         if (this.props.location.state) {
             this.setState({
                 id: this.props.location.state.id
-            }, () => this.loadDevice());
+            }, () => this.loadClassroom());
         }
     }
 
@@ -31,7 +31,7 @@ class Classroom extends Component {
         window.scrollTo(0, 0);
     }
 
-    loadDevice() {
+    loadClassroom() {
         let that = this;
         let res = db.fetchWhere("classroom", "id", this.state.id);
 

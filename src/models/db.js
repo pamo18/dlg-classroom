@@ -48,6 +48,21 @@ const db = {
             console.log(err);
         }
     },
+    changePassword: async function(data) {
+        try {
+            let res = await fetch(`${api}/login/password`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            return res.json();
+        } catch(err) {
+            console.log(err);
+        }
+    },
     reportCheck: async function(itemGroup, itemid) {
         try {
             let res = await fetch(`${api}/report/check/${itemGroup}/${itemid}`);

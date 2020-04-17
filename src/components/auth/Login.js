@@ -4,8 +4,10 @@ import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import db from '../../models/db.js';
 import utils from '../../models/utils.js';
+import { AuthContext } from "../auth/auth.js";
 
 class Login extends Component {
+    static contextType = AuthContext;
     constructor(props) {
         super(props);
         this.registerSubmit = this.registerSubmit.bind(this);
@@ -24,6 +26,7 @@ class Login extends Component {
     registerSubmit(e) {
         e.preventDefault();
         const data = new FormData(e.target);
+        const { setAuth } = this.context;
 
         let person = {
             "email": data.get("email"),
@@ -49,7 +52,8 @@ class Login extends Component {
                     token = data.token;
                     localStorage.setItem("person", JSON.stringify(person));
                     localStorage.setItem("token", JSON.stringify(token));
-                    return this.props.authCheck("/");
+                    setAuth(true, person.level === "admin");
+                    return utils.redirect(this, "/");
             }
 
             this.setState({
@@ -66,12 +70,15 @@ class Login extends Component {
     }
 
     logoff() {
+        const { setAuth } = this.context;
+
         localStorage.clear();
-        return this.props.authCheck("/login");
+        setAuth(null, null);
+        return utils.redirect(this, "/login");
     }
 
     render() {
-        let person = localStorage.getItem("person");
+        const person = JSON.parse(localStorage.getItem("person"));
 
         if (person === null) {
             return (
@@ -82,7 +89,6 @@ class Login extends Component {
                         </div>
                         <article>
                             <form action="/profile" className="form-register" onSubmit={this.registerSubmit}>
-                                <p className="center">För att använda DLG Classroom måste du först logga in.</p>
                                 <label className="form-label">Epost
                                     <input className="form-input" type="email" name="email" required placeholder="Din epost" />
                                 </label>

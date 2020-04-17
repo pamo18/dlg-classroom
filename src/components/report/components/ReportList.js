@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import ReportAdmin from './ReportAdmin';
-import { AuthContext, AdminContext } from "../../auth/auth.js";
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
@@ -28,9 +27,10 @@ class ReportList extends Component {
             itemData: this.props.itemData || this.props.location.state.itemData,
             selection : [
                ["item-category", "10%"],
-               ["title", "35%"],
-               ["created", "20%"],
-               ["solved", "20%"],
+               ["title", "25%"],
+               ["created", "15%"],
+               ["solved", "15%"],
+               ["person", "20%"],
                ["manage", "25%"]
            ]
         };
@@ -102,28 +102,14 @@ class ReportList extends Component {
             view;
 
         let unsolvedReportRows = unsolvedReports.map((report) => {
-            view = () => utils.redirect(this, "/report/page", { id: report.id }, false);
-            actions = [
-                icon.get("View", view),
-                <AuthContext.Provider value={ true }>
-                    <AdminContext.Provider value={ true }>
-                        <ReportAdmin that={ this } id={ report.id } />
-                    </AdminContext.Provider>
-                </AuthContext.Provider>
-            ];
+            actions = (<ReportAdmin that={ this } id={ report.id } />);
+
             return table.reportBody(report, selection, this, actions);
         });
 
         let solvedReportRows = solvedReports.map((report) => {
-            view = () => utils.redirect(this, "/report/page", { id: report.id }, false);
-            actions = [
-                icon.get("View", view),
-                <AuthContext.Provider value={ true }>
-                    <AdminContext.Provider value={ true }>
-                        <ReportAdmin that={ this } id={ report.id } />
-                    </AdminContext.Provider>
-                </AuthContext.Provider>
-            ];
+            actions = (<ReportAdmin that={ this } id={ report.id } />);
+
             return table.reportBody(report, selection, this, actions);
         });
 

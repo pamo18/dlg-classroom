@@ -7,24 +7,25 @@ function ReportAdmin({
     that: that,
     id: id
     }) {
-    const isAuthenticated = useAuth();
+    const { isAuth } = useAuth();
     const isAdmin = useAdmin();
 
-    let edit = () => utils.redirect(that, `/admin/report/edit/${ id }`, {});
-    let del = () => utils.redirect(that, `/admin/report/delete/${ id }`, {});
-
+    let view = () => utils.redirect(that, "/report/page", { id: id }, false);
     let actions = [
-        icon.get("Edit", edit),
-        icon.get("Delete", del)
+        icon.get("View", view)
     ];
 
-    return (
-        isAuthenticated && isAdmin
-            ?
-            actions
-            :
-            null
-    );
+    if (isAuth && isAdmin) {
+        let edit = () => utils.redirect(that, `/admin/report/edit/${ id }`, {});
+        let del = () => utils.redirect(that, `/admin/report/delete/${ id }`, {});
+
+        actions.push(
+            icon.get("Edit", edit),
+            icon.get("Delete", del)
+        );
+    }
+
+    return actions;
 }
 
 export default ReportAdmin;

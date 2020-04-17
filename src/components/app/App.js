@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary.js';
 
@@ -7,7 +7,8 @@ import Footer from '../footer/Footer.js';
 import Register from '../auth/Register.js';
 import Login from '../auth/Login.js';
 import Home from '../home/Home.js';
-import About from '../about/About.js';
+import Me from '../me/Me.js';
+import UpdateMe from '../me/UpdateMe.js';
 import Classroom from '../classroom/Classroom.js';
 import Device from '../device/Device.js';
 import Report from '../report/Report.js';
@@ -23,10 +24,11 @@ import './App.css';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.authCheck = this.authCheck.bind(this);
+        this.authStatus = this.authStatus.bind(this);
+        this.setAuth = this.setAuth.bind(this);
         this.state = {
-            auth: null,
-            admin: null
+            isAuth: null,
+            isAdmin: null
         };
         this.saveState = (page, state) => {
             this.setState({
@@ -39,33 +41,45 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.authCheck();
+        this.authStatus();
     }
 
-    authCheck(redirect = false) {
+    authStatus() {
         let res = getAuth();
 
         res.then(data => {
             this.setState({
-                auth: data.active,
-                admin: isAdmin()
-            }, () => redirect && window.location.replace(redirect));
+                isAuth: data.active,
+                isAdmin: isAdmin()
+            });
+        });
+    };
+
+    setAuth(auth, admin) {
+        this.setState({
+            isAuth: auth,
+            isAdmin: admin
         });
     };
 
     render() {
+        const { isAuth } = this.state;
+        const { isAdmin } = this.state;
+        const { setAuth } = this;
+
         return (
-            <AuthContext.Provider value={ this.state.auth }>
-                <AdminContext.Provider value={ this.state.admin }>
+            <AuthContext.Provider value={ { isAuth, setAuth } }>
+                <AdminContext.Provider value={ isAdmin }>
                     <Router>
                         <div className="App">
-                            <Header auth={ this.state.auth } admin={ this.state.admin } />
+                            <Header />
                             <div className="page-wrapper">
                                 <Switch>
                                     <PrivateRoute exact path="/" component={Home} save={this.saveState} restore={this.restoreState} />
                                     <Route exact path="/register" component={Register} />
-                                    <Route exact path="/login" render={ () => <Login authCheck={ this.authCheck } /> } />
-                                    <PrivateRoute exact path="/about" component={About} />
+                                    <Route exact path="/login" component={Login} />
+                                    <PrivateRoute exact path="/me" component={Me} />
+                                    <PrivateRoute exact path="/me/update" component={UpdateMe} />
                                     <PrivateRoute exact path="/device" component={Device} />
                                     <PrivateRoute exact path="/classroom" component={Classroom} />
                                     <PrivateRoute exact path="/report" component={Report} />
@@ -74,7 +88,7 @@ class App extends Component {
                                     <AdminRoute path="/admin/:selected?/:admin?/:id?" component={Admin} save={this.saveState} restore={this.restoreState} />
                                 </Switch>
                             </div>
-                            <Footer auth={ this.state.auth } admin={ this.state.admin } />
+                            <Footer />
                         </div>
                     </Router>
                 </AdminContext.Provider>

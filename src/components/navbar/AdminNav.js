@@ -7,15 +7,15 @@ function AdminNav({
     activeClassName: activeClassName,
     name: name
     }) {
-    const isAuthenticated = useAuth();
+    const { isAuth } = useAuth();
     const isAdmin = useAdmin();
 
-    if (isAuthenticated === null || isAdmin === null) {
+    if (isAuth === null || isAdmin === null) {
         return null;
     };
 
     return (
-        isAuthenticated && isAdmin
+        isAuth && isAdmin
             ?
             <NavLink to={ to } activeClassName={ activeClassName }>{ name }</NavLink >
             :

@@ -8,18 +8,18 @@ function AdminRoute({
     save: save,
     restore: restore
     }) {
-    const isAuthenticated = useAuth();
+    const { isAuth } = useAuth();
     const isAdmin = useAdmin();
 
-    if (isAuthenticated === null || isAdmin === null) {
+    if (isAuth === null || isAdmin === null) {
         return null;
     };
 
     return (
-        <Route exact path={ path } render={ () => (
-            isAuthenticated && isAdmin
+        <Route exact path={ path } render={ (props) => (
+            isAuth && isAdmin
                 ?
-                <Component save={ save } restore={ restore } />
+                <Component save={ save } restore={ restore } {...props} />
                 :
                 <Redirect to="/" />
             )}
