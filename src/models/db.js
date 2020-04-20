@@ -50,11 +50,42 @@ const db = {
     },
     changePassword: async function(data) {
         try {
-            let res = await fetch(`${api}/login/password`, {
+            let res = await fetch(`${api}/password/change`, {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
                     'Content-Type': 'application/json'
+                }
+            });
+
+            return res.json();
+        } catch(err) {
+            console.log(err);
+        }
+    },
+    forgotPassword: async function(data) {
+        try {
+            let res = await fetch(`${api}/password/forgot`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            return res.json();
+        } catch(err) {
+            console.log(err);
+        }
+    },
+    resetPassword: async function(data, token) {
+        try {
+            let res = await fetch(`${api}/password/reset`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': token
                 }
             });
 

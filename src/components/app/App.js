@@ -6,6 +6,8 @@ import Header from '../header/Header.js';
 import Footer from '../footer/Footer.js';
 import Register from '../auth/Register.js';
 import Login from '../auth/Login.js';
+import Forgot from '../auth/Forgot.js';
+import Reset from '../auth/Reset.js';
 import Home from '../home/Home.js';
 import Me from '../me/Me.js';
 import UpdateMe from '../me/UpdateMe.js';
@@ -78,6 +80,8 @@ class App extends Component {
                                     <PrivateRoute exact path="/" component={Home} save={this.saveState} restore={this.restoreState} />
                                     <Route exact path="/register" component={Register} />
                                     <Route exact path="/login" component={Login} />
+                                    <Route exact path="/forgot" component={Forgot} />
+                                    <Route exact path="/reset/:token?" component={Reset} />
                                     <PrivateRoute exact path="/me" component={Me} />
                                     <PrivateRoute exact path="/me/update" component={UpdateMe} />
                                     <PrivateRoute exact path="/device" component={Device} />

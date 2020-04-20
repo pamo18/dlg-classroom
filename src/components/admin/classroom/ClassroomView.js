@@ -17,7 +17,7 @@ class ClassroomView extends Component {
         this.toggleFilter = this.toggleFilter.bind(this);
         this.state = {
             title: "Klassrum vy",
-            toggle: "close",
+            toggle: window.innerWidth <= 900 ? "close" : "open",
             data: [],
             classroomTable: {
                 head: [],

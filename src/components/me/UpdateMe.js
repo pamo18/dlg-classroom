@@ -13,12 +13,17 @@ class PersonUpdate extends Component {
         this.updatePerson = this.updatePerson.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
         this.toggleShowPassword = this.toggleShowPassword.bind(this);
+        this.onPasswordChange = this.onPasswordChange.bind(this);
         this.state = {
             title: "Uppdatera Personuppgifter",
             person: JSON.parse(localStorage.getItem("person")),
-            hidden: true,
+            departments: [],
             invalid: false,
-            departments: []
+            changePass: false,
+            password: "",
+            strength: 0,
+            button: true,
+            hidden: true
         };
     }
 
@@ -39,63 +44,49 @@ class PersonUpdate extends Component {
     updatePerson(e) {
         e.preventDefault();
         const data = new FormData(e.target);
-        let currentPerson = JSON.parse(localStorage.getItem("person"));
         let id = data.get("id");
 
-        let person = {
+        let updatedPerson = {
             "firstname": data.get("firstname"),
             "lastname": data.get("lastname"),
             "email": data.get("email"),
             "department": data.get("department")
         };
 
-        let res = db.update("person", id, person);
+        let res = db.update("person", id, updatedPerson);
 
         res.then(() => {
+            let currentPerson = JSON.parse(localStorage.getItem("person"));
+
+            currentPerson["firstname"] = updatedPerson["firstname"];
+            currentPerson["lastname"] = updatedPerson["lastname"];
+            currentPerson["email"] = updatedPerson["email"];
+            currentPerson["department"] = updatedPerson["department"];
+
+            localStorage.setItem("person", JSON.stringify(currentPerson));
+
             if (data.get("new-password")) {
-                let currentPerson = {
-                    "email": data.get("email"),
+                let person = {
+                    "id": id,
                     "oldPassword": data.get("old-password"),
-                    "newPassword": data.get("password")
+                    "newPassword": data.get("new-password")
                 };
-                let changePassword = db.changePassword(currentPerson);
+                let changePassword = db.changePassword(person);
 
                 changePassword.then((res) => {
-                    let updatedPerson = {
-                        "email": data.get("email"),
-                        "password": data.get("password")
-                    };
-                    let login = db.changePassword(currentPerson);
+                    let invalid = false;
 
-                    login.then((data) => {
-                        let invalid = false;
-                        let person;
+                    if (res.hasOwnProperty("err")) {
+                        invalid = res.err;
 
-                        switch(true) {
-                            case (!data.email):
-                                invalid = "Ogiltid epost!";
-                                break;
-                            case (data.email && !data.password):
-                                invalid = "Ogiltid lösenord";
-                                break;
-                            case (data.email && data.password):
-                                person = data.person;
-                                localStorage.setItem("person", JSON.stringify(person));
-                                return utils.goBack(this);
-                        }
-
-                        this.setState({
+                        return this.setState({
                             invalid: <p className="center invalid"><error>{ invalid }</error></p>
                         });
-                    });
+                    } else {
+                        return utils.goBack(this);
+                    }
                 });
             } else {
-                currentPerson["firstname"] = data.get("firstname");
-                currentPerson["lastname"] = data.get("lastname");
-                currentPerson["email"] = data.get("email");
-                currentPerson["department"] = data.get("department");
-
-                localStorage.setItem("person", JSON.stringify(currentPerson));
                 return utils.goBack(this);
             }
         });
@@ -117,6 +108,16 @@ class PersonUpdate extends Component {
         this.setState({
             hidden: !this.state.hidden,
             button: !this.state.button
+        });
+    }
+
+    onPasswordChange(e) {
+        let val = e.target.value;
+
+        this.setState({
+            strength: utils.passwordChecker(e.target.value),
+            password: e.target.value,
+            changePass: val ? true : false
         });
     }
 
@@ -156,24 +157,33 @@ class PersonUpdate extends Component {
                         <input className="form-input" type="email" name="email" value={ this.state.person.email } required placeholder="abc@lidkoping.se" onChange={ this.inputHandler } />
                     </label>
 
-                    <label className="form-label">Gammla Lösenord
+                    <label className="form-label">Gammal Lösenord
                         <input
                             className="form-input password"
                             type="password"
                             name="old-password"
                             placeholder="Din gammla lösenord"
+                            required={ this.state.changePass ? "required" : false }
                         />
                     </label>
 
-                    <label className="form-label">Nya Lösenord
+                    <label className="form-label">Ny Lösenord: Minst 1 stor bokstäv, 1 siffra, 4+ bokstäver lång.
                         <input
                             className="form-input password"
                             type={this.state.hidden ? "password" : "text"}
                             name="new-password"
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,}"
+                            value={this.state.password}
                             placeholder="Din nya lösenord"
+                            onChange={ this.onPasswordChange }
+                            required={ this.state.changePass ? "required" : false }
                         />
-                        <p><input type="checkbox" className="show-password" onClick={this.toggleShowPassword} /> {this.state.button ? "Visa" : "Dölja"} Lösenord</p>
+                        <p><input type="checkbox" className="show-password" onClick={ this.toggleShowPassword } /> { this.state.button ? "Visa" : "Dölja" } Lösenord</p>
                     </label>
+
+                    <label className="form-label">Lösenord styrke
+                        <meter className="form-meter" min="0" low="4" optimum="9" high="8" max="10" value={ this.state.strength }></meter>
+                    </label><br />
 
                     <input className="button center-margin" type="submit" name="update" value="Uppdatera" />
                     { this.state.invalid }

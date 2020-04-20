@@ -78,9 +78,7 @@ class Login extends Component {
     }
 
     render() {
-        const person = JSON.parse(localStorage.getItem("person"));
-
-        if (person === null) {
+        if (!this.context.isAuth) {
             return (
                 <main>
                     <div className="single-column">
@@ -103,7 +101,10 @@ class Login extends Component {
                                     />
                                     <p><input type="checkbox" className="show-password" onClick={this.toggleShowPassword} /> {this.state.button ? "Visa" : "Dölja"} Lösenord</p>
                                 </label>
-                                <input className="button center-margin" type="submit" name="login" value="Logga in" />
+                                <div>
+                                    <input className="button center-margin" type="submit" name="login" value="Logga in" />
+                                    <p><button name="forgot" className="button forgot center-margin" onClick={ () => utils.redirect(this, "/forgot") }>Glömt Lösnord?</button></p>
+                                </div>
                                 { this.state.invalid }
                             </form>
                         </article>

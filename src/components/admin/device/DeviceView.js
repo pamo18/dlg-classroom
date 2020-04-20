@@ -17,7 +17,7 @@ class DeviceView extends Component {
         this.toggleFilter = this.toggleFilter.bind(this);
         this.state = {
             title: "Utrustning vy",
-            toggle: "close",
+            toggle: window.innerWidth <= 900 ? "close" : "open",
             data: [],
             deviceTable: {
                 head: [],

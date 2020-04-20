@@ -19,7 +19,7 @@ class ReportView extends Component {
         this.toggleFilter = this.toggleFilter.bind(this);
         this.state = {
             title: "Report vy",
-            toggle: "close",
+            toggle: window.innerWidth <= 900 ? "close" : "open",
             data: [],
             reportsTable: {
                 head: [],
