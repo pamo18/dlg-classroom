@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
-import utils from '../../../models/utils.js';
 import icon from '../../../models/icon.js';
 import '../Report.css';
 
@@ -51,6 +50,8 @@ class ReportForm extends Component {
                 res = db.insert("report", device);
                 res.then(() => this.state.callback("device", this.state.itemData.id));
                 break;
+            default:
+                return;
         }
 
         this.setState({

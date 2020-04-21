@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
+/* eslint-disable react/jsx-no-target-blank */
+
+import React from 'react';
 import  { withRouter } from 'react-router-dom';
 import icon from './icon.js';
 import utils from './utils.js';
-import db from './db.js';
 
 // Table helper
 const table = {
     deviceHead: function(selection) {
         let rows = {
             "category": (w) => <th width={w}>Kategori</th>,
-            "category-caption": (w) => <th width={w}>Kategori</th>,
+            "category-caption-simple": (w) => <th width={w}>Kategori</th>,
             "category-caption-large": (w) => <th width={w}>Kategori</th>,
             "name": (w) => <th width={w}>Namn</th>,
             "brand": (w) => <th width={w}>Märke</th>,
@@ -36,13 +37,13 @@ const table = {
     deviceBody: function(device, selection, actions = null) {
         let rows = {
             "category": <td data-title="Kategori">{ icon.get(device.category)}</td>,
-            "category-caption": [
+            "category-caption-simple-large": [
                 <td data-title="Kategori">
                     <figure className="icon-text">
-                        { icon.get(device.category)}
+                        { icon.get(`${device.category}-large`)}
                         <figcaption>
                             <span className="caption-text">
-                                { device.category }
+                                { `${ device.category }` }
                             </span>
                         </figcaption>
                     </figure>
@@ -138,10 +139,10 @@ const table = {
         ]
     },
     reportHead: function(selection) {
-        let len = selection.length;
         let rows = {
             "item": (w) => <th width={w}>Vad</th>,
             "item-category": (w) => <th width={w}>Vad</th>,
+            "item-category-simple": (w) => <th width={w}>Vad</th>,
             "title": (w) => <th width={w}>Titel</th>,
             "message": (w) => <th width={w}>Meddeland</th>,
             "classroom": (w) => <th width={w}>Klassrum</th>,
@@ -184,6 +185,18 @@ const table = {
                         <figcaption>
                             <span className="caption-text">
                                 { report.device_id ? `${report.device_brand } ${ report.device_model }` : report.classroom_name }
+                            </span>
+                        </figcaption>
+                    </figure>
+                </td>
+            ],
+            "item-category-simple": [
+                <td data-title="Vad">
+                    <figure className="icon-text">
+                        { icon.get(report.device_category || "Build")}
+                        <figcaption>
+                            <span className="caption-text">
+                                { report.device_id ? `${ report.device_category }` : report.classroom_name }
                             </span>
                         </figcaption>
                     </figure>

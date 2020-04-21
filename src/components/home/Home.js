@@ -1,7 +1,8 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
+/* eslint eqeqeq: "off" */
 
 import React, { Component } from 'react';
-import  { withRouter, Link } from 'react-router-dom';
+import  { withRouter } from 'react-router-dom';
 import db from '../../models/db.js';
 import utils from '../../models/utils.js';
 import form from '../../models/form.js';
@@ -38,7 +39,7 @@ class Home extends Component {
             devices: [],
             filter: {},
             selection : [
-                ["category-caption-large", null],
+                ["category-caption-simple-large", null],
                 ["manage", null]
             ]
         };
@@ -251,7 +252,7 @@ class Home extends Component {
                                 }
                             </h2>
                             <div className="home-image">
-                                <img src={ image.get(this.state.classroom.image) } alt="Classroom image"/>
+                                <img src={ image.get(this.state.classroom.image) } alt="Classroom"/>
                             </div>
                         </div>
 

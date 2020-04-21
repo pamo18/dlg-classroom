@@ -21,7 +21,7 @@ class ReportItem extends Component {
                 ["manage", null]
             ],
             deviceSelection: [
-                ["category-caption-large", null],
+                ["category-caption-simple-large", null],
                 ["manage", null]
             ]
         };
@@ -34,8 +34,7 @@ class ReportItem extends Component {
     getItem() {
         let itemGroup = this.state.itemGroup;
         let itemData = this.state.itemData;
-        let data,
-            selection,
+        let selection,
             view,
             reportList,
             reportStatus,
@@ -80,6 +79,8 @@ class ReportItem extends Component {
                     });
                 });
                 break;
+            default:
+                return;
         }
     }
 

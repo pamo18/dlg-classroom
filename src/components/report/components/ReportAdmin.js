@@ -1,16 +1,19 @@
+/* eslint-disable no-useless-rename */
+
 import utils from '../../../models/utils.js';
 import icon from '../../../models/icon.js';
-import table from '../../../models/table.js';
 import { useAuth, useAdmin } from "../../auth/auth.js";
 
 function ReportAdmin({
     that: that,
-    id: id
+    id: id,
+    itemGroup: itemGroup,
+    itemData: itemData
     }) {
     const { isAuth } = useAuth();
-    const isAdmin = useAdmin();
+    const { isAdmin } = useAdmin();
 
-    let view = () => utils.redirect(that, "/report/page", { id: id }, false);
+    let view = () => utils.redirect(that, "/report/page", { id: id, itemGroup: itemGroup, itemData: itemData }, false);
     let actions = [
         icon.get("View", view)
     ];

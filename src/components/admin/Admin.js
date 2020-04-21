@@ -1,10 +1,9 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
+/* eslint eqeqeq: "off" */
 
-import React, { Component, useEffect } from 'react';
-import  { Redirect, withRouter } from 'react-router-dom';
-// import auth from '../../models/auth.js';
+import React, { Component } from 'react';
+import  {  withRouter } from 'react-router-dom';
 import utils from '../../models/utils.js';
-import db from '../../models/db.js';
 import icon from '../../models/icon.js';
 import './Admin.css';
 import image from "../../assets/classroom/default.jpg";
@@ -107,6 +106,8 @@ class Admin extends Component {
             case (selected === "person"):
                 this.personView(admin, id);
                 break;
+            default:
+                return;
             }
     }
 
@@ -126,6 +127,8 @@ class Admin extends Component {
             case (admin === "delete"):
                 view = <ClassroomDelete id={id} />;
                 break;
+            default:
+                return;
         }
 
         this.change(view, "classroom", admin, id);
@@ -147,6 +150,8 @@ class Admin extends Component {
             case (admin === "delete"):
                 view = <DeviceDelete id={id} />;
                 break;
+            default:
+                return;
         }
 
         this.change(view, "device", admin, id);
@@ -162,6 +167,8 @@ class Admin extends Component {
             case (admin === "swap"):
                 view = <SwapDevices save={this.props.save} restore={this.props.restore} />;
                 break;
+            default:
+                return;
         }
 
         this.change(view, "classroom-device", admin);
@@ -180,6 +187,8 @@ class Admin extends Component {
             case (admin === "delete"):
                 view = <ReportDelete id={id} />;
                 break;
+            default:
+                return;
         }
 
         this.change(view, "report", admin, id);
@@ -192,6 +201,8 @@ class Admin extends Component {
             case (admin === "delete"):
                 view = <PersonDelete id={id} />;
                 break;
+            default:
+                return;
         }
 
         this.change(view, "person", admin, id);
@@ -216,6 +227,8 @@ class Admin extends Component {
             case (selected === "person"):
                 title = "Admin Personer";
                 break;
+            default:
+                return;
             }
 
         this.setState({
@@ -354,7 +367,7 @@ class Admin extends Component {
                         <article>
                             <h2 className="center margin">DLG</h2>
                             <div className="admin-default-image">
-                                <img src={ this.state.image } alt="Classroom image"/>
+                                <img src={ this.state.image } alt="Classroom"/>
                             </div>
                         </article>
                     }

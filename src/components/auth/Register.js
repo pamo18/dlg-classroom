@@ -1,4 +1,4 @@
-/*eslint max-len: ["error", { "code": 300 }]*/
+/* eslint max-len: ["error", { "code": 300 }] */
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
@@ -38,8 +38,6 @@ class Register extends Component {
     }
 
     registerSubmit(event) {
-        const that = this;
-
         event.preventDefault();
         const data = new FormData(event.target);
 
@@ -71,6 +69,7 @@ class Register extends Component {
     }
 
     render() {
+        // eslint-disable-next-line
         const { showing } = this.state;
 
         return (

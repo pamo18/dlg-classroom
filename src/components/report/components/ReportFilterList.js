@@ -7,7 +7,7 @@ import utils from '../../../models/utils.js';
 import icon from '../../../models/icon.js';
 import table from '../../../models/table.js';
 
-class ReportFilter extends Component {
+class ReportFilterList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -45,8 +45,6 @@ class ReportFilter extends Component {
         let selection = this.state.selection;
 
         let reports= this.state.data.map((report) => {
-            let key = `report-${report.id}`;
-
             return table.reportBody(
                 report,
                 selection,
@@ -81,8 +79,10 @@ class ReportFilter extends Component {
 
     render() {
         return (
-            <div>
-                <h2 class="center">{ this.state.title }: { this.state.table.body.length }st </h2>
+            <div className="report-log">
+                <div className="column-heading table-heading">
+                    <h2 class="center">{ this.state.title }: { this.state.table.body.length }st </h2>
+                </div>
 
                 { this.state.data.length > 0
                     ?
@@ -102,4 +102,4 @@ class ReportFilter extends Component {
     }
 }
 
-export default withRouter(ReportFilter);
+export default withRouter(ReportFilterList);

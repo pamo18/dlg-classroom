@@ -1,11 +1,10 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
-import ReportFilter from '../../report/components/ReportFilter.js';
-import  { withRouter, Redirect, Link } from 'react-router-dom';
+import ReportFilterList from '../../report/components/ReportFilterList.js';
+import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
-import form from '../../../models/form.js';
 import table from '../../../models/table.js';
 import icon from '../../../models/icon.js';
 import '../Admin.css';
@@ -66,8 +65,7 @@ class ReportView extends Component {
         let selection = this.state.selection;
 
         let reportRows = this.state.data.map((report) => {
-            let key = `report-${report.id}`;
-            let view = () => utils.redirect(this, "/report/page", { id: report.id });
+            let view = () => utils.redirect(this, "/report/page", { id: report.id, itemGroup: report.item_group, itemData: report });
             let edit = () => utils.redirect(this, `/admin/report/edit/${ report.id }`, {});
             let del = () => utils.redirect(this, `/admin/report/delete/${ report.id }`, {});
             let actions = [
@@ -131,7 +129,7 @@ class ReportView extends Component {
                     />
                 </div>
 
-                <ReportFilter
+                <ReportFilterList
                     onRef={ref => (this.list = ref)}
                     title="Aktuella Felanmälningar"
                     filter={ this.state.filter }

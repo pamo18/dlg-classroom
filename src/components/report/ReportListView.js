@@ -3,14 +3,14 @@
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import ReportItem from './components/ReportItem.js';
-import ReportList from './components/ReportList.js';
+import ReportItemList from './components/ReportItemList.js';
 import './Report.css';
 
 class ReportListView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: "Felanmäla",
+            title: "Felanmälningar",
             itemGroup: this.props.location.state.itemGroup || "",
             itemData: this.props.location.state.itemData || {}
         };
@@ -22,7 +22,7 @@ class ReportListView extends Component {
 
     render() {
         return (
-            <div className="main-column">
+            <div className="single-column">
                 <div className="column-heading">
                     <h1>{ this.state.title }</h1>
                 </div>
@@ -32,12 +32,10 @@ class ReportListView extends Component {
                         itemData={ this.state.itemData }
                     />
 
-                    <ReportList
-                        onRef={ref => (this.list = ref)}
+                    <ReportItemList
                         itemGroup={ this.state.itemGroup }
                         itemData={ this.state.itemData }
                     />
-
                 </article>
                 { this.state.reportList }
             </div>

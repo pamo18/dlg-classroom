@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import ErrorBoundary from './ErrorBoundary.js';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 
 import Header from '../header/Header.js';
 import Footer from '../footer/Footer.js';
@@ -17,10 +16,10 @@ import Report from '../report/Report.js';
 import ReportListView from '../report/ReportListView.js';
 import ReportPageView from '../report/ReportPageView.js';
 import Admin from '../admin/Admin.js';
+import PublicRoute from './PublicRoute.js';
 import PrivateRoute from './PrivateRoute.js';
 import AdminRoute from './AdminRoute.js';
 import { AuthContext, AdminContext, getAuth, isAdmin } from "../auth/auth.js";
-import utils from '../../models/utils.js';
 import './App.css';
 
 class App extends Component {
@@ -71,25 +70,25 @@ class App extends Component {
 
         return (
             <AuthContext.Provider value={ { isAuth, setAuth } }>
-                <AdminContext.Provider value={ isAdmin }>
+                <AdminContext.Provider value={ { isAdmin } }>
                     <Router>
                         <div className="App">
                             <Header />
                             <div className="page-wrapper">
                                 <Switch>
                                     <PrivateRoute exact path="/" component={Home} save={this.saveState} restore={this.restoreState} />
-                                    <Route exact path="/register" component={Register} />
-                                    <Route exact path="/login" component={Login} />
-                                    <Route exact path="/forgot" component={Forgot} />
-                                    <Route exact path="/reset/:token?" component={Reset} />
+                                    <PublicRoute exact path="/register" component={Register} />
+                                    <PublicRoute exact path="/login" component={Login} />
+                                    <PublicRoute exact path="/forgot" component={Forgot} />
+                                    <PublicRoute exact path="/reset/:token?" component={Reset} />
                                     <PrivateRoute exact path="/me" component={Me} />
                                     <PrivateRoute exact path="/me/update" component={UpdateMe} />
                                     <PrivateRoute exact path="/device" component={Device} />
                                     <PrivateRoute exact path="/classroom" component={Classroom} />
                                     <PrivateRoute exact path="/report" component={Report} />
                                     <PrivateRoute exact path="/report/list" component={ReportListView} />
-                                    <PrivateRoute path="/report/page" component={ReportPageView} />
-                                    <AdminRoute path="/admin/:selected?/:admin?/:id?" component={Admin} save={this.saveState} restore={this.restoreState} />
+                                    <PrivateRoute exact path="/report/page" component={ReportPageView} />
+                                    <AdminRoute exact path="/admin/:selected?/:admin?/:id?" component={Admin} save={this.saveState} restore={this.restoreState} />
                                 </Switch>
                             </div>
                             <Footer />

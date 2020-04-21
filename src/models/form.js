@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+/* eslint eqeqeq: "off" */
+import React from 'react';
 
 // Form helper
 const form = {
@@ -66,7 +67,7 @@ const form = {
         let optionNames = [];
         let names = template.split(",");
         let word = /^[A-Za-z].*[A-Za-z]$/i;
-        let special = /^(\(|\-|\/)(\w+)(\)?|\-?)/i;
+        let special = /^(\(|-|\/)(\w+)(\)?|-?)/i;
 
         names.forEach(function(name) {
             if (name.match(word)) {

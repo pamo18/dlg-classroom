@@ -1,4 +1,5 @@
-/*eslint max-len: ["error", { "code": 300 }]*/
+/* eslint max-len: ["error", { "code": 300 }] */
+/* eslint eqeqeq: "off" */
 
 import React, { Component } from 'react';
 import DatePicker from '../../datepicker/DatePicker.js';
@@ -92,7 +93,6 @@ class DeviceUpdate extends Component {
         e.preventDefault();
         const data = new FormData(e.target);
         let id = data.get("id");
-        let that = this;
 
         let device = {
             category: data.get("category"),

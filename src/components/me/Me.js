@@ -1,7 +1,7 @@
 /*eslint max-len: ["error", { "code": 500 }]*/
 
 import React, { Component } from 'react';
-import ReportFilter from '../report/components/ReportFilter.js';
+import ReportFilterList from '../report/components/ReportFilterList.js';
 import db from '../../models/db.js';
 import utils from '../../models/utils.js';
 import table from '../../models/table.js';
@@ -107,17 +107,17 @@ class Me extends Component {
                                 :
                                 null
                                 }
-                        </div>
+                        </div><br />
 
-                        <ReportFilter
-                            title="Felanmälningar kvar att göra"
+                        <ReportFilterList
+                            title="Felanmälningar Kvar"
                             filter={ this.state.filter1 }
                             selection={ this.state.selection }
                             actions={ this.state.actions }
                         />
 
-                        <ReportFilter
-                            title="Felanmälningar åtgärdade"
+                        <ReportFilterList
+                            title="Felanmälningar Klar"
                             filter={ this.state.filter2 }
                             selection={ this.state.selection }
                             actions={ this.state.actions }

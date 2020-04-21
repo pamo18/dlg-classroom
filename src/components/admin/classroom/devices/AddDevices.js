@@ -1,7 +1,8 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
+/* eslint eqeqeq: "off" */
 
 import React, { Component } from 'react';
-import  { withRouter, Link } from 'react-router-dom';
+import  { withRouter } from 'react-router-dom';
 import db from '../../../../models/db.js';
 import utils from '../../../../models/utils.js';
 import form from '../../../../models/form.js';
@@ -102,8 +103,6 @@ class AddDevice extends Component {
 
     // Load Devices - Step 1
     loadDevices() {
-        let allData = {};
-        let groups = {};
         let res = db.fetchAll("device/available");
 
         res.then((data) => {
@@ -189,8 +188,6 @@ class AddDevice extends Component {
     getDevice(id) {
         try {
             let res = this.state.deviceData[id];
-            let purchased = new Date(res.purchased).toISOString().substring(0, 10);
-            let expires = new Date(res.expires).toISOString().substring(0, 10);
             let view = () => utils.redirect(this, "/device", {id: res.id});
             let selection = this.state.selection;
 

@@ -1,4 +1,7 @@
+/* eslint-disable no-useless-rename */
+
 import React from "react";
+import ErrorBoundary from './ErrorBoundary.js';
 import { Route, Redirect } from "react-router-dom";
 import { useAuth } from "../auth/auth.js";
 
@@ -18,7 +21,9 @@ function PrivateRoute({
         <Route exact path={ path } render={ props => (
             isAuth
                 ?
-                <Component save={ save } restore={ restore } {...props} />
+                <ErrorBoundary key={path}>
+                    <Component save={ save } restore={ restore } {...props} />
+                </ErrorBoundary>
                 :
                 <Redirect to="/login" />
             )}

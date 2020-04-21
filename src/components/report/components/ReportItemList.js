@@ -4,12 +4,11 @@ import React, { Component } from 'react';
 import ReportAdmin from './ReportAdmin';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
-import utils from '../../../models/utils.js';
 import icon from '../../../models/icon.js';
 import table from '../../../models/table.js';
 import '../Report.css';
 
-class ReportList extends Component {
+class ReportItemList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +25,7 @@ class ReportList extends Component {
             itemGroup: this.props.itemGroup || this.props.location.state.itemGroup,
             itemData: this.props.itemData || this.props.location.state.itemData,
             selection : [
-               ["item-category", "10%"],
+               ["item-category-simple", "10%"],
                ["title", "25%"],
                ["created", "15%"],
                ["solved", "15%"],
@@ -98,17 +97,16 @@ class ReportList extends Component {
         let selection = this.state.selection;
         let unsolvedReports = this.state.reports.filter((report) => !report.solved);
         let solvedReports = this.state.reports.filter((report) => report.solved);
-        let actions,
-            view;
+        let actions;
 
         let unsolvedReportRows = unsolvedReports.map((report) => {
-            actions = (<ReportAdmin that={ this } id={ report.id } />);
+            actions = (<ReportAdmin that={ this } id={ report.id } itemGroup={ this.state.itemGroup } itemData={ this.state.itemData } />);
 
             return table.reportBody(report, selection, this, actions);
         });
 
         let solvedReportRows = solvedReports.map((report) => {
-            actions = (<ReportAdmin that={ this } id={ report.id } />);
+            actions = (<ReportAdmin that={ this } id={ report.id } itemGroup={ this.state.itemGroup } itemData={ this.state.itemData } />);
 
             return table.reportBody(report, selection, this, actions);
         });
@@ -128,61 +126,56 @@ class ReportList extends Component {
     render() {
         return (
             <div className="report-log">
-                <div className="column-heading main-heading">
-                    <h1 class="center">{ this.state.title }</h1>
-                </div>
-                <article>
-                    {
-                        this.state.unsolvedTable.body.length > 0
-                            ?
-                            <div>
-                                <div className="column-heading table-heading">
-                                    <h2 className="center">{ `Kvar att göra: ${this.state.unsolvedTable.body.length}st`} { icon.get("Reported") }</h2>
-                                </div>
-                                <table className="results large-rows">
-                                    <thead>
-                                        { this.state.unsolvedTable.head }
-                                    </thead>
-                                    <tbody>
-                                        { this.state.unsolvedTable.body }
-                                    </tbody>
-                                </table>
-                            </div>
-                            :
-                            null
-                    }
-
-                    {
-                        this.state.solvedTable.body.length > 0
+                {
+                    this.state.unsolvedTable.body.length > 0
                         ?
                         <div>
                             <div className="column-heading table-heading">
-                                <h2 className="center">{ `Klar: ${this.state.solvedTable.body.length}st`} { icon.get("Report") }</h2>
+                                <h2 className="center">{ `Kvar att göra: ${this.state.unsolvedTable.body.length}st`} { icon.get("Reported") }</h2>
                             </div>
                             <table className="results large-rows">
                                 <thead>
-                                    { this.state.solvedTable.head }
+                                    { this.state.unsolvedTable.head }
                                 </thead>
                                 <tbody>
-                                    { this.state.solvedTable.body }
+                                    { this.state.unsolvedTable.body }
                                 </tbody>
                             </table>
                         </div>
                         :
                         null
-                    }
+                }
 
-                    {
-                        this.state.unsolvedTable.body.length + this.state.solvedTable.body.length === 0
-                        ?
-                        <h2 className="center">Inga fler ärenden</h2>
-                        :
-                        null
-                    }
-                </article>
+                {
+                    this.state.solvedTable.body.length > 0
+                    ?
+                    <div>
+                        <div className="column-heading table-heading">
+                            <h2 className="center">{ `Klar: ${this.state.solvedTable.body.length}st`} { icon.get("Report") }</h2>
+                        </div>
+                        <table className="results large-rows">
+                            <thead>
+                                { this.state.solvedTable.head }
+                            </thead>
+                            <tbody>
+                                { this.state.solvedTable.body }
+                            </tbody>
+                        </table>
+                    </div>
+                    :
+                    null
+                }
+
+                {
+                    this.state.unsolvedTable.body.length + this.state.solvedTable.body.length === 0
+                    ?
+                    <h2 className="center">Inga fler ärenden</h2>
+                    :
+                    null
+                }
             </div>
         );
     }
 }
 
-export default withRouter(ReportList);
+export default withRouter(ReportItemList);

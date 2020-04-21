@@ -73,7 +73,6 @@ class Categories extends Component {
                             {
                                 this.state.data.map((cat) => {
                                     let category = cat[this.state.category];
-                                    let key = `filter-category-${category}`;
 
                                     return icon.getFigure(category, () => { this.filter(category) }, filter === category)
                                 })

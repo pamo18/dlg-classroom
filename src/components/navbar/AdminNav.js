@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-rename */
+
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth, useAdmin } from "../auth/auth.js";
@@ -8,7 +10,7 @@ function AdminNav({
     name: name
     }) {
     const { isAuth } = useAuth();
-    const isAdmin = useAdmin();
+    const { isAdmin } = useAdmin();
 
     if (isAuth === null || isAdmin === null) {
         return null;

@@ -1,4 +1,5 @@
-/*eslint max-len: ["error", { "code": 300 }]*/
+/* eslint max-len: ["error", { "code": 300 }] */
+/* eslint eqeqeq: "off" */
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
@@ -50,7 +51,6 @@ class ReportDelete extends Component {
     getReport(id) {
         try {
             let res = this.state.reportData[id];
-            let name = form.optionName(res, this.state.reportTemplate);
 
             this.setState({
                 report: {
@@ -67,7 +67,6 @@ class ReportDelete extends Component {
 
     deleteReport(e) {
         e.preventDefault();
-        let that = this;
         const data = new FormData(e.target);
         let id = data.get("id");
 

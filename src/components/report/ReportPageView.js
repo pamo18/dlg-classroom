@@ -2,185 +2,48 @@
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
-import ReportList from './components/ReportList.js';
-import db from '../../models/db.js';
-import utils from '../../models/utils.js';
-import icon from '../../models/icon.js';
-import table from '../../models/table.js';
+import ReportItem from './components/ReportItem.js';
+import ReportView from './components/ReportView.js';
+import ReportItemList from './components/ReportItemList.js';
 import './Report.css';
 
 class ReportPageView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: "Felanmälning",
+            title: "Felanmälningar",
             id: this.props.location.state.id,
-            report: {},
-            item: {},
-            itemTable: {
-                body: []
-            },
-            classroomSelection: [
-                ["name-caption-large", null],
-                ["manage", null]
-            ],
-            deviceSelection: [
-                ["category-caption-large", null],
-                ["manage", null]
-            ]
+            itemGroup: this.props.location.state.itemGroup || "",
+            itemData: this.props.location.state.itemData || {}
         };
-    }
-
-    componentDidMount() {
-        this.loadReport();
     }
 
     componentWillUnmount() {
         window.scrollTo(0, 0);
     }
 
-    loadReport() {
-        let res = db.fetchWhere("report", "report.id", this.state.id);
-
-        res.then((data) => {
-            this.setState({
-                report: data
-            }, () => this.loadItem());
-        });
-    }
-
-    loadItem() {
-        let itemGroup = this.state.report.item_group;
-        let res;
-
-        switch(true) {
-            case (itemGroup === "classroom"):
-                res = db.fetchWhere("classroom", "id", this.state.report.classroom_id);
-                break;
-            case (itemGroup === "device"):
-                res = db.fetchWhere("device", "id", this.state.report.device_id);
-                break;
-        }
-
-        if (res) {
-            res.then((data) => {
-                this.setState({
-                    item: data,
-                    reportList: <ReportList onRef={ref => (this.list = ref)} itemGroup={ itemGroup } itemData={ data } />
-                }, () => this.getItem());
-            });
-        }
-    }
-
-    getItem() {
-        let report = this.state.report;
-        let item = this.state.item;
-        let itemGroup = this.state.report.item_group;
-        let data,
-            selection,
-            view,
-            reportList,
-            reportStatus,
-            actions;
-
-        switch(true) {
-            case (itemGroup === "classroom"):
-                selection = this.state.classroomSelection;
-                view = () => utils.redirect(this, "/classroom", { id: item.id });
-                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: item.id });
-                reportStatus = db.reportCheck("report", report.id);
-
-                reportStatus.then((status) => {
-                    actions = [
-                        icon.reportStatus(reportList, status),
-                        icon.get("View", view)
-                    ];
-
-                    this.setState({
-                        itemTable: {
-                            body: table.classroomBody(item, selection, actions)
-                        }
-                    });
-                });
-                break;
-            case (itemGroup === "device"):
-                selection = this.state.deviceSelection;
-                view = () => utils.redirect(this, "/device", { id: item.id });
-                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: item.id });
-                reportStatus = db.reportCheck("device", item.id);
-
-                reportStatus.then((status) => {
-                    actions = [
-                        icon.reportStatus(reportList, status),
-                        icon.get("View", view)
-                    ];
-
-                    this.setState({
-                        itemTable: {
-                            body: table.deviceBody(item, selection, actions)
-                        }
-                    });
-                });
-                break;
-        }
-    }
-
     render() {
         return (
-            <div className="main-column">
+            <div className="single-column">
                 <div className="column-heading">
                     <h1>{ this.state.title }</h1>
                 </div>
                 <article>
-                    {
-                        Object.entries(this.state.report).length > 0
-                            ?
-                            <div>
-                                <table className="results-card single-card">
-                                    <tbody>
-                                        { this.state.itemTable.body }
-                                    </tbody>
-                                </table>
+                    <ReportItem
+                        itemGroup={ this.state.itemGroup }
+                        itemData={ this.state.itemData }
+                    />
 
-                                <h2 className="center margin">
-                                    { icon.get("Maintenance") }<br />
-                                    Rapport
-                                </h2>
+                    <ReportView
+                        id={ this.state.id }
+                        itemGroup={ this.state.itemGroup }
+                        itemData={ this.state.itemData }
+                    />
 
-                                <table className="results-alt">
-                                    <tr>
-                                        <th>Titel</th>
-                                        <td>{ this.state.report.name }</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Vad</th>
-                                        <td>{ this.state.report.device_id ? this.state.report.device_brand + " " + this.state.report.device_model : "Allmänt" }</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Meddeland</th>
-                                        <td>{ this.state.report.message }</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Åtgärdning</th>
-                                        <td>{ this.state.report.action || "-" }</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Åtgärdat</th>
-                                        <td>{ this.state.report.solved ? utils.convertSqlDate(this.state.report.solved) : "-" }</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Skapad</th>
-                                        <td>{ this.state.report.created ? utils.convertSqlDate(this.state.report.created) : "-" }</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Person</th>
-                                        <td>{ this.state.report.person }</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            :
-                            null
-                    }
+                    <ReportItemList
+                        itemGroup={ this.state.itemGroup }
+                        itemData={ this.state.itemData }
+                    />
                 </article>
                 { this.state.reportList }
             </div>

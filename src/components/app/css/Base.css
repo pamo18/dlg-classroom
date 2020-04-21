@@ -103,6 +103,7 @@ aside,
 article {
     padding-top: 2rem;
     padding-bottom: 2rem;
+    margin-bottom: 2rem;
 }
 
 aside {
@@ -113,7 +114,6 @@ article {
     width: 100%;
     padding-left: 2rem;
     padding-right: 2rem;
-    /* min-height: 57em; */
 }
 
 .center {

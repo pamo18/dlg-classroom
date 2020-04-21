@@ -1,5 +1,4 @@
-import utils from './utils.js';
-import React, { Component } from 'react';
+import React from 'react';
 import TheatersIcon from '@material-ui/icons/Theaters';
 import TvIcon from '@material-ui/icons/Tv';
 import SpeakerIcon from '@material-ui/icons/Speaker';
@@ -52,13 +51,13 @@ const icon = {
             <TvIcon fontSize="large" />
         ],
         "Projektor-large": [
-            <img src={ projector } className="icon" />
+            <img src={ projector } className="icon" alt="icon" />
         ],
         "Högtalare-large": [
-            <img src={ speaker } className="icon" />
+            <img src={ speaker } className="icon" alt="icon" />
         ],
         "TV-large": [
-            <img src={ tv } className="icon" />
+            <img src={ tv } className="icon" alt="icon" />
         ],
         "View": [
             <VisibilityIcon fontSize="large" />
@@ -109,28 +108,28 @@ const icon = {
             <ArrowDropUpIcon fontSize="large" />
         ],
         "House": [
-            <img src={ house } className="icon" />
+            <img src={ house } className="icon" alt="icon" />
         ],
         "Classroom": [
-            <img src={ classroom } className="icon" />
+            <img src={ classroom } className="icon" alt="icon" />
         ],
         "Classroom-large": [
-            <img src={ classroom } className="icon" />
+            <img src={ classroom } className="icon" alt="icon" />
         ],
         "Device": [
-            <img src={ device } className="icon" />
+            <img src={ device } className="icon" alt="icon" />
         ],
         "classroomDevice": [
-            <img src={ classroomDevice } className="icon" />
+            <img src={ classroomDevice } className="icon" alt="icon" />
         ],
         "Message": [
-            <img src={ message } className="icon" />
+            <img src={ message } className="icon" alt="icon" />
         ],
         "Maintenance": [
-            <img src={ maintenance } className="icon" />
+            <img src={ maintenance } className="icon" alt="icon" />
         ],
         "User": [
-            <img src={ user } className="icon" />
+            <img src={ user } className="icon" alt="icon" />
         ]
     },
     get: function(name, callback = null, selected = null) {

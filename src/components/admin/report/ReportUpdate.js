@@ -1,4 +1,5 @@
-/*eslint max-len: ["error", { "code": 300 }]*/
+/* eslint max-len: ["error", { "code": 300 }] */
+/* eslint eqeqeq: "off" */
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
@@ -50,7 +51,6 @@ class ReportUpdate extends Component {
     getReport(id) {
         try {
             let res = this.state.reportData[id];
-            let name = form.optionName(res, this.state.reportTemplate);
 
             this.setState({
                 report: {
@@ -73,7 +73,6 @@ class ReportUpdate extends Component {
         const data = new FormData(e.target);
         let id = data.get("id");
         let checkbox = data.get("solved");
-        let solved;
 
         let report = {
             name: data.get("name"),
@@ -99,6 +98,8 @@ class ReportUpdate extends Component {
 
         if (key === "solved") {
             report[key] = report[key] ? false : utils.getLocalDate();
+        } else {
+            report[key] = value;
         }
 
         this.setState({

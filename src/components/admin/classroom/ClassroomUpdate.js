@@ -1,4 +1,5 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
+/* eslint eqeqeq: "off" */
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';

@@ -1,4 +1,5 @@
-/*eslint max-len: ["error", { "code": 300 }]*/
+/* eslint max-len: ["error", { "code": 300 }] */
+/* eslint eqeqeq: "off" */
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
@@ -65,7 +66,6 @@ class ClassroomDelete extends Component {
 
     deleteClassroom(e) {
         e.preventDefault();
-        let that = this;
         const data = new FormData(e.target);
         let id = data.get("id");
 

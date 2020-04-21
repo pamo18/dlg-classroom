@@ -1,10 +1,9 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
-import  { withRouter, Redirect, Link } from 'react-router-dom';
+import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
-import form from '../../../models/form.js';
 import table from '../../../models/table.js';
 import icon from '../../../models/icon.js';
 import '../Admin.css';

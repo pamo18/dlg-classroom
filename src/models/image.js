@@ -1,5 +1,3 @@
-import React, { Component } from 'react';
-
 // Image helper
 const image = {
     get: function(url) {

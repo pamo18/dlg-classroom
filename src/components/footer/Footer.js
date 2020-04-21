@@ -1,7 +1,6 @@
 /*eslint max-len: ["error", { "code": 120 }]*/
 
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
 import Navbar from '../navbar/Navbar.js';
 import './Footer.css';
 

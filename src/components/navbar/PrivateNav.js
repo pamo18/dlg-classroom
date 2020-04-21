@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-rename */
+
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../auth/auth.js";

@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import Navbar from '../navbar/Navbar.js';
-import logo from '../../assets/img/classroom.jpeg';
+import logo from '../../assets/img/classroom.png';
 import './Header.css';
 
 class Header extends Component {

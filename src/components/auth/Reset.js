@@ -66,12 +66,13 @@ class Reset extends Component {
         let val = e.target.value;
 
         this.setState({
-            strength: utils.passwordChecker(e.target.value),
-            password: e.target.value
+            strength: utils.passwordChecker(val),
+            password: val
         });
     }
 
     render() {
+        // eslint-disable-next-line
         const { showing } = this.state;
 
         return (

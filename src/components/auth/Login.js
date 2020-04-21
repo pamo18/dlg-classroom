@@ -1,4 +1,4 @@
-/*eslint max-len: ["error", { "code": 200 }]*/
+/* eslint max-len: ["error", { "code": 200 }] */
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
@@ -54,6 +54,8 @@ class Login extends Component {
                     localStorage.setItem("token", JSON.stringify(token));
                     setAuth(true, person.level === "admin");
                     return utils.redirect(this, "/");
+                default:
+                    return utils.redirect(this, "/login");
             }
 
             this.setState({

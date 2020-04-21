@@ -1,4 +1,5 @@
-/*eslint max-len: ["error", { "code": 300 }]*/
+/* eslint max-len: ["error", { "code": 300 }] */
+/* eslint eqeqeq: "off" */
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
@@ -67,7 +68,6 @@ class PersonDelete extends Component {
         const person = JSON.parse(localStorage.getItem("person"));
         const data = new FormData(e.target);
         let id = data.get("id");
-        let that = this;
 
         let res = db.delete("person", id);
 

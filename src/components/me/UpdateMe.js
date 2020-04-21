@@ -97,7 +97,7 @@ class PersonUpdate extends Component {
         let person = this.state.person;
         let val = e.target.value;
 
-        person[key] = e.target.value;
+        person[key] = val;
 
         this.setState({
             person: person
@@ -122,6 +122,7 @@ class PersonUpdate extends Component {
     }
 
     render() {
+        // eslint-disable-next-line
         const { showing } = this.state;
         return (
             <article>

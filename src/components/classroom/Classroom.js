@@ -1,10 +1,7 @@
 /*eslint max-len: ["error", { "code": 300 }]*/
 
 import React, { Component } from 'react';
-import  { Redirect, Link } from 'react-router-dom';
 import db from '../../models/db.js';
-import utils from '../../models/utils.js';
-import form from '../../models/form.js';
 import icon from '../../models/icon.js';
 import image from '../../models/image.js';
 import './Classroom.css';
@@ -59,7 +56,7 @@ class Classroom extends Component {
                                         { this.state.classroom.name }
                                     </h2>
                                     <div className="classroom-view-image">
-                                        <img src={ image.get(this.state.classroom.image) } alt="Classroom image"/>
+                                        <img src={ image.get(this.state.classroom.image) } alt="Classroom"/>
                                     </div>
                                     <table className="results-alt">
                                         <tr>
@@ -77,10 +74,6 @@ class Classroom extends Component {
                                         <tr>
                                             <th>Våning</th>
                                             <td>{ this.state.classroom.level }</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Bild Länk</th>
-                                            <td>{ this.state.classroom.image }</td>
                                         </tr>
                                     </table>
                                 </div>
