@@ -58,62 +58,64 @@ class Device extends Component {
                                         { this.state.device.brand + " " + this.state.device.model}
                                     </h2>
                                     <table className="results-alt">
-                                        <tr>
-                                            <th>Kategori</th>
-                                            <td>{ this.state.device.category }</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Märke</th>
-                                            <td>{ this.state.device.brand }</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Model</th>
-                                            <td>{ this.state.device.model }</td>
-                                        </tr>
-
-                                        { this.context.isAdmin &&
+                                        <tbody>
                                             <tr>
-                                                <th>Pris</th>
-                                                <td>{ this.state.device.price }:-</td>
+                                                <th>Kategori</th>
+                                                <td>{ this.state.device.category }</td>
                                             </tr>
-                                        }
-
-                                        { this.context.isAdmin &&
                                             <tr>
-                                                <th>Serial nummer</th>
-                                                <td>{ this.state.device.serialnum }</td>
+                                                <th>Märke</th>
+                                                <td>{ this.state.device.brand }</td>
                                             </tr>
-                                        }
-
-                                        { this.context.isAdmin &&
                                             <tr>
-                                                <th>Köpt</th>
-                                                <td>{ new Date(this.state.device.purchased).toISOString().substring(0, 10) }</td>
+                                                <th>Model</th>
+                                                <td>{ this.state.device.model }</td>
                                             </tr>
-                                        }
 
-                                        { this.context.isAdmin &&
+                                            { this.context.isAdmin &&
+                                                <tr>
+                                                    <th>Pris</th>
+                                                    <td>{ this.state.device.price }:-</td>
+                                                </tr>
+                                            }
+
+                                            { this.context.isAdmin &&
+                                                <tr>
+                                                    <th>Serial nummer</th>
+                                                    <td>{ this.state.device.serialnum }</td>
+                                                </tr>
+                                            }
+
+                                            { this.context.isAdmin &&
+                                                <tr>
+                                                    <th>Köpt</th>
+                                                    <td>{ new Date(this.state.device.purchased).toISOString().substring(0, 10) }</td>
+                                                </tr>
+                                            }
+
+                                            { this.context.isAdmin &&
+                                                <tr>
+                                                    <th>Garanti giltid till</th>
+                                                    <td>{ new Date(this.state.device.expires).toISOString().substring(0, 10) }</td>
+                                                </tr>
+                                            }
+
+                                            { this.context.isAdmin &&
+                                                <tr>
+                                                    <th>Garanti månader</th>
+                                                    <td>{ this.state.device.warranty }</td>
+                                                </tr>
+                                            }
+
                                             <tr>
-                                                <th>Garanti giltid till</th>
-                                                <td>{ new Date(this.state.device.expires).toISOString().substring(0, 10) }</td>
+                                                <th>Länk URL</th>
+                                                <td><a href={ this.state.device.url } target="_blank">Till produktsida</a></td>
                                             </tr>
-                                        }
-
-                                        { this.context.isAdmin &&
                                             <tr>
-                                                <th>Garanti månader</th>
-                                                <td>{ this.state.device.warranty }</td>
+                                                <th>Info</th>
+                                                <td>{ this.state.device.message }</td>
                                             </tr>
-                                        }
-
-                                        <tr>
-                                            <th>Länk URL</th>
-                                            <td><a href={ this.state.device.url } target="_blank">Till produktsida</a></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Info</th>
-                                            <td>{ this.state.device.message }</td>
-                                        </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                                 :

@@ -78,26 +78,28 @@ class Me extends Component {
                                         { `${this.state.person.firstname } ${this.state.person.lastname }` }
                                     </h2>
                                     <table className="results-alt">
-                                        <tr>
-                                            <th>Förnamn</th>
-                                            <td>{ this.state.person.firstname }</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Efternamn</th>
-                                            <td>{ this.state.person.lastname }</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Epost</th>
-                                            <td>{ this.state.person.email }</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Avdelning</th>
-                                            <td>{ this.state.person.department }</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Behörighet</th>
-                                            <td>{ this.state.person.level.charAt(0).toUpperCase() + this.state.person.level.slice(1) }</td>
-                                        </tr>
+                                        <tbody>
+                                            <tr>
+                                                <th>Förnamn</th>
+                                                <td>{ this.state.person.firstname }</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Efternamn</th>
+                                                <td>{ this.state.person.lastname }</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Epost</th>
+                                                <td>{ this.state.person.email }</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Avdelning</th>
+                                                <td>{ this.state.person.department }</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Behörighet</th>
+                                                <td>{ this.state.person.level.charAt(0).toUpperCase() + this.state.person.level.slice(1) }</td>
+                                            </tr>
+                                        </tbody>
                                     </table>
 
                                     <p>

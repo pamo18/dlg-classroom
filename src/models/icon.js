@@ -17,6 +17,7 @@ import RoomIcon from '@material-ui/icons/Room';
 import BuildIcon from '@material-ui/icons/Build';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 import house from '../assets/img/icons/house.png';
 import classroom from '../assets/img/icons/classroom.png';
@@ -33,103 +34,106 @@ import user from '../assets/img/icons/user.png'
 const icon = {
     cat: {
         "Åtgärdat": [
-            <TheatersIcon fontSize="large" />
+            <TheatersIcon fontSize="large" key="Åtgärdat" />
         ],
         "Att göra": [
-            <TheatersIcon fontSize="large" />
+            <TheatersIcon fontSize="large" key="Att göra" />
         ],
         "Projektor": [
-            <TheatersIcon fontSize="large" />
+            <TheatersIcon fontSize="large" key="Projektor" />
         ],
         "Högtalare": [
-            <SpeakerIcon fontSize="large" />
+            <SpeakerIcon fontSize="large" key="Högtalare" />
         ],
         "TV": [
-            <TvIcon fontSize="large" />
+            <TvIcon fontSize="large" key="TV" />
         ],
         "Skärm": [
-            <TvIcon fontSize="large" />
+            <TvIcon fontSize="large" key="Skärm" />
         ],
         "Projektor-large": [
-            <img src={ projector } className="icon" alt="icon" />
+            <img src={ projector } className="icon" alt="icon" key="Projektor-large" />
         ],
         "Högtalare-large": [
-            <img src={ speaker } className="icon" alt="icon" />
+            <img src={ speaker } className="icon" alt="icon" key="Högtalare-large" />
         ],
         "TV-large": [
-            <img src={ tv } className="icon" alt="icon" />
+            <img src={ tv } className="icon" alt="icon" key="TV-large" />
         ],
         "View": [
-            <VisibilityIcon fontSize="large" />
+            <VisibilityIcon fontSize="large" key="View" />
         ],
         "Up": [
-            <ArrowUpwardIcon fontSize="large" />
+            <ArrowUpwardIcon fontSize="large" key="Up" />
         ],
         "Down": [
-            <ArrowDownwardIcon fontSize="large" />
+            <ArrowDownwardIcon fontSize="large" key="Down" />
         ],
         "Add": [
-            <AddBoxIcon fontSize="large" />
+            <AddBoxIcon fontSize="large" key="Add" />
         ],
         "Edit": [
-            <EditIcon fontSize="large" />
+            <EditIcon fontSize="large" key="Edit" />
         ],
         "Delete": [
-            <DeleteIcon fontSize="large" />
+            <DeleteIcon fontSize="large" key="Delete" />
         ],
         "Swap": [
-            <SwapVerticalCircleIcon fontSize="large" />
+            <SwapVerticalCircleIcon fontSize="large" key="Swap" />
         ],
         "Building": [
-            <HomeWorkIcon fontSize="large" />
+            <HomeWorkIcon fontSize="large" key="Building" />
         ],
         "Alla": [
-            <SelectAllIcon fontSize="large" />
+            <SelectAllIcon fontSize="large" key="Alla" />
         ],
         "Report": [
-            <CheckCircleIcon className="check-icon" fontSize="large" color="disable"/>
+            <CheckCircleIcon className="check-icon" fontSize="large" color="disable" key="Report" />
         ],
         "Reported": [
-            <ErrorIcon fontSize="large" color="error"/>
+            <ErrorIcon fontSize="large" color="error" key="Reported" />
         ],
         "Room": [
-            <RoomIcon fontSize="large" />
+            <RoomIcon fontSize="large" key="Room" />
         ],
         "Classroom2": [
-            <HomeWorkIcon fontSize="large" />
+            <HomeWorkIcon fontSize="large" key="Classroom2" />
         ],
         "Build": [
-            <BuildIcon fontSize="large" />
+            <BuildIcon fontSize="large" key="Build" />
         ],
         "Drop-down": [
-            <ArrowDropDownIcon fontSize="large" />
+            <ArrowDropDownIcon fontSize="large" key="Drop-down" />
         ],
         "Drop-up": [
-            <ArrowDropUpIcon fontSize="large" />
+            <ArrowDropUpIcon fontSize="large" key="Drop-up" />
+        ],
+        "Level": [
+            <SupervisorAccountIcon fontSize="large" key="Level" />
         ],
         "House": [
-            <img src={ house } className="icon" alt="icon" />
+            <img src={ house } className="icon" alt="icon" key="House" />
         ],
         "Classroom": [
-            <img src={ classroom } className="icon" alt="icon" />
+            <img src={ classroom } className="icon" alt="icon" key="Classroom" />
         ],
         "Classroom-large": [
-            <img src={ classroom } className="icon" alt="icon" />
+            <img src={ classroom } className="icon" alt="icon" key="Classroom-large" />
         ],
         "Device": [
-            <img src={ device } className="icon" alt="icon" />
+            <img src={ device } className="icon" alt="icon" key="Device" />
         ],
         "classroomDevice": [
-            <img src={ classroomDevice } className="icon" alt="icon" />
+            <img src={ classroomDevice } className="icon" alt="icon" key="classroomDevice" />
         ],
         "Message": [
-            <img src={ message } className="icon" alt="icon" />
+            <img src={ message } className="icon" alt="icon" key="Message" />
         ],
         "Maintenance": [
-            <img src={ maintenance } className="icon" alt="icon" />
+            <img src={ maintenance } className="icon" alt="icon" key="Maintenance" />
         ],
         "User": [
-            <img src={ user } className="icon" alt="icon" />
+            <img src={ user } className="icon" alt="icon" key="User" />
         ]
     },
     get: function(name, callback = null, selected = null) {
@@ -154,7 +158,7 @@ const icon = {
             ]
         } else {
             element = [
-                <i>{ icon }</i>
+                <i key={`icon-${name}`}>{ icon }</i>
             ]
         }
 
@@ -206,7 +210,7 @@ const icon = {
             ]
         } else {
             element = [
-                <figure>
+                <figure key={`icon-${name}`}>
                     { icon }
                     <figcaption>
                         { name }

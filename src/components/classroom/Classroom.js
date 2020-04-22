@@ -59,22 +59,24 @@ class Classroom extends Component {
                                         <img src={ image.get(this.state.classroom.image) } alt="Classroom"/>
                                     </div>
                                     <table className="results-alt">
-                                        <tr>
-                                            <th>Namn</th>
-                                            <td>{ this.state.classroom.name }</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Typ</th>
-                                            <td>{ this.state.classroom.type }</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Hus</th>
-                                            <td>{ this.state.classroom.building }</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Våning</th>
-                                            <td>{ this.state.classroom.level }</td>
-                                        </tr>
+                                        <tbody>
+                                            <tr>
+                                                <th>Namn</th>
+                                                <td>{ this.state.classroom.name }</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Typ</th>
+                                                <td>{ this.state.classroom.type }</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Hus</th>
+                                                <td>{ this.state.classroom.building }</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Våning</th>
+                                                <td>{ this.state.classroom.level }</td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                                 :

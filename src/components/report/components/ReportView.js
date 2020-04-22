@@ -12,7 +12,7 @@ class ReportView extends Component {
         super(props);
         this.state = {
             id: this.props.id,
-            report: {}
+            report: null
         };
     }
 
@@ -24,14 +24,18 @@ class ReportView extends Component {
         let res = db.fetchWhere("report", "report.id", this.state.id);
 
         res.then((data) => {
-            this.setState({
-                report: data
-            });
+            if (data) {
+                this.setState({
+                    report: data
+                });
+            } else {
+                utils.redirect(this, "/");
+            }
         });
     }
 
     render() {
-        return (
+        return this.state.report && (
             <div className="single-column">
                 <h2 className="center margin">
                     { icon.get("Maintenance") }<br />
@@ -48,8 +52,8 @@ class ReportView extends Component {
                         <td>{ this.state.report.device_id ? this.state.report.device_brand + " " + this.state.report.device_model : "Allmänt" }</td>
                     </tr>
                     <tr>
-                        <th>Meddeland</th>
-                        <td>{ this.state.report.message }</td>
+                        <th>Meddelande</th>
+                        <td className={ this.state.report.message.length > 100 ? "left" : null }>{ this.state.report.message }</td>
                     </tr>
                     <tr>
                         <th>Åtgärdning</th>

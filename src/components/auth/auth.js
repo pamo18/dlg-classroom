@@ -22,7 +22,7 @@ export function isAdmin() {
     try {
         const person = JSON.parse(localStorage.getItem("person"));
 
-        return person.level === "admin";
+        return person ? person.level === "admin" : false;
     } catch(err) {
         console.log(err);
         return false

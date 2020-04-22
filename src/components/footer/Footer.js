@@ -13,7 +13,7 @@ class Footer extends Component {
     render() {
         return (
             <footer className="site-footer">
-                <div className="copyright">Copyright 2019 Paul Moreland</div>
+                <div className="copyright">&copy; 2020 Paul Moreland, Pamosystems</div>
                 <Navbar />
             </footer>
         );

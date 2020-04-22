@@ -18,7 +18,8 @@ class Register extends Component {
             password: "",
             hidden: true,
             button: true,
-            strength: 0
+            strength: 0,
+            invalid: null
         };
     }
 
@@ -53,9 +54,23 @@ class Register extends Component {
             "password": data.get("password")
         };
 
-        let res = db.register(person);
+        let checkExists = db.fetchAllWhere("person", "email", person.email);
 
-        res.then(utils.reload(this, "/login"));
+        checkExists.then((data) => {
+            if (data.length > 0) {
+                this.setState({
+                    invalid: (
+                        <p className="center invalid">
+                            Epost kontot finns redan. Du kan återställa lösenordet från Logga in sidan.
+                        </p>
+                    )
+                });
+            } else {
+                let res = db.register(person);
+
+                res.then(utils.reload(this, "/login"));
+            }
+        });
     }
 
     onPasswordChange(e) {
@@ -95,7 +110,6 @@ class Register extends Component {
 
                             <label className="form-label">Avdelning
                                 <select className="form-input" type="text" name="department" required>
-                                    <option disable selected>Välj</option>
                                     {
                                         this.state.departments.map(function(row) {
                                             let department = row.department;
@@ -138,6 +152,7 @@ class Register extends Component {
                             </label><br />
 
                             <input className="button center-margin" type="submit" name="register" value="Registrera" />
+                            { this.state.invalid }
                         </form>
                     </article>
                 </div>

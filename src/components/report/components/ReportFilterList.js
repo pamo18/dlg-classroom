@@ -85,7 +85,7 @@ class ReportFilterList extends Component {
         return (
             <div className="report-log">
                 <div className="column-heading table-heading">
-                    <h2 class="center">{ this.state.title }: { this.state.table.body.length }st </h2>
+                    <h2 className="center">{ this.state.title }: { this.state.table.body.length }st </h2>
                 </div>
 
                 { this.state.data.length > 0

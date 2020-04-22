@@ -63,8 +63,7 @@ table.results-alt tr:hover {
 
 table.results td,
 table.results-alt td {
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 8px;
     word-wrap: break-word;
     font-size: 1em;
 }
@@ -151,9 +150,9 @@ table.results-card td {
 }
 
 table.results-card td figure.icon-text {
-    width: 125px;
-    margin-left: 2rem;
-    margin-right: 2rem;
+    width: 150px;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 table.results-card td:first-child {

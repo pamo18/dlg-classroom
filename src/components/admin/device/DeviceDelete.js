@@ -77,25 +77,20 @@ class DeviceDelete extends Component {
     render() {
         return (
             <article>
-                <h2 className="center">Välj apparat att radera</h2>
+                <h2 className="center">{ this.state.title }</h2>
                 <form action="/delete" className="form-register" onSubmit={this.deleteDevice}>
                     <select className="form-input" type="text" name="fullname" required onChange={ (e) => this.getDevice(e.target.value) }>
-                        <option disabled selected>Klicka för att välja</option>
+                        <option disabled selected>Välj här</option>
                             { this.state.deviceGroups }
                     </select>
                     { this.state.device
                         ?
                         <div>
-                            <h2 class="center">{ this.state.title }</h2>
                             <input className="form-input" type="hidden" name="id" required value={ this.state.device.id } />
-
-                            <label className="form-label">Namn
-                                <input className="form-input" type="text" name="name" required value={ this.state.device.name } />
-                            </label>
 
                             <label className="form-label check-label">
                                 <input className="check-input" type="checkbox" name="confirm" required />
-                                Radera klassrummet från systemet?
+                                Radera utrustning från systemet?
                             </label><br />
 
                             <input className="button center-margin" type="submit" name="delete" value="Radera" />

@@ -77,21 +77,16 @@ class ClassroomDelete extends Component {
     render() {
         return (
             <article>
-                <h2 className="center">Välj klassrum att radera</h2>
+                <h2 className="center">{ this.state.title }</h2>
                 <form action="/delete" className="form-register" onSubmit={ this.deleteClassroom }>
                     <select className="form-input" type="text" name="name" required onChange={ (e) => this.getClassroom(e.target.value) }>
-                        <option disabled selected>Klicka här för att välja Klassrum</option>
+                        <option disabled selected>Välj här</option>
                         { this.state.classroomGroups }
                     </select>
                     { this.state.classroom
                         ?
                         <div>
-                            <h2 className="center">{ this.state.title }</h2>
                             <input className="form-input" type="hidden" name="id" required value={ this.state.classroom.id } />
-
-                            <label className="form-label">Namn
-                                <input className="form-input" type="text" name="name" required readonly value={ this.state.classroom.name } />
-                            </label>
 
                             <label className="form-label check-label">
                                 <input className="check-input" type="checkbox" name="confirm" required />

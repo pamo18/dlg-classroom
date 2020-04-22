@@ -21,6 +21,7 @@ import ReportView from './report/ReportView.js';
 import ReportUpdate from './report/ReportUpdate.js';
 import ReportDelete from './report/ReportDelete.js';
 import PersonDelete from './person/PersonDelete.js';
+import PersonLevel from './person/PersonLevel.js';
 
 class Admin extends Component {
     constructor(props) {
@@ -201,6 +202,9 @@ class Admin extends Component {
             case (admin === "delete"):
                 view = <PersonDelete id={id} />;
                 break;
+            case (admin === "level"):
+                view = <PersonLevel id={id} />;
+                break;
             default:
                 return;
         }
@@ -349,6 +353,7 @@ class Admin extends Component {
                                 <figcaption>
                                     <div className="control-icon">
                                         { icon.get("Delete", () => { utils.redirect(this, "/admin/person/delete") }, selected === "person" && admin === "delete") }
+                                        { icon.get("Level", () => { utils.redirect(this, "/admin/person/level") }, selected === "person" && admin === "level") }
                                     </div>
                                 </figcaption>
                             </figure>

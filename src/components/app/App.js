@@ -87,7 +87,7 @@ class App extends Component {
                                     <PrivateRoute exact path="/classroom" component={Classroom} />
                                     <PrivateRoute exact path="/report" component={Report} />
                                     <PrivateRoute exact path="/report/list" component={ReportListView} />
-                                    <PrivateRoute exact path="/report/page" component={ReportPageView} />
+                                    <PrivateRoute exact path="/report/page/:id?/:itemGroup?/:itemid?" component={ReportPageView} />
                                     <AdminRoute exact path="/admin/:selected?/:admin?/:id?" component={Admin} save={this.saveState} restore={this.restoreState} />
                                 </Switch>
                             </div>

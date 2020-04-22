@@ -258,7 +258,7 @@ class Home extends Component {
 
                         { this.state.classroomDevicesTable.body.length > 0
                             ?
-                            <h3 class="center">{ `Antal utrustning: ${ this.state.classroomDevicesTable.body.length}` }</h3>
+                            <h3 className="center">{ `Antal utrustning: ${ this.state.classroomDevicesTable.body.length}` }</h3>
                             :
                             null
                         }

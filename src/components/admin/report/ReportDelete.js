@@ -78,21 +78,16 @@ class ReportDelete extends Component {
     render() {
         return (
             <article>
-                <h2 className="center">Välj felanmälning att radera</h2>
+                <h2 className="center">{ this.state.title }</h2>
                 <form action="/delete" className="form-register" onSubmit={ this.deleteReport }>
                     <select className="form-input" type="text" name="name" required onChange={ (e) => this.getReport(e.target.value) }>
-                        <option disabled selected>Klicka här</option>
+                        <option disabled selected>Välj här</option>
                         { this.state.reportGroups }
                     </select>
                     { this.state.report
                         ?
                         <div>
-                            <h2 className="center">{ this.state.title }</h2>
                             <input className="form-input" type="hidden" name="id" required value={ this.state.report.id } />
-
-                            <label className="form-label">Titel
-                                <input className="form-input" type="text" name="name" readonly value={ this.state.report.name } />
-                            </label>
 
                             <label className="form-label check-label">
                                 <input className="check-input" type="checkbox" name="confirm" required />

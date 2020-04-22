@@ -13,17 +13,27 @@ class ReportPageView extends Component {
         super(props);
         this.state = {
             title: "Felanmälningar",
-            id: this.props.location.state.id,
-            itemGroup: this.props.location.state.itemGroup || "",
-            itemid: this.props.location.state.itemid || "",
+            id: this.props.match.params.id || "",
+            itemGroup: this.props.match.params.itemGroup || "",
+            itemid: this.props.match.params.itemid || "",
             itemData: null
         };
     }
 
     componentDidMount() {
-        let data = ItemData(this.state.itemGroup, this.state.itemid);
+        let id = this.state.id || (
+            this.props.location.state && this.props.location.state.id
+        );
+        let itemGroup = this.state.itemGroup || (
+            this.props.location.state && this.props.location.state.itemGroup
+        );
+        let itemid = this.state.itemid || (
+            this.props.location.state && this.props.location.state.itemid
+        );
 
-        data.then(itemData => this.setState({ itemData }))
+        let data = ItemData(itemGroup, itemid);
+
+        data && data.then(itemData => this.setState({ id, itemGroup, itemid, itemData }));
     }
 
     componentWillUnmount() {

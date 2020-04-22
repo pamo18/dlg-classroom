@@ -144,7 +144,6 @@ class PersonUpdate extends Component {
 
                             <label className="form-label">Avdelning
                                 <select className="form-input" type="text" name="department" required>
-                                    <option disable selected>Välj</option>
                                     {
                                         this.state.departments.map((row) => {
                                             let department = row.department;
@@ -160,12 +159,12 @@ class PersonUpdate extends Component {
                                 <input className="form-input" type="email" name="email" value={ this.state.person.email } required placeholder="abc@lidkoping.se" onChange={ this.inputHandler } />
                             </label>
 
-                            <label className="form-label">Gammla Lösenordet
+                            <label className="form-label">Gamla Lösenordet
                                 <input
                                     className="form-input password"
                                     type="password"
                                     name="old-password"
-                                    placeholder="Ditt gammla lösenord"
+                                    placeholder="Ditt gamla lösenord"
                                     required={ this.state.changePass ? "required" : false }
                                 />
                             </label>

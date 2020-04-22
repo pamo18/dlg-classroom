@@ -9,18 +9,18 @@ import utils from './utils.js';
 const table = {
     deviceHead: function(selection) {
         let rows = {
-            "category": (w) => <th width={w}>Kategori</th>,
-            "category-caption-simple": (w) => <th width={w}>Kategori</th>,
-            "category-caption-large": (w) => <th width={w}>Kategori</th>,
-            "name": (w) => <th width={w}>Namn</th>,
-            "brand": (w) => <th width={w}>Märke</th>,
-            "model": (w) => <th width={w}>Modell</th>,
-            "serial": (w) => <th width={w}>Serial Nummer</th>,
-            "purchased": (w) => <th width={w}>Köpt</th>,
-            "price": (w) => <th width={w}>Pris</th>,
-            "link": (w) => <th width={w}>Länk URL</th>,
-            "classroom": (w) => <th width={w}>Klassrum</th>,
-            "manage": (w) => <th width={w}>Hantera</th>
+            "category": (w) => <th key="head-category" width={w}>Kategori</th>,
+            "category-caption-simple": (w) => <th key="head-category-caption-simple" width={w}>Kategori</th>,
+            "category-caption-large": (w) => <th key="head-category-caption-large" width={w}>Kategori</th>,
+            "name": (w) => <th key="head-name" width={w}>Namn</th>,
+            "brand": (w) => <th key="head-brand" width={w}>Märke</th>,
+            "model": (w) => <th key="head-catmodelegory" width={w}>Modell</th>,
+            "serial": (w) => <th key="head-serial" width={w}>Serial Nummer</th>,
+            "purchased": (w) => <th key="head-purchased" width={w}>Köpt</th>,
+            "price": (w) => <th key="head-price" width={w}>Pris</th>,
+            "link": (w) => <th key="head-link" width={w}>Länk URL</th>,
+            "classroom": (w) => <th key="head-classroom" width={w}>Klassrum</th>,
+            "manage": (w) => <th key="head-manage" width={w}>Hantera</th>
         }
 
         return [
@@ -36,21 +36,22 @@ const table = {
     },
     deviceBody: function(device, selection, actions = null) {
         let rows = {
-            "category": <td data-title="Kategori">{ icon.get(device.category)}</td>,
+            "category": <td key="body-category" data-title="Kategori">{ icon.get(device.category)}</td>,
             "category-caption-simple-large": [
-                <td data-title="Kategori">
+                <td key="body-category-caption-simple-large" data-title="Kategori">
                     <figure className="icon-text">
                         { icon.get(`${device.category}-large`)}
                         <figcaption>
                             <span className="caption-text">
-                                { `${ device.category }` }
+                                { `${ device.category }` }<br />
+                                { `${ device.brand } ${ device.model }` }
                             </span>
                         </figcaption>
                     </figure>
                 </td>
             ],
             "category-caption-large": [
-                <td data-title="Kategori">
+                <td key="body-category-caption-large" data-title="Kategori">
                     <figure className="icon-text">
                         { icon.get(`${device.category}-large`)}
                         <figcaption>
@@ -61,15 +62,15 @@ const table = {
                     </figure>
                 </td>
             ],
-            "name": <td data-title="Namn">{ `${ device.brand } ${ device.model }` }</td>,
-            "brand": <td data-title="Märke">{ device.brand }</td>,
-            "model": <td data-title="Modell">{ device.model }</td>,
-            "serial": <td data-title="Serial">{ device.serialnum }</td>,
-            "purchased": <td data-title="Köpt">{ new Date(device.purchased).toISOString().substring(0, 10) }</td>,
-            "classroom": <td data-title="Klassrum">{ device.classroom_name || "-" }</td>,
-            "price": <td data-title="Pris">{ device.price }:-</td>,
-            "link": <td data-title="Länk"><a href={ device.url } target="_blank">Till produktsida</a></td>,
-            "manage": <td data-title="Hantera">{ actions }</td>
+            "name": <td key="body-name" data-title="Namn">{ `${ device.brand } ${ device.model }` }</td>,
+            "brand": <td key="body-brand" data-title="Märke">{ device.brand }</td>,
+            "model": <td key="body-model" data-title="Modell">{ device.model }</td>,
+            "serial": <td key="body-serial" data-title="Serial">{ device.serialnum }</td>,
+            "purchased": <td key="body-purchased" data-title="Köpt">{ new Date(device.purchased).toISOString().substring(0, 10) }</td>,
+            "classroom": <td key="body-classroom" data-title="Klassrum">{ device.classroom_name || "-" }</td>,
+            "price": <td key="body-price" data-title="Pris">{ device.price }:-</td>,
+            "link": <td key="body-link" data-title="Länk"><a href={ device.url } target="_blank">Till produktsida</a></td>,
+            "manage": <td key="body-manage" data-title="Hantera">{ actions }</td>
         }
 
 
@@ -86,13 +87,13 @@ const table = {
     },
     classroomHead: function(selection) {
         let rows = {
-            "name": (w) => <th width={w}>Namn</th>,
-            "name-caption-large": (w) => <th width={w}>Namn</th>,
-            "category": (w) => <th width={w}>Kategori</th>,
-            "type": (w) => <th width={w}>Typ</th>,
-            "level": (w) => <th width={w}>Våning</th>,
-            "building": (w) => <th width={w}>Hus</th>,
-            "manage": (w) => <th width={w}>Hantera</th>
+            "name": (w) => <th key="head-name" width={w}>Namn</th>,
+            "name-caption-large": (w) => <th key="head-name-caption-large" width={w}>Namn</th>,
+            "category": (w) => <th key="head-category" width={w}>Kategori</th>,
+            "type": (w) => <th key="head-type" width={w}>Typ</th>,
+            "level": (w) => <th key="head-level" width={w}>Våning</th>,
+            "building": (w) => <th key="head-building" width={w}>Hus</th>,
+            "manage": (w) => <th key="head-manage" width={w}>Hantera</th>
         }
 
         return [
@@ -108,9 +109,9 @@ const table = {
     },
     classroomBody: function(classroom, selection, actions = null) {
         let rows = {
-            "name": <td data-title="Namn">{ classroom.name }</td>,
+            "name": <td key="body-name" data-title="Namn">{ classroom.name }</td>,
             "name-caption-large": [
-                <td data-title="Namn">
+                <td key="body-name-caption-large" data-title="Namn">
                     <figure className="icon-text">
                         { icon.get("Classroom-large")}
                         <figcaption>
@@ -121,11 +122,11 @@ const table = {
                     </figure>
                 </td>
             ],
-            "category": <td data-title="Kategori">{ icon.get("Build")}</td>,
-            "type": <td data-title="Typ">{ classroom.type }</td>,
-            "level": <td data-title="Våning">{ classroom.level }</td>,
-            "building": <td data-title="Hus">{ classroom.building }</td>,
-            "manage": <td data-title="Hantera">{ actions }</td>
+            "category": <td key="body-category" data-title="Kategori">{ icon.get("Build")}</td>,
+            "type": <td key="body-type" data-title="Typ">{ classroom.type }</td>,
+            "level": <td key="body-level" data-title="Våning">{ classroom.level }</td>,
+            "building": <td key="body-building" data-title="Hus">{ classroom.building }</td>,
+            "manage": <td key="body-manage" data-title="Hantera">{ actions }</td>
         };
 
         return [
@@ -140,17 +141,17 @@ const table = {
     },
     reportHead: function(selection) {
         let rows = {
-            "item": (w) => <th width={w}>Vad</th>,
-            "item-category": (w) => <th width={w}>Vad</th>,
-            "item-category-simple": (w) => <th width={w}>Vad</th>,
-            "title": (w) => <th width={w}>Titel</th>,
-            "message": (w) => <th width={w}>Meddeland</th>,
-            "classroom": (w) => <th width={w}>Klassrum</th>,
-            "created": (w) => <th width={w}>Skapad</th>,
-            "action": (w) => <th width={w}>Åtgärdning</th>,
-            "solved": (w) => <th width={w}>Åtgärdat</th>,
-            "person": (w) => <th width={w}>Person</th>,
-            "manage": (w) => <th width={w}>Hantera</th>
+            "item": (w) => <th key="head-item" width={w}>Vad</th>,
+            "item-category": (w) => <th key="head-item-category" width={w}>Vad</th>,
+            "item-category-simple": (w) => <th key="head-item-category-simple" width={w}>Vad</th>,
+            "title": (w) => <th key="head-title" width={w}>Titel</th>,
+            "message": (w) => <th key="head-message" width={w}>Meddeland</th>,
+            "classroom": (w) => <th key="head-classroom" width={w}>Klassrum</th>,
+            "created": (w) => <th key="head-created" width={w}>Skapad</th>,
+            "action": (w) => <th key="head-action" width={w}>Åtgärdning</th>,
+            "solved": (w) => <th key="head-solved" width={w}>Åtgärdat</th>,
+            "person": (w) => <th key="head-person" width={w}>Person</th>,
+            "manage": (w) => <th key="head-manage" width={w}>Hantera</th>
         };
 
         return [
@@ -167,7 +168,7 @@ const table = {
     reportBody: function(report, selection, that, actions = null) {
         let rows = {
             "item": [
-                <td data-title="Vad">
+                <td key="body-item" data-title="Vad">
                     <figure className="icon-text">
                         { icon.get("View", () => utils.redirect(that, `/${ report.item_group }`, { id: report.item_id })) }
                         <figcaption>
@@ -179,7 +180,7 @@ const table = {
                 </td>
             ],
             "item-category": [
-                <td data-title="Vad">
+                <td key="body-item-category" data-title="Vad">
                     <figure className="icon-text">
                         { icon.get(report.device_category || "Build")}
                         <figcaption>
@@ -191,7 +192,7 @@ const table = {
                 </td>
             ],
             "item-category-simple": [
-                <td data-title="Vad">
+                <td key="body-item-category-simple" data-title="Vad">
                     <figure className="icon-text">
                         { icon.get(report.device_category || "Build")}
                         <figcaption>
@@ -202,10 +203,10 @@ const table = {
                     </figure>
                 </td>
             ],
-            "title": <td data-title="Titel">{ report.name }</td>,
-            "message": <td data-title="Meddelande">{ report.message }</td>,
+            "title": <td key="body-title" data-title="Titel">{ report.name }</td>,
+            "message": <td key="body-message" data-title="Meddelande">{ report.message }</td>,
             "classroom": [
-                <td data-title="Klassrum">
+                <td key="body-classroom" data-title="Klassrum">
                     <figure className="icon-text">
                         { icon.get("View", () => utils.redirect(that, `/classroom`, { id: report.classroom_id })) }
                         <figcaption>
@@ -216,11 +217,11 @@ const table = {
                     </figure>
                 </td>
             ],
-            "created": <td data-title="Skapad">{ report.created ? utils.convertSqlDate(report.created).substring(0, 10) : "-" }</td>,
-            "action": <td data-title="Åtgärdning">{ report.action || "-" }</td>,
-            "solved": <td data-title="Åtgärdat">{ report.solved ? utils.convertSqlDate(report.solved).substring(0, 10) : "-" }</td>,
-            "person": <td data-title="Person">{ report.person }</td>,
-            "manage": <td data-title="Hantera">{ actions }</td>
+            "created": <td key="body-created" data-title="Skapad">{ report.created ? utils.convertSqlDate(report.created).substring(0, 10) : "-" }</td>,
+            "action": <td key="body-action" data-title="Åtgärdning">{ report.action || "-" }</td>,
+            "solved": <td key="body-solved" data-title="Åtgärdat">{ report.solved ? utils.convertSqlDate(report.solved).substring(0, 10) : "-" }</td>,
+            "person": <td key="body-person" data-title="Person">{ report.person }</td>,
+            "manage": <td key="body-manage" data-title="Hantera">{ actions }</td>
         };
 
         return [

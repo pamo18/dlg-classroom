@@ -6,20 +6,18 @@ import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
 import utils from '../../../models/utils.js';
 import form from '../../../models/form.js';
-import { AuthContext } from "../../auth/auth.js";
 import '../Admin.css';
 
-class PersonDelete extends Component {
-    static contextType = AuthContext;
+class PersonLevel extends Component {
     constructor(props) {
         super(props);
         this.getPerson = this.getPerson.bind(this);
-        this.deletePerson = this.deletePerson.bind(this);
+        this.toggleAdmin = this.toggleAdmin.bind(this);
         this.state = {
-            title: "Radera Person",
+            title: "Växla Behörighet",
             personData: {},
             personGroups: [],
-            personTemplate: "firstname,lastname",
+            personTemplate: "firstname,lastname,(level)",
             person: null
         };
     }
@@ -54,7 +52,8 @@ class PersonDelete extends Component {
             this.setState({
                 person: {
                     id: res.id,
-                    name: name
+                    name: name,
+                    level: res.level
                 }
             });
         } catch(err) {
@@ -62,31 +61,28 @@ class PersonDelete extends Component {
         }
     }
 
-    deletePerson(e) {
+    toggleAdmin(e) {
         e.preventDefault();
-        const { setAuth } = this.context;
-        const person = JSON.parse(localStorage.getItem("person"));
+        const person = this.state.person;
         const data = new FormData(e.target);
         let id = data.get("id");
 
-        let res = db.delete("person", id);
+        let admin = {
+            "level": person.level === "user" ? "admin" : "user"
+        };
 
-        if (id == person.id) {
-            localStorage.clear();
-            setAuth(null, null);
-            return utils.redirect(this, "/login");
-        } else {
-            return res.then(utils.reload(this));
-        }
+        let res = db.update("person", id, admin);
+
+        return res.then(utils.reload(this));
     }
 
     render() {
         return (
             <article>
                 <h2 className="center">{ this.state.title }</h2>
-                <form action="/delete" className="form-register" onSubmit={this.deletePerson}>
+                <form className="form-register" onSubmit={ this.toggleAdmin }>
                     <select className="form-input" type="text" name="fullname" required onChange={ (e) => this.getPerson(e.target.value) }>
-                        <option disabled selected>Välj här</option>
+                        <option disabled selected>Klicka för att välja</option>
                             { this.state.personGroups }
                     </select>
                     { this.state.person
@@ -95,12 +91,11 @@ class PersonDelete extends Component {
                             <input className="form-input" type="hidden" name="id" required value={ this.state.person.id } />
 
                             <label className="form-label check-label">
-                                OBS Alla raporter skapade av { this.state.person.name } kommer att försvinna också.<br /><br />
                                 <input className="check-input" type="checkbox" name="confirm" required />
-                                Radera personen från systemet?
+                                Växla persons behörighet från admin till user eller user till admin?
                             </label><br />
 
-                            <input className="button center-margin" type="submit" name="delete" value="Radera" />
+                            <input className="button center-margin" type="submit" name="delete" value="Växla" />
                         </div>
                         :
                         null
@@ -111,4 +106,4 @@ class PersonDelete extends Component {
     }
 }
 
-export default withRouter(PersonDelete);
+export default withRouter(PersonLevel);
