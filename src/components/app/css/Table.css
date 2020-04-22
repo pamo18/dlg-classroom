@@ -126,7 +126,7 @@ table.results-card {
 table.results-card tbody {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
 }

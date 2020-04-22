@@ -62,7 +62,7 @@ class ClassroomView extends Component {
             let view = () => utils.redirect(this, "/classroom", {id: classroom.id});
             let edit = () => utils.redirect(this, `/admin/classroom/edit/${ classroom.id }`);
             let del = () => utils.redirect(this, `/admin/classroom/delete/${ classroom.id }`);
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemData: classroom });
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: classroom.id });
             let reportStatus = await db.reportCheck("classroom", classroom.id);
             let actions = [
                 icon.reportStatus(reportList, reportStatus),

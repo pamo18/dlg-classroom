@@ -6,7 +6,7 @@ import icon from '../../../models/icon.js';
 import table from '../../../models/table.js';
 import '../Report.css';
 
-class ReportItem extends Component {
+class ItemView extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,7 +44,7 @@ class ReportItem extends Component {
             case (itemGroup === "classroom"):
                 selection = this.state.classroomSelection;
                 view = () => utils.redirect(this, "/classroom", { id: itemData.id });
-                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemData: itemData });
+                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: itemData.id });
                 reportStatus = db.reportCheck("classroom", itemData.id);
 
                 reportStatus.then((status) => {
@@ -63,7 +63,7 @@ class ReportItem extends Component {
             case (itemGroup === "device"):
                 selection = this.state.deviceSelection;
                 view = () => utils.redirect(this, "/device", { id: itemData.id });
-                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemData: itemData });
+                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: itemData.id });
                 reportStatus = db.reportCheck("device", itemData.id);
 
                 reportStatus.then((status) => {
@@ -95,4 +95,4 @@ class ReportItem extends Component {
     }
 }
 
-export default withRouter(ReportItem);
+export default withRouter(ItemView);

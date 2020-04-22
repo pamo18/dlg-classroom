@@ -27,6 +27,10 @@ class Register extends Component {
         this.departments();
     }
 
+    componentWillUnmount() {
+        window.scrollTo(0, 0);
+    }
+
     departments() {
         let res = db.fetchAll("person/department");
 
@@ -114,7 +118,7 @@ class Register extends Component {
                                     name="password"
                                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,}"
                                     value={this.state.password}
-                                    placeholder="Ett stark lösenord"
+                                    placeholder="Ett starkt lösenord"
                                     onChange={this.onPasswordChange}
                                     required
                                 />
@@ -124,7 +128,7 @@ class Register extends Component {
                                 </p>
                             </label>
 
-                            <label className="form-label">Lösenord styrke
+                            <label className="form-label">Lösenord styrka
                                 <meter className="form-meter" min="0" low="4" optimum="9" high="8" max="10" value={this.state.strength}></meter>
                             </label>
 

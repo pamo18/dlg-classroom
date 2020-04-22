@@ -49,7 +49,7 @@ class ReportFilterList extends Component {
                 report,
                 selection,
                 this,
-                this.getActions(this.state.actions, report.id)
+                this.getActions(this.state.actions, report)
             );
         });
 
@@ -61,10 +61,14 @@ class ReportFilterList extends Component {
         });
     }
 
-    getActions(actionList, id) {
-        let view = () => utils.redirect(this, "/report/page", { id: id });
-        let edit = () => utils.redirect(this, `/admin/report/edit/${ id }`, {});
-        let del = () => utils.redirect(this, `/admin/report/delete/${ id }`, {});
+    getActions(actionList, report) {
+        let view = () => utils.redirect(this, "/report/page", {
+            id: report.id,
+            itemGroup: report.item_group,
+            itemid: report.item_id
+        });
+        let edit = () => utils.redirect(this, `/admin/report/edit/${ report.id }`, {});
+        let del = () => utils.redirect(this, `/admin/report/delete/${ report.id }`, {});
 
         let allActions = {
             view: icon.get("View", view),

@@ -267,7 +267,7 @@ class Admin extends Component {
             <main>
                 <div className="left-column">
                     <div className="column-heading left-heading">
-                        <h2>Kontrollpanel</h2>
+                        <h2>Admin Kontroll</h2>
                     </div>
                     <aside className="panel admin-panel">
                         <div className={`controller ${ this.state.toggle.classroom }`}>

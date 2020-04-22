@@ -62,7 +62,7 @@ class DeviceView extends Component {
             let view = () => utils.redirect(this, "/device", { id: device.id });
             let edit = () => utils.redirect(this, `/admin/device/edit/${ device.id }`, {});
             let del = () => utils.redirect(this, `/admin/device/delete/${ device.id }`, {});
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemData: device });
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
             let reportStatus = await db.reportCheck("device", device.id);
             let actions = [
                 icon.reportStatus(reportList, reportStatus),

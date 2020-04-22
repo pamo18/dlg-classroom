@@ -14,6 +14,10 @@ class Forgot extends Component {
         };
     }
 
+    componentWillUnmount() {
+        window.scrollTo(0, 0);
+    }
+
     registerSubmit(e) {
         e.preventDefault();
         const data = new FormData(e.target);

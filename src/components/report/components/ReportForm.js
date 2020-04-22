@@ -11,7 +11,7 @@ class ReportForm extends Component {
         this.formHandler = this.formHandler.bind(this);
         this.state = {
             itemGroup: this.props.itemGroup,
-            itemData: this.props.itemData,
+            itemid: this.props.itemid,
             callback: this.props.callback,
             name: "",
             message: ""
@@ -30,25 +30,25 @@ class ReportForm extends Component {
                 let classroom = {
                     name:  data.get("name"),
                     item_group: "classroom",
-                    item_id: this.state.itemData.id,
+                    item_id: this.state.itemid,
                     message: data.get("message"),
                     person_id: person.id
                 };
 
                 res = db.insert("report", classroom);
-                res.then(() => this.state.callback("classroom", this.state.itemData.id));
+                res.then(() => this.state.callback("classroom", this.state.itemid));
                 break;
             case (itemGroup === "device"):
                 let device = {
                     name:  data.get("name"),
                     item_group: "device",
-                    item_id: this.state.itemData.id,
+                    item_id: this.state.itemid,
                     message: data.get("message"),
                     person_id: person.id
                 };
 
                 res = db.insert("report", device);
-                res.then(() => this.state.callback("device", this.state.itemData.id));
+                res.then(() => this.state.callback("device", this.state.itemid));
                 break;
             default:
                 return;

@@ -2,7 +2,8 @@
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
-import ReportItem from './components/ReportItem.js';
+import ItemData from './components/ItemData.js';
+import ItemView from './components/ItemView.js';
 import ReportForm from './components/ReportForm.js';
 import ReportItemList from './components/ReportItemList.js';
 import './Report.css';
@@ -14,40 +15,47 @@ class Report extends Component {
         this.state = {
             title: "Felanmäla",
             itemGroup: this.props.location.state.itemGroup || "",
-            itemData: this.props.location.state.itemData || {}
+            itemid: this.props.location.state.itemid || "",
+            itemData: null
         };
+    }
+
+    componentDidMount() {
+        let data = ItemData(this.state.itemGroup, this.state.itemid);
+
+        data.then(itemData => this.setState({ itemData }))
     }
 
     componentWillUnmount() {
         window.scrollTo(0, 0);
     }
 
-    listHandler(itemGroup, itemData) {
-        this.list.loadReports(itemGroup, itemData);
+    listHandler(itemGroup, itemid) {
+        this.list.loadReports(itemGroup, itemid);
     }
 
     render() {
-        return (
+        return this.state.itemData && (
             <div className="single-column">
                 <div className="column-heading">
                     <h1>{ this.state.title }</h1>
                 </div>
                 <article>
-                    <ReportItem
+                    <ItemView
                         itemGroup={ this.state.itemGroup }
                         itemData={ this.state.itemData }
                     />
 
                     <ReportForm
                         itemGroup={ this.state.itemGroup }
-                        itemData={ this.state.itemData }
+                        itemid={ this.state.itemid }
                         callback={ this.listHandler }
                     />
 
                     <ReportItemList
                         onRef={ref => (this.list = ref)}
                         itemGroup={ this.state.itemGroup }
-                        itemData={ this.state.itemData }
+                        itemid={ this.state.itemData.id }
                     />
                 </article>
             </div>

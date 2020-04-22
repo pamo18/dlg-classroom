@@ -65,7 +65,7 @@ class ReportView extends Component {
         let selection = this.state.selection;
 
         let reportRows = this.state.data.map((report) => {
-            let view = () => utils.redirect(this, "/report/page", { id: report.id, itemGroup: report.item_group, itemData: report });
+            let view = () => utils.redirect(this, "/report/page", { id: report.id, itemGroup: report.item_group, itemid: report.item_id });
             let edit = () => utils.redirect(this, `/admin/report/edit/${ report.id }`, {});
             let del = () => utils.redirect(this, `/admin/report/delete/${ report.id }`, {});
             let actions = [

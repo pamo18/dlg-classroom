@@ -114,15 +114,9 @@ const db = {
             console.error(err);
         }
     },
-    fetchAllWhere: async function(table, column1, value1, column2 = null, value2 = null) {
-        let res;
-
+    fetchAllWhere: async function(table, column, value) {
         try {
-            if (column2 && value2) {
-                res = await fetch(`${api}/${table}/view/${column1}/${value1}/${column2}/${value2}`);
-            } else {
-                res = await fetch(`${api}/${table}/view/${column1}/${value1}`);
-            }
+            let res = await fetch(`${api}/${table}/view/${column}/${value}`);
 
             return await res.json();
         } catch(err) {

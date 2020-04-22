@@ -23,6 +23,10 @@ class Login extends Component {
         };
     }
 
+    componentWillUnmount() {
+        window.scrollTo(0, 0);
+    }
+
     registerSubmit(e) {
         e.preventDefault();
         const data = new FormData(e.target);
@@ -98,14 +102,14 @@ class Login extends Component {
                                         className="form-input password"
                                         type={this.state.hidden ? "password" : "text"}
                                         name="password"
-                                        placeholder="Din lösenord"
+                                        placeholder="Ditt lösenord"
                                         required
                                     />
                                     <p><input type="checkbox" className="show-password" onClick={this.toggleShowPassword} /> {this.state.button ? "Visa" : "Dölja"} Lösenord</p>
                                 </label>
                                 <div>
                                     <input className="button center-margin" type="submit" name="login" value="Logga in" />
-                                    <p><button name="forgot" className="button forgot center-margin" onClick={ () => utils.redirect(this, "/forgot") }>Glömt Lösnord?</button></p>
+                                    <p><button name="forgot" className="button forgot center-margin" onClick={ () => utils.redirect(this, "/forgot") }>Glömt Lösenord?</button></p>
                                 </div>
                                 { this.state.invalid }
                             </form>

@@ -2,7 +2,8 @@
 
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
-import ReportItem from './components/ReportItem.js';
+import ItemData from './components/ItemData.js';
+import ItemView from './components/ItemView.js';
 import ReportView from './components/ReportView.js';
 import ReportItemList from './components/ReportItemList.js';
 import './Report.css';
@@ -14,8 +15,15 @@ class ReportPageView extends Component {
             title: "Felanmälningar",
             id: this.props.location.state.id,
             itemGroup: this.props.location.state.itemGroup || "",
-            itemData: this.props.location.state.itemData || {}
+            itemid: this.props.location.state.itemid || "",
+            itemData: null
         };
+    }
+
+    componentDidMount() {
+        let data = ItemData(this.state.itemGroup, this.state.itemid);
+
+        data.then(itemData => this.setState({ itemData }))
     }
 
     componentWillUnmount() {
@@ -23,29 +31,26 @@ class ReportPageView extends Component {
     }
 
     render() {
-        return (
+        return this.state.itemData && (
             <div className="single-column">
                 <div className="column-heading">
                     <h1>{ this.state.title }</h1>
                 </div>
                 <article>
-                    <ReportItem
+                    <ItemView
                         itemGroup={ this.state.itemGroup }
                         itemData={ this.state.itemData }
                     />
 
                     <ReportView
                         id={ this.state.id }
-                        itemGroup={ this.state.itemGroup }
-                        itemData={ this.state.itemData }
                     />
 
                     <ReportItemList
                         itemGroup={ this.state.itemGroup }
-                        itemData={ this.state.itemData }
+                        itemid={ this.state.itemData.id }
                     />
                 </article>
-                { this.state.reportList }
             </div>
         );
     }

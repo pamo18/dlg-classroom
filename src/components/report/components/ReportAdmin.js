@@ -8,12 +8,12 @@ function ReportAdmin({
     that: that,
     id: id,
     itemGroup: itemGroup,
-    itemData: itemData
+    itemid: itemid
     }) {
     const { isAuth } = useAuth();
     const { isAdmin } = useAdmin();
 
-    let view = () => utils.redirect(that, "/report/page", { id: id, itemGroup: itemGroup, itemData: itemData }, false);
+    let view = () => utils.redirect(that, "/report/page", { id: id, itemGroup: itemGroup, itemid: itemid }, false);
     let actions = [
         icon.get("View", view)
     ];

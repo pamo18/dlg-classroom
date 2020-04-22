@@ -106,7 +106,8 @@ article {
     margin-bottom: 2rem;
 }
 
-aside {
+aside,
+.left-heading {
     padding-left: 2rem;
 }
 
@@ -159,7 +160,7 @@ article {
 
 .button {
     -webkit-appearance: none;
-    width: 10rem;
+    width: 12rem;
     font-size: 1.5rem;
     padding: 0.6rem;
     -webkit-transition-duration: 0.2s;

@@ -125,72 +125,75 @@ class PersonUpdate extends Component {
         // eslint-disable-next-line
         const { showing } = this.state;
         return (
-            <article>
-            <div>
-                <h2 class="center">{ this.state.title }</h2>
+            <main>
+                <div className="single-column">
+                    <div className="column-heading">
+                        <h1>{ this.state.title }</h1>
+                    </div>
+                    <article>
+                        <form className="form-register" onSubmit={ this.updatePerson }>
+                            <input className="form-input" type="hidden" name="id" required value={ this.state.person.id } />
 
-                <form className="form-register" onSubmit={ this.updatePerson }>
-                    <input className="form-input" type="hidden" name="id" required value={ this.state.person.id } />
+                            <label className="form-label">Förnamn
+                                <input className="form-input" type="text" name="firstname" value={ this.state.person.firstname } required placeholder="Ditt förnamn" onChange={ this.inputHandler } />
+                            </label>
 
-                    <label className="form-label">Förnamn
-                        <input className="form-input" type="text" name="firstname" value={ this.state.person.firstname } required placeholder="Ditt förnamn" onChange={ this.inputHandler } />
-                    </label>
+                            <label className="form-label">Efternamn
+                                <input className="form-input" type="text" name="lastname" value={ this.state.person.lastname } required placeholder="Ditt efternamn" onChange={ this.inputHandler } />
+                            </label>
 
-                    <label className="form-label">Efternamn
-                        <input className="form-input" type="text" name="lastname" value={ this.state.person.lastname } required placeholder="Ditt efternamn" onChange={ this.inputHandler } />
-                    </label>
+                            <label className="form-label">Avdelning
+                                <select className="form-input" type="text" name="department" required>
+                                    <option disable selected>Välj</option>
+                                    {
+                                        this.state.departments.map((row) => {
+                                            let department = row.department;
+                                            return [
+                                                <option key={ department } selected={ this.state.person.department === row.department ? "selected" : null } value={ department }>{ department }</option>
+                                            ]
+                                        })
+                                    }
+                                </select>
+                            </label>
 
-                    <label className="form-label">Avdelning
-                        <select className="form-input" type="text" name="department" required>
-                            <option disable selected>Välj</option>
-                            {
-                                this.state.departments.map((row) => {
-                                    let department = row.department;
-                                    return [
-                                        <option key={ department } selected={ this.state.person.department === row.department ? "selected" : null } value={ department }>{ department }</option>
-                                    ]
-                                })
-                            }
-                        </select>
-                    </label>
+                            <label className="form-label">Epost
+                                <input className="form-input" type="email" name="email" value={ this.state.person.email } required placeholder="abc@lidkoping.se" onChange={ this.inputHandler } />
+                            </label>
 
-                    <label className="form-label">Epost
-                        <input className="form-input" type="email" name="email" value={ this.state.person.email } required placeholder="abc@lidkoping.se" onChange={ this.inputHandler } />
-                    </label>
+                            <label className="form-label">Gammla Lösenordet
+                                <input
+                                    className="form-input password"
+                                    type="password"
+                                    name="old-password"
+                                    placeholder="Ditt gammla lösenord"
+                                    required={ this.state.changePass ? "required" : false }
+                                />
+                            </label>
 
-                    <label className="form-label">Gammal Lösenord
-                        <input
-                            className="form-input password"
-                            type="password"
-                            name="old-password"
-                            placeholder="Din gammla lösenord"
-                            required={ this.state.changePass ? "required" : false }
-                        />
-                    </label>
+                            <label className="form-label">Ny Lösenord: Minst 1 stor bokstäv, 1 siffra, 4+ bokstäver lång.
+                                <input
+                                    className="form-input password"
+                                    type={this.state.hidden ? "password" : "text"}
+                                    name="new-password"
+                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,}"
+                                    value={this.state.password}
+                                    placeholder="Ditt nya lösenord"
+                                    onChange={ this.onPasswordChange }
+                                    required={ this.state.changePass ? "required" : false }
+                                />
+                                <p><input type="checkbox" className="show-password" onClick={ this.toggleShowPassword } /> { this.state.button ? "Visa" : "Dölja" } Lösenord</p>
+                            </label>
 
-                    <label className="form-label">Ny Lösenord: Minst 1 stor bokstäv, 1 siffra, 4+ bokstäver lång.
-                        <input
-                            className="form-input password"
-                            type={this.state.hidden ? "password" : "text"}
-                            name="new-password"
-                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,}"
-                            value={this.state.password}
-                            placeholder="Din nya lösenord"
-                            onChange={ this.onPasswordChange }
-                            required={ this.state.changePass ? "required" : false }
-                        />
-                        <p><input type="checkbox" className="show-password" onClick={ this.toggleShowPassword } /> { this.state.button ? "Visa" : "Dölja" } Lösenord</p>
-                    </label>
+                            <label className="form-label">Lösenord styrka
+                                <meter className="form-meter" min="0" low="4" optimum="9" high="8" max="10" value={ this.state.strength }></meter>
+                            </label><br />
 
-                    <label className="form-label">Lösenord styrke
-                        <meter className="form-meter" min="0" low="4" optimum="9" high="8" max="10" value={ this.state.strength }></meter>
-                    </label><br />
-
-                    <input className="button center-margin" type="submit" name="update" value="Uppdatera" />
-                    { this.state.invalid }
-                </form>
-            </div>
-            </article>
+                            <input className="button center-margin" type="submit" name="update" value="Uppdatera" />
+                            { this.state.invalid }
+                        </form>
+                    </article>
+                </div>
+            </main>
         );
     }
 }

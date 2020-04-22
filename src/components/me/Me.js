@@ -101,7 +101,7 @@ class Me extends Component {
                                     </table>
 
                                     <p>
-                                        <button name="update" className="button center-margin" onClick={ () => utils.redirect(this, "me/update") }>Redigera</button>
+                                        <button name="update" className="button center-margin" onClick={ () => utils.redirect(this, "me/update") }>Ändra Uppgifter</button>
                                     </p>
                                 </div>
                                 :
@@ -110,19 +110,18 @@ class Me extends Component {
                         </div><br />
 
                         <ReportFilterList
-                            title="Felanmälningar Kvar"
+                            title="Aktiva ärenden"
                             filter={ this.state.filter1 }
                             selection={ this.state.selection }
                             actions={ this.state.actions }
                         />
 
                         <ReportFilterList
-                            title="Felanmälningar Klar"
+                            title="Klar"
                             filter={ this.state.filter2 }
                             selection={ this.state.selection }
                             actions={ this.state.actions }
                         />
-
                     </article>
                 </div>
             </main>

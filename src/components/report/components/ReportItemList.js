@@ -22,8 +22,8 @@ class ReportItemList extends Component {
                 head: [],
                 body: []
             },
-            itemGroup: this.props.itemGroup || this.props.location.state.itemGroup,
-            itemData: this.props.itemData || this.props.location.state.itemData,
+            itemGroup: this.props.itemGroup || "",
+            itemid: this.props.itemid || "",
             selection : [
                ["item-category-simple", "10%"],
                ["title", "25%"],
@@ -41,7 +41,7 @@ class ReportItemList extends Component {
         }
 
         try {
-            this.loadReports(this.state.itemGroup, this.state.itemData.id);
+            this.loadReports(this.state.itemGroup, this.state.itemid);
         } catch(err) {
             console.log(err);
         }
@@ -100,13 +100,13 @@ class ReportItemList extends Component {
         let actions;
 
         let unsolvedReportRows = unsolvedReports.map((report) => {
-            actions = (<ReportAdmin that={ this } id={ report.id } itemGroup={ this.state.itemGroup } itemData={ this.state.itemData } />);
+            actions = (<ReportAdmin that={ this } id={ report.id } itemGroup={ this.state.itemGroup } itemid={ this.state.itemid } />);
 
             return table.reportBody(report, selection, this, actions);
         });
 
         let solvedReportRows = solvedReports.map((report) => {
-            actions = (<ReportAdmin that={ this } id={ report.id } itemGroup={ this.state.itemGroup } itemData={ this.state.itemData } />);
+            actions = (<ReportAdmin that={ this } id={ report.id } itemGroup={ this.state.itemGroup } itemid={ this.state.itemid } />);
 
             return table.reportBody(report, selection, this, actions);
         });

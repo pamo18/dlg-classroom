@@ -14,18 +14,21 @@
 
 .sitle-heading {
     display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    flex-direction: row;
     width: 280px;
-    padding-top: 0px;
-    padding-right: 28px;
-    font-size: 1.4rem;
+    padding-left: 0.5rem;
+    padding-right: 1rem;
+}
+
+.sitle-heading a,
+.sitle-heading a:hover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-decoration: none;
 }
 
-.sitle-heading a {
-    text-decoration: none;
+.sitle-heading p {
+    font-size: 1.5rem;
 }
 
 .sitle-heading a:visited {
@@ -33,7 +36,7 @@
 }
 
 .site-logo {
-    width: 80px;
-    height: 80px;
-    padding: 1em;
+    width: 60px;
+    height: 60px;
+    margin-right: 0.5em;
 }

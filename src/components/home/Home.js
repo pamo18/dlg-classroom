@@ -23,7 +23,7 @@ class Home extends Component {
         this.filterHandler = this.filterHandler.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
         this.state = {
-            title: "Klassrum vy",
+            title: "Klassrums vy",
             toggle: window.innerWidth <= 900 ? "close" : "open",
             buildings: [],
             classroomTemplate: "name",
@@ -108,8 +108,8 @@ class Home extends Component {
         try {
             let classroom = this.state.classroomData[id];
             let name = form.optionName(classroom, this.state.classroomTemplate);
-            let report = () => utils.redirect(this, "/report", { itemGroup: "classroom", itemData: classroom });
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemData: classroom });
+            let report = () => utils.redirect(this, "/report", { itemGroup: "classroom", itemid: classroom.id });
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: classroom.id });
             let reportStatus = db.reportCheck("classroom", classroom.id);
 
             reportStatus.then((status) => {
@@ -148,8 +148,8 @@ class Home extends Component {
 
         let deviceRows = this.state.devices.map(async (device) => {
             let view = () => utils.redirect(this, "/device", {id: device.id});
-            let report = () => utils.redirect(this, "/report", { itemGroup: "device", itemData: device });
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemData: device });
+            let report = () => utils.redirect(this, "/report", { itemGroup: "device", itemid: device.id });
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
             let status = await db.reportCheck("device", device.id);
             let actions = [
                 icon.reportStatus(reportList, status),
@@ -207,10 +207,20 @@ class Home extends Component {
         return (
             <main>
                 <div className="left-column">
-                    <div className="column-heading">
-                        <h2>Kontrollpanel</h2>
+                    <div className="column-heading left-heading">
+                        <h2>Välj Klassrum</h2>
                     </div>
                     <aside className="panel home-panel">
+                        <div ref={ this.ref } className="controller">
+                            <div className="control-group">
+                                <h2 className="center margin">Välj</h2>
+                                <select className="form-input" type="text" name="classroom" required onChange={ this.classroomHandler }>
+                                    <option disabled>Klassrum</option>
+                                    { this.state.classroomGroups }
+                                </select>
+                            </div>
+                        </div>
+
                         <div className={`filter-panel ${ this.state.toggle }`}>
                             <div className="dropdown">
                                 { icon.get(this.state.toggle === "close" ? "Drop-down" : "Drop-up", this.toggleFilter) }
@@ -224,16 +234,6 @@ class Home extends Component {
                                 save={ this.props.save }
                                 restore={ this.props.restore }
                             />
-                        </div>
-
-                        <div ref={ this.ref } className="controller">
-                            <div className="control-group">
-                                <h2 className="center margin">Välj Klassrum</h2>
-                                <select className="form-input" type="text" name="classroom" required onChange={ this.classroomHandler }>
-                                    <option disabled>Klassrum</option>
-                                    { this.state.classroomGroups }
-                                </select>
-                            </div>
                         </div>
                     </aside>
                 </div>

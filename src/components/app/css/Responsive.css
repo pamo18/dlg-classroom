@@ -83,12 +83,22 @@
     }
 
     aside {
+        margin-bottom: 0;
+    }
+
+    aside,
+    .left-heading {
         padding: 0;
     }
 
     article:last-child {
         min-height: 1190px;
         margin-bottom: 2rem;
+    }
+
+    article {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
 
     /* Form */
@@ -140,9 +150,10 @@
         will-change: transform;
     }
 
-    .filter-panel,
-    .panel .controller:not(.filter-panel .controller) {
+    .panel .controller:not(.filter-panel .controller),
+    .filter-panel {
         background-color: rgb(6, 13, 19, 0.7);
+        border-radius: 0;
     }
 
     /* Date Picker */
