@@ -213,7 +213,7 @@ class Home extends Component {
                     <aside className="panel home-panel">
                         <div ref={ this.ref } className="controller">
                             <div className="control-group">
-                                <h2 className="center margin">Välj</h2>
+                                { window.innerWidth <= 900 ? null : <h2 className="center">Välj</h2> }
                                 <select className="form-input" type="text" name="classroom" required onChange={ this.classroomHandler }>
                                     <option disabled>Klassrum</option>
                                     { this.state.classroomGroups }
