@@ -37,12 +37,7 @@ class SwapDevices extends Component {
                 body: []
             },
             selection : [
-                ["category", null],
-                ["brand", null],
-                ["model", null],
-                ["serial", null],
-                ["price", null],
-                ["link", null],
+                ["category-caption-advanced", null],
                 ["manage", null]
             ]
         };
@@ -159,7 +154,7 @@ class SwapDevices extends Component {
         let classroomid = this.state[classroom].id;
         let selection = this.state.selection;
 
-        let classroomDevicesRows = this.state[classroomDevices].map((device) => {
+        let classroomDevicesRows = this.state[classroomDevices].map(async (device) => {
             let swap;
             let down = () => this.swapDevice(this.state.classroom1.id, this.state.classroom2.id, device.id);
             let up = () => this.swapDevice(this.state.classroom2.id, this.state.classroom1.id, device.id);
@@ -172,7 +167,11 @@ class SwapDevices extends Component {
                 swap = icon.get("Up", up);
             }
 
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
+            let reportStatus = await db.reportCheck("device", device.id);
+
             let actions = [
+                icon.reportStatus(reportList, reportStatus),
                 icon.get("View", view),
                 icon.get("Delete", del),
                 swap
@@ -181,11 +180,12 @@ class SwapDevices extends Component {
             return table.deviceBody(device, selection, actions);
         });
 
-        this.setState({
-            [`${classroom}DevicesTable`]: {
-                head: table.deviceHead(selection),
-                body: classroomDevicesRows
-            }
+        Promise.all(classroomDevicesRows).then((rows) => {
+            this.setState({
+                [`${classroom}DevicesTable`]: {
+                    body: rows
+                }
+            });
         });
     }
 
@@ -244,10 +244,7 @@ class SwapDevices extends Component {
                         ?
                         <div>
                             <h3 class="center">{ `Antal apparater: ${ this.state.classroom1Devices.length }` }</h3>
-                            <table className={ this.state.type === "Lägg till" ? "results" : "results swap" }>
-                                <thead>
-                                    { this.state.classroom1DevicesTable.head }
-                                </thead>
+                            <table className="results-card">
                                 <tbody>
                                     { this.state.classroom1DevicesTable.body }
                                 </tbody>
@@ -268,10 +265,7 @@ class SwapDevices extends Component {
                         ?
                         <div>
                             <h3 class="center">{ `Antal apparater: ${ this.state.classroom2Devices.length }` }</h3>
-                            <table className="results swap">
-                                <thead>
-                                    { this.state.classroom2DevicesTable.head }
-                                </thead>
+                            <table className="results-card">
                                 <tbody>
                                     { this.state.classroom2DevicesTable.body }
                                 </tbody>

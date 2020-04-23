@@ -21,13 +21,17 @@ class ItemView extends Component {
                 ["manage", null]
             ],
             deviceSelection: [
-                ["category-caption-simple-large", null],
+                ["category-caption-simple", null],
                 ["manage", null]
             ]
         };
     }
 
     componentDidMount() {
+        if (this.props.onRef) {
+            this.props.onRef(this);
+        }
+
         this.getItem();
     }
 

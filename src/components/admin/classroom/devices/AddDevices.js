@@ -36,12 +36,7 @@ class AddDevice extends Component {
                 body: []
             },
             selection : [
-                ["category", null],
-                ["brand", null],
-                ["model", null],
-                ["serial", null],
-                ["price", null],
-                ["link", null],
+                ["category-caption-advanced", null],
                 ["manage", null]
             ]
         };
@@ -90,10 +85,9 @@ class AddDevice extends Component {
             data = this.state.classroomGroups;
         }
 
-        let that = this;
         let template = this.state.classroomNameTemplate;
-        let selected = function(id) {
-            return that.state.classroomSelected == id ? "selected" : null;
+        let selected = (id) => {
+            return this.state.classroomSelected == id ? "selected" : null;
         };
 
         let groups = form.group(data, "id", template, selected);
@@ -112,12 +106,11 @@ class AddDevice extends Component {
 
     // Load Devices - Step 2 - Get Formdata
     getDeviceGroups(data) {
-        let that = this;
         let organize = form.organize(data, "category", "id");
         let deviceData = organize.data;
         let groupData = organize.groups;
-        let selected = function(id) {
-            return that.state.selectedDevice == id ? "selected" : null;
+        let selected = (id) => {
+            return this.state.selectedDevice == id ? "selected" : null;
         };
 
         let deviceGroups = form.group(groupData, "id", this.state.deviceNameTemplate, selected);
@@ -166,10 +159,14 @@ class AddDevice extends Component {
         let classroomid = this.state.classroom.id;
         let selection = this.state.selection;
 
-        let classroomDevicesRows = this.state.classroomDevices.map((device) => {
+        let classroomDevicesRows = this.state.classroomDevices.map(async (device) => {
             let view = () => utils.redirect(this, "/device", {id: device.id});
             let del = () => this.removeDevice(classroomid, device.id);
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
+            let reportStatus = await db.reportCheck("device", device.id);
+
             let actions = [
+                icon.reportStatus(reportList, reportStatus),
                 icon.get("View", view),
                 icon.get("Delete", del),
             ];
@@ -177,29 +174,36 @@ class AddDevice extends Component {
             return table.deviceBody(device, selection, actions);
         });
 
-        this.setState({
-            classroomDevicesTable: {
-                head: table.deviceHead(selection),
-                body: classroomDevicesRows
-            }
+        Promise.all(classroomDevicesRows).then((rows) => {
+            this.setState({
+                classroomDevicesTable: {
+                    body: rows
+                }
+            });
         });
     }
 
     getDevice(id) {
         try {
             let res = this.state.deviceData[id];
-            let view = () => utils.redirect(this, "/device", {id: res.id});
             let selection = this.state.selection;
+            let view = () => utils.redirect(this, "/device", {id: res.id});
+            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: res.id });
+            let reportStatus = db.reportCheck("device", res.id);
 
-            let row = table.deviceBody(res, selection, icon.get("View", view));
+            reportStatus.then((status) => {
+                let actions = [
+                    icon.reportStatus(reportList, status),
+                    icon.get("View", view)
+                ];
 
-            this.setState({
-                device: res,
-                deviceTable: {
-                    head: table.deviceHead(selection),
-                    body: row
-                },
-                selectedDevice: id
+                this.setState({
+                    device: res,
+                    deviceTable: {
+                        body: table.deviceBody(res, selection, actions)
+                    },
+                    selectedDevice: id
+                });
             });
         } catch(err) {
             console.log(err);
@@ -271,10 +275,7 @@ class AddDevice extends Component {
                         ?
                         <div>
                             <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevices.length }` }</h3>
-                            <table className="results">
-                                <thead>
-                                    { this.state.classroomDevicesTable.head }
-                                </thead>
+                            <table className="results-card">
                                 <tbody>
                                     { this.state.classroomDevicesTable.body }
                                 </tbody>
@@ -293,10 +294,7 @@ class AddDevice extends Component {
                     {
                         Object.entries(this.state.device).length > 0
                         ?
-                        <table className="results add">
-                            <thead>
-                                { this.state.deviceTable.head }
-                            </thead>
+                        <table className="results-card">
                             <tbody>
                                 { this.state.deviceTable.body }
                             </tbody>

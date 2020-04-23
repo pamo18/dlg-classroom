@@ -39,7 +39,7 @@ class Home extends Component {
             devices: [],
             filter: {},
             selection : [
-                ["category-caption-simple-large", null],
+                ["category-caption-simple", null],
                 ["manage", null]
             ]
         };

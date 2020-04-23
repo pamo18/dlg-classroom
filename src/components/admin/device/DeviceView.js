@@ -24,7 +24,7 @@ class DeviceView extends Component {
             },
             filter: {},
             selection: [
-                ["category-caption-large", null],
+                ["category-caption-advanced", null],
                 ["manage", null]
             ]
         };

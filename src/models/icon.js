@@ -1,6 +1,7 @@
 import React from 'react';
 import TheatersIcon from '@material-ui/icons/Theaters';
 import TvIcon from '@material-ui/icons/Tv';
+import AppleIcon from '@material-ui/icons/Apple';
 import SpeakerIcon from '@material-ui/icons/Speaker';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -22,13 +23,14 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import house from '../assets/img/icons/house.png';
 import classroom from '../assets/img/icons/classroom.png';
 import device from '../assets/img/icons/device.png';
-import classroomDevice from '../assets/img/icons/classroom-device.png'
-import message from '../assets/img/icons/message.png'
-import maintenance from '../assets/img/icons/maintenance.png'
-import speaker from '../assets/img/icons/speaker.png'
-import projector from '../assets/img/icons/projector.png'
-import tv from '../assets/img/icons/tv.png'
-import user from '../assets/img/icons/user.png'
+import classroomDevice from '../assets/img/icons/classroom-device.png';
+import message from '../assets/img/icons/message.png';
+import maintenance from '../assets/img/icons/maintenance.png';
+import speaker from '../assets/img/icons/speaker.png';
+import projector from '../assets/img/icons/projector.png';
+import tv from '../assets/img/icons/tv.png';
+import appleTV from '../assets/img/icons/apple-tv.png';
+import user from '../assets/img/icons/user.png';
 
 // Icon helper
 const icon = {
@@ -48,6 +50,9 @@ const icon = {
         "TV": [
             <TvIcon fontSize="large" key="TV" />
         ],
+        "Apple TV": [
+            <AppleIcon fontSize="large" key="Apple TV" />
+        ],
         "Skärm": [
             <TvIcon fontSize="large" key="Skärm" />
         ],
@@ -59,6 +64,9 @@ const icon = {
         ],
         "TV-large": [
             <img src={ tv } className="icon" alt="icon" key="TV-large" />
+        ],
+        "Apple TV-large": [
+            <img src={ appleTV } className="icon" alt="icon" key="Apple-TV-large" />
         ],
         "View": [
             <VisibilityIcon fontSize="large" key="View" />

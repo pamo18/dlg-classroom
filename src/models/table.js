@@ -11,7 +11,7 @@ const table = {
         let rows = {
             "category": (w) => <th key="head-category" width={w}>Kategori</th>,
             "category-caption-simple": (w) => <th key="head-category-caption-simple" width={w}>Kategori</th>,
-            "category-caption-large": (w) => <th key="head-category-caption-large" width={w}>Kategori</th>,
+            "category-caption-advanced": (w) => <th key="head-category-caption-advanced" width={w}>Kategori</th>,
             "name": (w) => <th key="head-name" width={w}>Namn</th>,
             "brand": (w) => <th key="head-brand" width={w}>Märke</th>,
             "model": (w) => <th key="head-catmodelegory" width={w}>Modell</th>,
@@ -37,8 +37,8 @@ const table = {
     deviceBody: function(device, selection, actions = null) {
         let rows = {
             "category": <td key="body-category" data-title="Kategori">{ icon.get(device.category)}</td>,
-            "category-caption-simple-large": [
-                <td key="body-category-caption-simple-large" data-title="Kategori">
+            "category-caption-simple": [
+                <td key="body-category-caption-simple" data-title="Kategori">
                     <figure className="icon-text">
                         { icon.get(`${device.category}-large`)}
                         <figcaption>
@@ -50,13 +50,14 @@ const table = {
                     </figure>
                 </td>
             ],
-            "category-caption-large": [
-                <td key="body-category-caption-large" data-title="Kategori">
+            "category-caption-advanced": [
+                <td key="body-category-caption-advanced" data-title="Kategori">
                     <figure className="icon-text">
                         { icon.get(`${device.category}-large`)}
                         <figcaption>
                             <span className="caption-text">
-                                { `${ device.brand } ${ device.model }` }
+                                { `${ device.brand } ${ device.model }` }<br />
+                                { `${ device.serialnum }` }
                             </span>
                         </figcaption>
                     </figure>

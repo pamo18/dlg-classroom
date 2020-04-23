@@ -32,6 +32,7 @@ class Report extends Component {
 
     listHandler(itemGroup, itemid) {
         this.list.loadReports(itemGroup, itemid);
+        this.item.getItem();
     }
 
     render() {
@@ -42,6 +43,7 @@ class Report extends Component {
                 </div>
                 <article>
                     <ItemView
+                        onRef={ref => (this.item = ref)}
                         itemGroup={ this.state.itemGroup }
                         itemData={ this.state.itemData }
                     />
