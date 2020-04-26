@@ -213,7 +213,7 @@ const icon = {
         let element = [
             <i
                 key={`icon-Report`}
-                className="tooltip clickable"
+                className="clickable"
                 onClick={ callback }
             >
             { icon }
