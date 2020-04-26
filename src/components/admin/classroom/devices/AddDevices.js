@@ -17,7 +17,7 @@ class AddDevice extends Component {
         this.deviceHandler = this.deviceHandler.bind(this);
         this.classroomHandler = this.classroomHandler.bind(this);
         this.state = {
-            title: "Lägg till utrustning i ett klassrum",
+            title: "Koppla utrustning till ett klassrum",
             classroomNameTemplate: "name",
             deviceNameTemplate: "brand,model,(serialnum)",
             classroomData: [],

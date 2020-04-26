@@ -144,7 +144,34 @@ const icon = {
             <img src={ user } className="icon" alt="icon" key="User" />
         ]
     },
-    get: function(name, callback = null, selected = null) {
+    tooltip: {
+        "Classroom": {
+            "View": "Visa alla klassrum",
+            "Add": "Lägga till ny klassrum",
+            "Edit": "Redigera ett klassrum",
+            "Delete": "Radera ett klassrum"
+        },
+        "Device": {
+            "View": "Visa alla utrustning",
+            "Add": "Lägga till ny utrustning",
+            "Edit": "Redigera en utrustning",
+            "Delete": "Radera en utrustning"
+        },
+        "Connect": {
+            "Add": "Koppla utrustning till ett klassrum",
+            "Swap": "Växla utrustning mellan klassrum"
+        },
+        "Report": {
+            "View": "Visa alla felanmälningar",
+            "Edit": "Redigera en felanmälning",
+            "Delete": "Radera en felanmälning"
+        },
+        "Person": {
+            "Delete": "Radera en användare",
+            "Level": "Ändra en användares behörighet"
+        },
+    },
+    get: function(name, callback = null, selected = null, toggleHover = null, tooltip = null) {
         let icon;
         let element;
 
@@ -158,8 +185,10 @@ const icon = {
             element = [
                 <i
                     key={`icon-${name}`}
-                    className={selected ? "selected" : "clickable" }
+                    className={ selected ? "selected" : "clickable" }
                     onClick={ callback }
+                    onMouseEnter={ toggleHover ? () => toggleHover(this.tooltip[tooltip][name]) : null }
+                    onMouseLeave={ toggleHover ? () => toggleHover(null) : null }
                 >
                 { icon }
                 </i>
@@ -184,7 +213,7 @@ const icon = {
         let element = [
             <i
                 key={`icon-Report`}
-                className="clickable"
+                className="tooltip clickable"
                 onClick={ callback }
             >
             { icon }

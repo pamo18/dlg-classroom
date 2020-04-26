@@ -25,7 +25,11 @@ function PrivateRoute({
                     <Component save={ save } restore={ restore } {...props} />
                 </ErrorBoundary>
                 :
-                <Redirect to="/login" />
+                <Redirect to={{
+                    pathname: "/login",
+                    state: { from: props.location }
+                    }}
+                />
             )}
         />
     );

@@ -101,6 +101,10 @@
         padding-right: 0.5rem;
     }
 
+    .tooltip:hover .tooltiptext {
+        visibility: hidden;
+    }
+
     /* Form */
     .form-label,
     .form-input,
@@ -116,7 +120,11 @@
     }
 
     .admin-panel .controller {
-        padding-top: 0;
+        padding: 1rem;
+    }
+
+    .tooltip {
+        display: none;
     }
 
     .home-panel .filter-panel {

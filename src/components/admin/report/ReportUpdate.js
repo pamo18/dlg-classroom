@@ -51,17 +51,10 @@ class ReportUpdate extends Component {
     getReport(id) {
         try {
             let res = this.state.reportData[id];
+            res.solved = res.solved ? utils.convertSqlDate(res.solved) : null;
 
             this.setState({
-                report: {
-                    id: res.id,
-                    itemGroup: res.item_group,
-                    itemid: res.item_id,
-                    name: res.name,
-                    message: res.message,
-                    action: res.action,
-                    solved: res.solved ? utils.convertSqlDate(res.solved) : null
-                }
+                report: res
             });
         } catch(err) {
             console.log(err);
@@ -71,22 +64,23 @@ class ReportUpdate extends Component {
     updateReport(e) {
         e.preventDefault();
         const data = new FormData(e.target);
-        let id = data.get("id");
+        let report = this.state.report;
+        let id = report.id;
         let checkbox = data.get("solved");
+        let res;
 
-        let report = {
-            name: data.get("name"),
-            message: data.get("message"),
-            action: data.get("action")
-        };
+        report.name = data.get("name");
+        report.message = data.get("message");
+        report.action = data.get("action");
+        report.from = JSON.parse(localStorage.getItem("person"));
 
         if (checkbox) {
             report.solved = this.state.report.solved;
+            res = db.reportSolved(id, report);
         } else {
             report.solved = false;
+            res = db.update("report", id, report);
         }
-
-        let res = db.update("report", id, report);
 
         res.then(() => utils.goBack(this));
     }
@@ -121,8 +115,6 @@ class ReportUpdate extends Component {
                         <div>
                             <h2 className="center">{ this.state.title }</h2>
 
-                            <input className="form-input" type="hidden" name="id" required value={ this.state.report.id } />
-
                             <label className="form-label">Titel
                                 <input className="form-input" type="text" name="name" required value={ this.state.report.name } placeholder="Ett namn som förklare snabbt problemet." onChange={ this.inputHandler } />
                             </label>
@@ -131,8 +123,8 @@ class ReportUpdate extends Component {
                                 <textarea className="form-input" name="message" required value={ this.state.report.message } placeholder="Skriv något om problemet." onChange={ this.inputHandler } />
                             </label>
 
-                            <label className="form-label">Åtgärdning
-                                <input className="form-input" type="text" name="action" placeholder="Förklara åtgärdningen" value={ this.state.report.action } onChange={ this.inputHandler } />
+                            <label className="form-label">Åtgärd
+                                <input className="form-input" type="text" name="action" placeholder="Förklara hur den blev åtgärdat" value={ this.state.report.action } onChange={ this.inputHandler } />
                             </label>
 
                             <label className="form-label check-label">

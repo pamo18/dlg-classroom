@@ -23,7 +23,7 @@ class Home extends Component {
         this.filterHandler = this.filterHandler.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
         this.state = {
-            title: "Klassrums vy",
+            title: "Klassrumsvy",
             toggle: window.innerWidth <= 900 ? "close" : "open",
             buildings: [],
             classroomTemplate: "name",

@@ -15,7 +15,7 @@ class ClassroomUpdate extends Component {
         this.updateClassroom = this.updateClassroom.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
         this.state = {
-            title: "Uppdatera Klassrum",
+            title: "Redigera Klassrum",
             buildings: [],
             classroomData: [],
             classroomGroups: [],
@@ -112,7 +112,7 @@ class ClassroomUpdate extends Component {
     render() {
         return (
             <article>
-                <h2 className="center">Välj klassrum att uppdatera</h2>
+                <h2 className="center">Välj klassrum att redigera</h2>
                 <form action="/update" className="form-register" onSubmit={this.updateClassroom}>
                     <select className="form-input" type="text" name="fullname" required onChange={ (e) => this.getClassroom(e.target.value) }>
                         <option disabled selected value>Klicka här för att välja Klassrum</option>

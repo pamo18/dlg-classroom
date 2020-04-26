@@ -14,7 +14,7 @@ class PersonLevel extends Component {
         this.getPerson = this.getPerson.bind(this);
         this.toggleAdmin = this.toggleAdmin.bind(this);
         this.state = {
-            title: "Växla Behörighet",
+            title: "Ändra Behörighet",
             personData: {},
             personGroups: [],
             personTemplate: "firstname,lastname,(level)",
@@ -73,7 +73,7 @@ class PersonLevel extends Component {
 
         let res = db.update("person", id, admin);
 
-        return res.then(utils.reload(this));
+        return res.then(() => { utils.reload(this) });
     }
 
     render() {
@@ -95,7 +95,7 @@ class PersonLevel extends Component {
                                 Växla persons behörighet från admin till user eller user till admin?
                             </label><br />
 
-                            <input className="button center-margin" type="submit" name="delete" value="Växla" />
+                            <input className="button center-margin" type="submit" name="delete" value={ this.state.person.level === "user" ? "Ändra till admin" : "Ändra till user" } />
                         </div>
                         :
                         null

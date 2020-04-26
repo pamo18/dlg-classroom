@@ -21,7 +21,11 @@ class Navbar extends Component {
         }
         const {pathname} = location;
 
-        return pathname === "/";
+        let start = [
+            "/", "/report", "/report/list", "/report/page", "/device", "/classroom"
+        ];
+
+        return start.includes(pathname);
     };
 
     render() {

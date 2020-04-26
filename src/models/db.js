@@ -191,7 +191,22 @@ const db = {
         } catch(err) {
             console.log(err);
         }
-    }
+    },
+    reportSolved: async function(where, data) {
+        try {
+            let res = await fetch(`${api}/report/solved/${where}`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            return res.json();
+        } catch(err) {
+            console.log(err);
+        }
+    },
 };
 
 export default db;

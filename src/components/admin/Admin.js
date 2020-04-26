@@ -34,6 +34,7 @@ class Admin extends Component {
         this.reportView = this.reportView.bind(this);
         this.change = this.change.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
+        this.toggleHover = this.toggleHover.bind(this);
         this.state = {
             title: "Admin",
             toggle: {
@@ -47,7 +48,8 @@ class Admin extends Component {
             view: null,
             selected: this.props.match.params.selected || "",
             admin: this.props.match.params.admin || "",
-            id: this.props.match.params.id || null
+            id: this.props.match.params.id || null,
+            tooltip: null
         };
     }
 
@@ -264,6 +266,12 @@ class Admin extends Component {
         });
     }
 
+    toggleHover(tooltip) {
+        this.setState({
+            tooltip: tooltip
+        })
+    }
+
     render() {
         let selected = this.state.selected;
         let admin = this.state.admin;
@@ -271,7 +279,7 @@ class Admin extends Component {
             <main>
                 <div className="left-column">
                     <div className="column-heading left-heading">
-                        <h2>Admin Kontroll</h2>
+                        <h2>Adminkontroll</h2>
                     </div>
                     <aside className="panel admin-panel">
                         <div className={`controller ${ this.state.toggle.classroom }`}>
@@ -283,12 +291,15 @@ class Admin extends Component {
                                 { icon.get("Classroom") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { utils.redirect(this, "/admin/classroom/view") }, selected === "classroom" && admin === "view") }
-                                        { icon.get("Add", () => { utils.redirect(this, "/admin/classroom/add") }, selected === "classroom" && admin === "add") }
-                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/classroom/edit") }, selected === "classroom" && admin === "edit") }
-                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/classroom/delete") }, selected === "classroom" && admin === "delete") }
+                                        { icon.get("View", () => { utils.redirect(this, "/admin/classroom/view") }, selected === "classroom" && admin === "view", this.toggleHover, "Classroom") }
+                                        { icon.get("Add", () => { utils.redirect(this, "/admin/classroom/add") }, selected === "classroom" && admin === "add", this.toggleHover, "Classroom") }
+                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/classroom/edit") }, selected === "classroom" && admin === "edit", this.toggleHover, "Classroom") }
+                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/classroom/delete") }, selected === "classroom" && admin === "delete", this.toggleHover, "Classroom") }
                                     </div>
                                 </figcaption>
+                                <div className="tooltip">
+                                    <div className="tooltip-text">{ this.state.tooltip ?? <span className="tooltip-placeholder">Välj verktyg ovan</span> }</div>
+                                </div>
                             </figure>
                         </div>
 
@@ -301,10 +312,13 @@ class Admin extends Component {
                                 { icon.get("Device") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { utils.redirect(this, "/admin/device/view") }, selected === "device" && admin === "view") }
-                                        { icon.get("Add", () => { utils.redirect(this, "/admin/device/add") }, selected === "device" && admin === "add") }
-                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/device/edit") }, selected === "device" && admin === "edit") }
-                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/device/delete") }, selected === "device" && admin === "delete") }
+                                        { icon.get("View", () => { utils.redirect(this, "/admin/device/view") }, selected === "device" && admin === "view", this.toggleHover, "Device") }
+                                        { icon.get("Add", () => { utils.redirect(this, "/admin/device/add") }, selected === "device" && admin === "add", this.toggleHover, "Device") }
+                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/device/edit") }, selected === "device" && admin === "edit", this.toggleHover, "Device") }
+                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/device/delete") }, selected === "device" && admin === "delete", this.toggleHover, "Device") }
+                                    </div>
+                                    <div className="tooltip">
+                                        <div className="tooltip-text">{ this.state.tooltip ?? <span className="tooltip-placeholder">Välj verktyg ovan</span> }</div>
                                     </div>
                                 </figcaption>
                             </figure>
@@ -319,8 +333,11 @@ class Admin extends Component {
                                 { icon.get("classroomDevice") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("Add", () => { utils.redirect(this, "/admin/classroom-device/add") }, selected === "classroom-device" && admin === "add") }
-                                        { icon.get("Swap", () => { utils.redirect(this, "/admin/classroom-device/swap") }, selected === "classroom-device" && admin === "swap") }
+                                        { icon.get("Add", () => { utils.redirect(this, "/admin/classroom-device/add") }, selected === "classroom-device" && admin === "add", this.toggleHover, "Connect") }
+                                        { icon.get("Swap", () => { utils.redirect(this, "/admin/classroom-device/swap") }, selected === "classroom-device" && admin === "swap", this.toggleHover, "Connect") }
+                                    </div>
+                                    <div className="tooltip">
+                                        <div className="tooltip-text">{ this.state.tooltip ?? <span className="tooltip-placeholder">Välj verktyg ovan</span> }</div>
                                     </div>
                                 </figcaption>
                             </figure>
@@ -335,9 +352,12 @@ class Admin extends Component {
                                 { icon.get("Message") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { utils.redirect(this, "/admin/report/view") }, selected === "report" && admin === "view") }
-                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/report/edit") }, selected === "report" && admin === "edit") }
-                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/report/delete") }, selected === "report" && admin === "delete") }
+                                        { icon.get("View", () => { utils.redirect(this, "/admin/report/view") }, selected === "report" && admin === "view", this.toggleHover, "Report") }
+                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/report/edit") }, selected === "report" && admin === "edit", this.toggleHover, "Report") }
+                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/report/delete") }, selected === "report" && admin === "delete", this.toggleHover, "Report") }
+                                    </div>
+                                    <div className="tooltip">
+                                        <div className="tooltip-text">{ this.state.tooltip ?? <span className="tooltip-placeholder">Välj verktyg ovan</span> }</div>
                                     </div>
                                 </figcaption>
                             </figure>
@@ -352,8 +372,11 @@ class Admin extends Component {
                                 { icon.get("User") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/person/delete") }, selected === "person" && admin === "delete") }
-                                        { icon.get("Level", () => { utils.redirect(this, "/admin/person/level") }, selected === "person" && admin === "level") }
+                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/person/delete") }, selected === "person" && admin === "delete", this.toggleHover, "Person") }
+                                        { icon.get("Level", () => { utils.redirect(this, "/admin/person/level") }, selected === "person" && admin === "level", this.toggleHover, "Person") }
+                                    </div>
+                                    <div className="tooltip">
+                                        <div className="tooltip-text">{ this.state.tooltip ?? <span className="tooltip-placeholder">Välj verktyg ovan</span> }</div>
                                     </div>
                                 </figcaption>
                             </figure>

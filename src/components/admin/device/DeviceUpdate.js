@@ -17,7 +17,7 @@ class DeviceUpdate extends Component {
         this.inputHandler = this.inputHandler.bind(this);
         this.changeDate = this.changeDate.bind(this);
         this.state = {
-            title: "Uppdatera Utrustning",
+            title: "Redigera Utrustning",
             categories: [],
             deviceData: {},
             deviceGroups: [],
@@ -151,7 +151,7 @@ class DeviceUpdate extends Component {
         const { showing } = this.state;
         return (
             <article>
-                <h2 className="center">Välj apparat att uppdatera</h2>
+                <h2 className="center">Välj apparat att redigera</h2>
                 <form action="/update" className="form-register" onSubmit={this.updateDevice}>
                     <select className="form-input" type="text" name="fullname" required onChange={ (e) => this.getDevice(e.target.value) }>
                         <option disabled selected>Klicka för att välja</option>

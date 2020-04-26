@@ -56,7 +56,7 @@ class ReportView extends Component {
                         <td className={ this.state.report.message.length > 100 ? "left" : null }>{ this.state.report.message }</td>
                     </tr>
                     <tr>
-                        <th>Åtgärdning</th>
+                        <th>Åtgärd</th>
                         <td>{ this.state.report.action || "-" }</td>
                     </tr>
                     <tr>

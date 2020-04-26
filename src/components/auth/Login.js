@@ -57,7 +57,13 @@ class Login extends Component {
                     localStorage.setItem("person", JSON.stringify(person));
                     localStorage.setItem("token", JSON.stringify(token));
                     setAuth(true, person.level === "admin");
-                    return utils.redirect(this, "/");
+                    if (this.props.location.state) {
+                        let lastPage = this.props.location.state.from.pathname;
+                        return utils.redirect(this, lastPage);
+                    } else {
+                        return utils.redirect(this, "/");
+                    }
+
                 default:
                     return utils.redirect(this, "/login");
             }

@@ -25,6 +25,23 @@ a:hover {
     text-decoration: underline;
 }
 
+/* Controller Tooltip */
+.controller .tooltip .tooltip-text {
+    opacity: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.controller:hover .tooltip .tooltip-text {
+    opacity: 1;
+}
+
+/* Tooltip Placeholder */
+.tooltip-placeholder {
+    visibility: hidden;
+}
+
 .dropdown {
     text-align: center;
     font-weight: bold;

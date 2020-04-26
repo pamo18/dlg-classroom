@@ -11,7 +11,7 @@ class ClassroomCreate extends Component {
         super(props);
         this.classroomCreate = this.classroomCreate.bind(this);
         this.state = {
-            title: "Ny Klassrum",
+            title: "Lägga till Klassrum",
             buildings: []
         };
     }
