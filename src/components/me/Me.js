@@ -14,15 +14,6 @@ class Me extends Component {
             title: "Min Sida",
             person: {},
             classroomReports: [],
-            deviceReports: [],
-            classroomReportsTable: {
-                head: [],
-                body: []
-            },
-            deviceReportsTable: {
-                head: [],
-                body: []
-            },
             filter1 : {
                 person_id: JSON.parse(localStorage.getItem("person")).id,
                 solved: "Att göra"

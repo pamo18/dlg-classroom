@@ -35,11 +35,11 @@ import user from '../assets/img/icons/user.png';
 // Icon helper
 const icon = {
     cat: {
-        "Åtgärdat": [
-            <TheatersIcon fontSize="large" key="Åtgärdat" />
+        "OK": [
+            <CheckCircleIcon className="check-icon" fontSize="large" color="disable" key="OK" />
         ],
         "Att göra": [
-            <TheatersIcon fontSize="large" key="Att göra" />
+            <ErrorIcon fontSize="large" color="error" key="Broke" />
         ],
         "Projektor": [
             <TheatersIcon fontSize="large" key="Projektor" />
@@ -95,11 +95,11 @@ const icon = {
         "Alla": [
             <SelectAllIcon fontSize="large" key="Alla" />
         ],
-        "Report": [
-            <CheckCircleIcon className="check-icon" fontSize="large" color="disable" key="Report" />
+        "Working": [
+            <CheckCircleIcon className="check-icon" fontSize="large" color="disable" key="Working" />
         ],
-        "Reported": [
-            <ErrorIcon fontSize="large" color="error" key="Reported" />
+        "Broke": [
+            <ErrorIcon fontSize="large" color="error" key="Broke" />
         ],
         "Room": [
             <RoomIcon fontSize="large" key="Room" />
@@ -145,23 +145,39 @@ const icon = {
         ]
     },
     tooltip: {
-        "Classroom": {
+        "Report": {
+            "Working": "Inga felanmälningar",
+            "Broke": "Visa felanmälningar",
+        },
+        "Classrooms": {
             "View": "Visa alla klassrum",
-            "Add": "Lägga till ny klassrum",
+            "Add": "Lägg till nytt klassrum",
             "Edit": "Redigera ett klassrum",
             "Delete": "Radera ett klassrum"
         },
-        "Device": {
+        "Classroom": {
+            "View": "Visa klassrummet",
+            "Edit": "Redigera klassrummet",
+            "Delete": "Radera klassrummet"
+        },
+        "Devices": {
             "View": "Visa alla utrustning",
-            "Add": "Lägga till ny utrustning",
+            "Add": "Lägg till ny utrustning",
             "Edit": "Redigera en utrustning",
             "Delete": "Radera en utrustning"
+        },
+        "Device": {
+            "Report": "Visa status",
+            "Build": "Felanmäl",
+            "View": "Visa utrustningen",
+            "Edit": "Redigera utrustningen",
+            "Delete": "Radera utrustningen"
         },
         "Connect": {
             "Add": "Koppla utrustning till ett klassrum",
             "Swap": "Växla utrustning mellan klassrum"
         },
-        "Report": {
+        "Reports": {
             "View": "Visa alla felanmälningar",
             "Edit": "Redigera en felanmälning",
             "Delete": "Radera en felanmälning"
@@ -201,13 +217,13 @@ const icon = {
 
         return element;
     },
-    reportStatus: function(callback, check) {
+    reportStatus: function(callback, working, toggleHover = null) {
         let icon;
 
-        if (check) {
-            icon = this.cat["Reported"];
+        if (!working) {
+            icon = this.cat["Broke"];
         } else {
-            icon = this.cat["Report"];
+            icon = this.cat["Working"];
         }
 
         let element = [
@@ -215,6 +231,8 @@ const icon = {
                 key={`icon-Report`}
                 className="clickable"
                 onClick={ callback }
+                onMouseEnter={ toggleHover ? () => toggleHover(this.tooltip["Report"][!working ? "Broke" : "Working"]) : null }
+                onMouseLeave={ toggleHover ? () => toggleHover(null) : null }
             >
             { icon }
             </i>

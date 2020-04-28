@@ -4,16 +4,15 @@
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../../models/db.js';
-import utils from '../../../../models/utils.js';
 import form from '../../../../models/form.js';
-import table from '../../../../models/table.js';
-import icon from '../../../../models/icon.js';
 import '../../Admin.css';
+import DeviceCards from '../../../device/DeviceCards.js';
 
 class AddDevice extends Component {
     constructor(props) {
         super(props);
         this.addDevice = this.addDevice.bind(this);
+        this.removeDevice = this.removeDevice.bind(this);
         this.deviceHandler = this.deviceHandler.bind(this);
         this.classroomHandler = this.classroomHandler.bind(this);
         this.state = {
@@ -27,14 +26,9 @@ class AddDevice extends Component {
             deviceGroups: [],
             selectedDevice: null,
             device: {},
-            deviceTable: {},
             classroom: {},
             classroomSelected: null,
             classroomDevices: [],
-            classroomDevicesTable: {
-                head: [],
-                body: []
-            },
             selection : [
                 ["category-caption-advanced", null],
                 ["manage", null]
@@ -43,22 +37,8 @@ class AddDevice extends Component {
     }
 
     componentDidMount() {
-        let state = this.props.restore("managerState");
-
-        if (state) {
-            this.setState(state, () => {
-                if (this.state.classroom.hasOwnProperty("id")) {
-                    this.reload();
-                }
-            });
-        } else {
-            this.loadClassrooms();
-            this.loadDevices();
-        }
-    }
-
-    componentWillUnmount() {
-        this.props.save("managerState", this.state);
+        this.loadClassrooms();
+        this.loadDevices();
     }
 
     // Load Classrooms and group data - Step 1
@@ -121,95 +101,6 @@ class AddDevice extends Component {
         });
     }
 
-    // Get classroom - Step 1
-    getClassroom(id) {
-        try {
-            let res = this.state.classroomData[id];
-            let details = {
-                id: res.id,
-                name: res.name,
-                type: res.type,
-                building: res.building,
-                level: res.level,
-                image: res.image
-            }
-
-            this.setState({
-                classroom: details,
-                classroomSelected: res.id
-            }, () => this.loadClassroomDevices(id));
-        } catch(err) {
-            console.log(err);
-        }
-    }
-
-    // Get classroom - Step 2 - Get classroom devices
-    loadClassroomDevices(id) {
-        let res = db.fetchAllWhere("classroom/device", "classroom_id", id);
-
-        res.then((data) => {
-            this.setState({
-                classroomDevices: data
-            }, () => this.getClassroomDevices());
-        });
-    }
-
-    // Get classroom - Step 3 - Build classroom devices table rows
-    getClassroomDevices() {
-        let classroomid = this.state.classroom.id;
-        let selection = this.state.selection;
-
-        let classroomDevicesRows = this.state.classroomDevices.map(async (device) => {
-            let view = () => utils.redirect(this, "/device", {id: device.id});
-            let del = () => this.removeDevice(classroomid, device.id);
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
-            let reportStatus = await db.reportCheck("device", device.id);
-
-            let actions = [
-                icon.reportStatus(reportList, reportStatus),
-                icon.get("View", view),
-                icon.get("Delete", del),
-            ];
-
-            return table.deviceBody(device, selection, actions);
-        });
-
-        Promise.all(classroomDevicesRows).then((rows) => {
-            this.setState({
-                classroomDevicesTable: {
-                    body: rows
-                }
-            });
-        });
-    }
-
-    getDevice(id) {
-        try {
-            let res = this.state.deviceData[id];
-            let selection = this.state.selection;
-            let view = () => utils.redirect(this, "/device", {id: res.id});
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: res.id });
-            let reportStatus = db.reportCheck("device", res.id);
-
-            reportStatus.then((status) => {
-                let actions = [
-                    icon.reportStatus(reportList, status),
-                    icon.get("View", view)
-                ];
-
-                this.setState({
-                    device: res,
-                    deviceTable: {
-                        body: table.deviceBody(res, selection, actions)
-                    },
-                    selectedDevice: id
-                });
-            });
-        } catch(err) {
-            console.log(err);
-        }
-    }
-
     addDevice(e) {
         e.preventDefault();
         const data = new FormData(e.target);
@@ -224,36 +115,64 @@ class AddDevice extends Component {
         let res = db.insert("classroom/device", classroomDevice);
 
         res.then(() => {
-            this.reload();
+            this.devices.updateData([]);
 
             this.setState({
                 device: {},
-                deviceGroups: []
+                deviceGroups: [],
+                selectedDevice: null
+            }, () => {
+                this.reload();
             });
         });
     }
 
-    removeDevice(classroomid, deviceid) {
+    removeDevice(deviceid) {
+        let classroomid = this.state.classroom.id;
         let res = db.delete("classroom/device", `${classroomid}/${deviceid}`);
 
         res.then(() => this.reload());
     }
 
-    deviceHandler(e) {
-        this.getDevice(e.target.value);
+    deviceHandler(id) {
+        let device = this.state.deviceData[id];
+
+        this.devices.updateData([device]);
+
+        this.setState({
+            device: device,
+            selectedDevice: id
+        });
     }
 
-    classroomHandler(e) {
-        this.getClassroom(e.target.value);
+    classroomHandler(id) {
+        let classroom = this.state.classroomData[id];
+
+        this.setState({
+            classroom: classroom,
+            classroomSelected: classroom.id
+        }, () => this.loadClassroomDevices(id));
+    }
+
+    loadClassroomDevices(id) {
+        let res = db.fetchAllWhere("classroom/device", "classroom_id", id);
+
+        res.then((data) => {
+            this.classroomDevices.updateData(data);
+
+            this.setState({
+                classroomDevices: data
+            });
+        });
     }
 
     // Reload classrooms, devices and classroom devices to update any changes
     reload() {
-        let classroom = this.state.classroom.id;
+        let id = this.state.classroom.id;
 
         this.loadClassrooms();
         this.loadDevices();
-        this.getClassroom(classroom);
+        this.classroomHandler(id);
     }
 
     render() {
@@ -265,7 +184,7 @@ class AddDevice extends Component {
                     <input className="form-input" type="hidden" name="deviceid" required value={ this.state.device.id } />
 
                     <label className="form-label">Välj klassrum
-                        <select className="form-input" type="text" name="classroom" required onChange={ this.classroomHandler }>
+                        <select className="form-input" type="text" name="classroom" required onChange={ (e) => this.classroomHandler(e.target.value) }>
                             <option disabled selected>Klicka här för att välja Klassrum</option>
                             { this.getClassroomGroups() }
                         </select>
@@ -275,33 +194,30 @@ class AddDevice extends Component {
                         ?
                         <div>
                             <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevices.length }` }</h3>
-                            <table className="results-card">
-                                <tbody>
-                                    { this.state.classroomDevicesTable.body }
-                                </tbody>
-                            </table>
+                            <DeviceCards
+                                onRef={ref => (this.classroomDevices = ref)}
+                                devices={ this.state.classroomDevices }
+                                choice={ ["status", "view", "unlink"] }
+                                selection={ this.state.selection }
+                                callbacks={ { "unlink": this.removeDevice } }
+                            />
                         </div>
                         : null
                     }
 
                     <label className="form-label">Välj uttrustning
-                        <select className="form-input" type="text" name="default" required onChange={ this.deviceHandler }>
+                        <select className="form-input" type="text" name="default" required onChange={ (e) => this.deviceHandler(e.target.value) }>
                             <option disabled selected>Klicka här för att välja uttrustning</option>
                             { this.state.deviceGroups }
                         </select>
                     </label>
 
-                    {
-                        Object.entries(this.state.device).length > 0
-                        ?
-                        <table className="results-card">
-                            <tbody>
-                                { this.state.deviceTable.body }
-                            </tbody>
-                        </table>
-                        :
-                        null
-                    }
+                    <DeviceCards
+                        onRef={ref => (this.devices = ref)}
+                        devices={ this.state.device }
+                        choice={ ["status", "view"] }
+                        selection={ this.state.selection }
+                    />
 
                     { Object.entries(this.state.classroom).length > 0 && Object.entries(this.state.device).length > 0
                         ?

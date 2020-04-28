@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
-import db from '../../../models/db.js';
-import utils from '../../../models/utils.js';
-import icon from '../../../models/icon.js';
-import table from '../../../models/table.js';
 import '../Report.css';
+import ClassroomCards from '../../classroom/ClassroomCards.js';
+import DeviceCards from '../../device/DeviceCards.js';
 
 class ItemView extends Component {
     constructor(props) {
@@ -12,16 +10,12 @@ class ItemView extends Component {
         this.state = {
             itemGroup: this.props.itemGroup,
             itemData: this.props.itemData,
-            itemTable: {
-                head: [],
-                body: []
-            },
             classroomSelection: [
                 ["name-caption-large", null],
                 ["manage", null]
             ],
             deviceSelection: [
-                ["category-caption-simple", null],
+                ["category-caption-advanced", null],
                 ["manage", null]
             ]
         };
@@ -31,71 +25,28 @@ class ItemView extends Component {
         if (this.props.onRef) {
             this.props.onRef(this);
         }
-
-        this.getItem();
-    }
-
-    getItem() {
-        let itemGroup = this.state.itemGroup;
-        let itemData = this.state.itemData;
-        let selection,
-            view,
-            reportList,
-            reportStatus,
-            actions;
-
-        switch(true) {
-            case (itemGroup === "classroom"):
-                selection = this.state.classroomSelection;
-                view = () => utils.redirect(this, "/classroom", { id: itemData.id });
-                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: itemData.id });
-                reportStatus = db.reportCheck("classroom", itemData.id);
-
-                reportStatus.then((status) => {
-                    actions = [
-                        icon.reportStatus(reportList, status),
-                        icon.get("View", view)
-                    ];
-
-                    this.setState({
-                        itemTable: {
-                            body: table.classroomBody(itemData, selection, actions)
-                        }
-                    });
-                });
-                break;
-            case (itemGroup === "device"):
-                selection = this.state.deviceSelection;
-                view = () => utils.redirect(this, "/device", { id: itemData.id });
-                reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: itemData.id });
-                reportStatus = db.reportCheck("device", itemData.id);
-
-                reportStatus.then((status) => {
-                    actions = [
-                        icon.reportStatus(reportList, status),
-                        icon.get("View", view)
-                    ];
-
-                    this.setState({
-                        itemTable: {
-                            body: table.deviceBody(itemData, selection, actions)
-                        }
-                    });
-                });
-                break;
-            default:
-                return;
-        }
     }
 
     render() {
-        return (
-            <table className="results-card single-card">
-                <tbody>
-                    { this.state.itemTable.body }
-                </tbody>
-            </table>
-        );
+        if (this.state.itemGroup === "device") {
+            return (
+                <DeviceCards
+                    onRef={ref => (this.devices = ref)}
+                    devices={ [this.state.itemData] }
+                    choice={ ["status", "view"] }
+                    selection={ this.state.deviceSelection }
+                />
+            );
+        } else if (this.state.itemGroup === "classroom") {
+            return (
+                <ClassroomCards
+                    onRef={ref => (this.classrooms = ref)}
+                    classrooms={ [this.state.itemData] }
+                    choice={ ["status", "view"] }
+                    selection={ this.state.classroomSelection }
+                />
+            );
+        }
     }
 }
 

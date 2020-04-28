@@ -291,10 +291,10 @@ class Admin extends Component {
                                 { icon.get("Classroom") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { utils.redirect(this, "/admin/classroom/view") }, selected === "classroom" && admin === "view", this.toggleHover, "Classroom") }
-                                        { icon.get("Add", () => { utils.redirect(this, "/admin/classroom/add") }, selected === "classroom" && admin === "add", this.toggleHover, "Classroom") }
-                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/classroom/edit") }, selected === "classroom" && admin === "edit", this.toggleHover, "Classroom") }
-                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/classroom/delete") }, selected === "classroom" && admin === "delete", this.toggleHover, "Classroom") }
+                                        { icon.get("View", () => { utils.redirect(this, "/admin/classroom/view") }, selected === "classroom" && admin === "view", this.toggleHover, "Classrooms") }
+                                        { icon.get("Add", () => { utils.redirect(this, "/admin/classroom/add") }, selected === "classroom" && admin === "add", this.toggleHover, "Classrooms") }
+                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/classroom/edit") }, selected === "classroom" && admin === "edit", this.toggleHover, "Classrooms") }
+                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/classroom/delete") }, selected === "classroom" && admin === "delete", this.toggleHover, "Classrooms") }
                                     </div>
                                 </figcaption>
                                 <div className="tooltip">
@@ -312,10 +312,10 @@ class Admin extends Component {
                                 { icon.get("Device") }
                                 <figcaption>
                                     <div className="control-icon">
-                                        { icon.get("View", () => { utils.redirect(this, "/admin/device/view") }, selected === "device" && admin === "view", this.toggleHover, "Device") }
-                                        { icon.get("Add", () => { utils.redirect(this, "/admin/device/add") }, selected === "device" && admin === "add", this.toggleHover, "Device") }
-                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/device/edit") }, selected === "device" && admin === "edit", this.toggleHover, "Device") }
-                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/device/delete") }, selected === "device" && admin === "delete", this.toggleHover, "Device") }
+                                        { icon.get("View", () => { utils.redirect(this, "/admin/device/view") }, selected === "device" && admin === "view", this.toggleHover, "Devices") }
+                                        { icon.get("Add", () => { utils.redirect(this, "/admin/device/add") }, selected === "device" && admin === "add", this.toggleHover, "Devices") }
+                                        { icon.get("Edit", () => { utils.redirect(this, "/admin/device/edit") }, selected === "device" && admin === "edit", this.toggleHover, "Devices") }
+                                        { icon.get("Delete", () => { utils.redirect(this, "/admin/device/delete") }, selected === "device" && admin === "delete", this.toggleHover, "Devices") }
                                     </div>
                                     <div className="tooltip">
                                         <div className="tooltip-text">{ this.state.tooltip ?? <span className="tooltip-placeholder">Välj verktyg ovan</span> }</div>

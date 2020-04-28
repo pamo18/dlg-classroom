@@ -3,24 +3,20 @@
     width: 100%;
 }
 
-.panel .controller {
-    margin-bottom: 2rem;
-    padding: 0.5rem;
-    border-radius: 10px;
-}
-
-.admin-panel .controller  {
-    padding: 1rem 0.5rem 0 0.5rem;
-}
-
-.panel .controller:not(.filter-panel .controller) {
-    background-color: rgb(6, 13, 19);
+.admin-panel .controller {
+    height: 270px;
 }
 
 .panel .control-group {
     width: 100%;
     text-align: center;
     margin: 0 auto;
+}
+
+.admin-panel .control-group {
+    padding: 1rem 0.5rem 1rem 0.5rem;
+    border-radius: 10px;
+    background-color: rgb(6, 13, 19);
 }
 
 .panel .controller img.icon {

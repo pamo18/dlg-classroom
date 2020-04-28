@@ -3,11 +3,10 @@
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
-import utils from '../../../models/utils.js';
-import table from '../../../models/table.js';
 import icon from '../../../models/icon.js';
 import '../Admin.css';
 import Categories from '../../filter/Categories.js';
+import DeviceCards from '../../device/DeviceCards.js';
 
 class DeviceView extends Component {
     constructor(props) {
@@ -51,35 +50,7 @@ class DeviceView extends Component {
             this.setState({
                 data: data,
                 filter: filter
-            }, () => this.getDevices());
-        });
-    }
-
-    getDevices() {
-        let selection = this.state.selection;
-
-        let deviceRows = this.state.data.map(async (device) => {
-            let view = () => utils.redirect(this, "/device", { id: device.id });
-            let edit = () => utils.redirect(this, `/admin/device/edit/${ device.id }`, {});
-            let del = () => utils.redirect(this, `/admin/device/delete/${ device.id }`, {});
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
-            let reportStatus = await db.reportCheck("device", device.id);
-            let actions = [
-                icon.reportStatus(reportList, reportStatus),
-                icon.get("View", view),
-                icon.get("Edit", edit),
-                icon.get("Delete", del)
-            ];
-
-            return table.deviceBody(device, selection, actions);
-        });
-
-        Promise.all(deviceRows).then((rows) => {
-            this.setState({
-                deviceTable: {
-                    body: rows
-                }
-            });
+            }, () => this.devices.updateData(this.state.data));
         });
     }
 
@@ -127,16 +98,12 @@ class DeviceView extends Component {
                     />
                 </div>
 
-                <table className="results-card">
-                    <tbody>
-                        { this.state.data
-                            ?
-                            this.state.deviceTable.body
-                            :
-                            null
-                        }
-                    </tbody>
-                </table>
+                <DeviceCards
+                    onRef={ref => (this.devices = ref)}
+                    devices={ this.state.data }
+                    choice={ ["status", "view", "edit", "delete"] }
+                    selection={ this.state.selection }
+                />
             </article>
         );
     }

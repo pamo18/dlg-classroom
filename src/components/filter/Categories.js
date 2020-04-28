@@ -53,7 +53,7 @@ class Categories extends Component {
 
     filter(filter) {
         let category = this.state.category;
-        this.state.filterCb(category , filter);
+        this.state.filterCb(category, filter);
 
         this.setState({
             filter: filter

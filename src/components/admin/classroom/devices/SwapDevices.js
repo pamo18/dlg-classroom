@@ -4,15 +4,14 @@
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../../models/db.js';
-import utils from '../../../../models/utils.js';
 import form from '../../../../models/form.js';
-import table from '../../../../models/table.js';
-import icon from '../../../../models/icon.js';
 import '../../Admin.css';
+import DeviceCards from '../../../device/DeviceCards.js';
 
 class SwapDevices extends Component {
     constructor(props) {
         super(props);
+        this.swap = this.swap.bind(this);
         this.classroom1Handler = this.classroom1Handler.bind(this);
         this.classroom2Handler = this.classroom2Handler.bind(this);
         this.state = {
@@ -24,18 +23,10 @@ class SwapDevices extends Component {
             classroom1: {},
             classroom1Selected: null,
             classroom1Devices: [],
-            classroom1DevicesTable: {
-                head: [],
-                body: []
-            },
             classroom1DevicesCount: null,
             classroom2: {},
             classroom2Selected: null,
             classroom2Devices: [],
-            classroom2DevicesTable: {
-                head: [],
-                body: []
-            },
             selection : [
                 ["category-caption-advanced", null],
                 ["manage", null]
@@ -44,21 +35,7 @@ class SwapDevices extends Component {
     }
 
     componentDidMount() {
-        let state = this.props.restore("managerState");
-
-        if (state) {
-            this.setState(state, () => {
-                if (this.state.classroom1.hasOwnProperty("id")) {
-                    this.reload();
-                }
-            });
-        } else {
-            this.loadClassrooms();
-        }
-    }
-
-    componentWillUnmount() {
-        this.props.save("managerState", this.state);
+        this.loadClassrooms();
     }
 
     // Load Classrooms and group data - Step 1
@@ -118,19 +95,11 @@ class SwapDevices extends Component {
     // Get classroom - Step 1
     getClassroom(id, classroom) {
         try {
-            let res = this.state.classroomData[id];
-            let details = {
-                id: res.id,
-                name: res.name,
-                type: res.type,
-                building: res.building,
-                level: res.level,
-                image: res.image
-            }
+            let classroomData = this.state.classroomData[id];
 
             this.setState({
-                [classroom]: details,
-                [`${classroom}Selected`]: res.id
+                [classroom]: classroomData,
+                [`${classroom}Selected`]: classroomData.id
             }, () => this.loadClassroomDevices(id, classroom));
         } catch(err) {
             console.log(err);
@@ -144,52 +113,15 @@ class SwapDevices extends Component {
         res.then((data) => {
             this.setState({
                 [`${classroom}Devices`]: data
-            }, () => this.getClassroomDevices(classroom));
+            }, () => this[`${classroom}Devices`].updateData(data));
         });
     }
 
-    // Get classroom - Step 3 - Build classroom devices table rows
-    getClassroomDevices(classroom) {
-        let classroomDevices = `${classroom}Devices`;
-        let classroomid = this.state[classroom].id;
-        let selection = this.state.selection;
-
-        let classroomDevicesRows = this.state[classroomDevices].map(async (device) => {
-            let swap;
-            let down = () => this.swapDevice(this.state.classroom1.id, this.state.classroom2.id, device.id);
-            let up = () => this.swapDevice(this.state.classroom2.id, this.state.classroom1.id, device.id);
-            let view = () => utils.redirect(this, "/device", {id: device.id});
-            let del = () => this.removeDevice(classroomid, device.id);
-
-            if (classroom === "classroom1") {
-                swap = icon.get("Down", down);
-            } else if (classroom === "classroom2") {
-                swap = icon.get("Up", up);
-            }
-
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
-            let reportStatus = await db.reportCheck("device", device.id);
-
-            let actions = [
-                icon.reportStatus(reportList, reportStatus),
-                icon.get("View", view),
-                icon.get("Delete", del),
-                swap
-            ];
-
-            return table.deviceBody(device, selection, actions);
-        });
-
-        Promise.all(classroomDevicesRows).then((rows) => {
-            this.setState({
-                [`${classroom}DevicesTable`]: {
-                    body: rows
-                }
-            });
-        });
-    }
-
-    swapDevice(classroomFrom, classroomTo, deviceid) {
+    swap(deviceid, direction) {
+        let id1 = this.state.classroom1.id;
+        let id2 = this.state.classroom2.id;
+        let classroomFrom = (direction === "up") ? id2 : id1;
+        let classroomTo = (direction === "up") ? id1 : id2;
         let classroomDevice = {
             classroom_id: classroomTo
         };
@@ -199,12 +131,6 @@ class SwapDevices extends Component {
             `${classroomFrom}/${deviceid}`,
             classroomDevice
         );
-
-        res.then(() => this.reload());
-    }
-
-    removeDevice(classroomid, deviceid) {
-        let res = db.delete("classroom/device", `${classroomid}/${deviceid}`);
 
         res.then(() => this.reload());
     }
@@ -244,11 +170,13 @@ class SwapDevices extends Component {
                         ?
                         <div>
                             <h3 class="center">{ `Antal apparater: ${ this.state.classroom1Devices.length }` }</h3>
-                            <table className="results-card">
-                                <tbody>
-                                    { this.state.classroom1DevicesTable.body }
-                                </tbody>
-                            </table>
+                            <DeviceCards
+                                onRef={ref => (this.classroom1Devices = ref)}
+                                devices={ this.state.classroom1Devices }
+                                choice={ ["status", "view", "down"] }
+                                selection={ this.state.selection }
+                                callbacks={ { "swap": this.swap } }
+                            />
                         </div>
                         : null
                     }
@@ -265,11 +193,13 @@ class SwapDevices extends Component {
                         ?
                         <div>
                             <h3 class="center">{ `Antal apparater: ${ this.state.classroom2Devices.length }` }</h3>
-                            <table className="results-card">
-                                <tbody>
-                                    { this.state.classroom2DevicesTable.body }
-                                </tbody>
-                            </table>
+                            <DeviceCards
+                                onRef={ref => (this.classroom2Devices = ref)}
+                                devices={ this.state.classroom2Devices }
+                                choice={ ["status", "view", "up"] }
+                                selection={ this.state.selection }
+                                callbacks={ { "swap": this.swap } }
+                            />
                         </div>
                         :
                         null

@@ -101,6 +101,10 @@
         padding-right: 0.5rem;
     }
 
+    .tooltip {
+        display: none;
+    }
+
     .tooltip:hover .tooltiptext {
         visibility: hidden;
     }
@@ -113,9 +117,16 @@
     }
 
     /* Control panels */
-    .panel .controller {
-        border-radius: 0;
+    /* Home panel */
+    .home-panel .controller {
         margin-bottom: 0;
+        border-radius: 0;
+        border-bottom: 1px solid rgb(38, 45, 52);
+    }
+
+    /* Admi panel */
+    .admin-panel .controller {
+        height: auto;
         border-bottom: 1px solid rgb(38, 45, 52);
     }
 
@@ -123,8 +134,10 @@
         padding: 1rem;
     }
 
-    .tooltip {
-        display: none;
+    .admin-panel .control-group {
+        padding: 0;
+        border-radius: 0;
+        background-color: transparent;
     }
 
     .home-panel .filter-panel {
@@ -235,8 +248,11 @@
         display: block;
     }
 
-    table.results-card tr {
+    table.results-card .card-row {
+        display: block;
+        height: auto;
         padding: 0;
+        margin-bottom: 2rem;
     }
 
     table.results-card td figure.icon-text {

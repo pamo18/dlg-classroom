@@ -34,7 +34,7 @@ const table = {
             </tr>
         ]
     },
-    deviceBody: function(device, selection, actions = null) {
+    deviceBody: function(device, selection, actions = null, tooltip = null) {
         let rows = {
             "category": <td key="body-category" data-title="Kategori">{ icon.get(device.category)}</td>,
             "category-caption-simple": [
@@ -57,7 +57,7 @@ const table = {
                         <figcaption>
                             <span className="caption-text">
                                 { `${ device.brand } ${ device.model }` }<br />
-                                { `${ device.serialnum }` }
+                                { `${ device.classroom_name ?? "Ledig" }` }
                             </span>
                         </figcaption>
                     </figure>
@@ -71,18 +71,29 @@ const table = {
             "classroom": <td key="body-classroom" data-title="Klassrum">{ device.classroom_name || "-" }</td>,
             "price": <td key="body-price" data-title="Pris">{ device.price }:-</td>,
             "link": <td key="body-link" data-title="Länk"><a href={ device.url } target="_blank">Till produktsida</a></td>,
-            "manage": <td key="body-manage" data-title="Hantera">{ actions }</td>
+            "manage": (
+                <td key="body-manage" data-title="Hantera">
+                    { actions }
+                    <div className="tooltip">
+                        <div className="tooltip-text">
+                            { tooltip ?? <span className="tooltip-placeholder">Välj verktyg</span> }
+                        </div>
+                    </div>
+                </td>
+            )
         }
 
 
         return [
-            <tr key={ `device-body-${device.id}` }>
-                {
-                    selection.map(choice => {
-                        return rows[choice[0]];
-                    })
-                }
-            </tr>
+            <div className="card-row">
+                <tr key={ `device-body-${device.id}` }>
+                    {
+                        selection.map(choice => {
+                            return rows[choice[0]];
+                        })
+                    }
+                </tr>
+            </div>
         ]
 
     },
@@ -108,7 +119,7 @@ const table = {
             </tr>
         ]
     },
-    classroomBody: function(classroom, selection, actions = null) {
+    classroomBody: function(classroom, selection, actions = null, tooltip =  null) {
         let rows = {
             "name": <td key="body-name" data-title="Namn">{ classroom.name }</td>,
             "name-caption-large": [
@@ -117,6 +128,7 @@ const table = {
                         { icon.get("Classroom-large")}
                         <figcaption>
                             <span className="caption-text">
+                                { "Klassrum" }<br />
                                 { classroom.name }
                             </span>
                         </figcaption>
@@ -127,17 +139,28 @@ const table = {
             "type": <td key="body-type" data-title="Typ">{ classroom.type }</td>,
             "level": <td key="body-level" data-title="Våning">{ classroom.level }</td>,
             "building": <td key="body-building" data-title="Hus">{ classroom.building }</td>,
-            "manage": <td key="body-manage" data-title="Hantera">{ actions }</td>
+            "manage": (
+                <td key="body-manage" data-title="Hantera">
+                    { actions }
+                    <div className="tooltip">
+                        <div className="tooltip-text">
+                            { tooltip ?? <span className="tooltip-placeholder">Välj verktyg</span> }
+                        </div>
+                    </div>
+                </td>
+                )
         };
 
         return [
-            <tr key={ `classroom-body-${classroom.id}` }>
-                {
-                    selection.map(function(choice) {
-                        return rows[choice[0]];
-                    })
-                }
-            </tr>
+            <div className="card-row">
+                <tr key={ `classroom-body-${classroom.id}` }>
+                    {
+                        selection.map(function(choice) {
+                            return rows[choice[0]];
+                        })
+                    }
+                </tr>
+            </div>
         ]
     },
     reportHead: function(selection) {

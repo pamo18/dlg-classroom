@@ -6,11 +6,11 @@ import  { withRouter } from 'react-router-dom';
 import db from '../../models/db.js';
 import utils from '../../models/utils.js';
 import form from '../../models/form.js';
-import table from '../../models/table.js';
 import image from '../../models/image.js';
 import icon from '../../models/icon.js';
 import './Home.css';
 import Categories from '../filter/Categories.js';
+import DeviceCards from '../device/DeviceCards.js';
 
 class Home extends Component {
     constructor(props) {
@@ -18,7 +18,6 @@ class Home extends Component {
         this.ref = React.createRef();
         this.getClassroom = this.getClassroom.bind(this);
         this.loadDevices = this.loadDevices.bind(this);
-        this.getDevices = this.getDevices.bind(this);
         this.classroomHandler = this.classroomHandler.bind(this);
         this.filterHandler = this.filterHandler.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
@@ -29,17 +28,13 @@ class Home extends Component {
             classroomTemplate: "name",
             classroomData: [],
             classroomGroups: [],
-            classroomDevicesTable: {
-                head: [],
-                body: []
-            },
             classroomSelected: null,
             classroom: {},
             name: null,
             devices: [],
             filter: {},
             selection : [
-                ["category-caption-simple", null],
+                ["category-caption-advanced", null],
                 ["manage", null]
             ]
         };
@@ -110,24 +105,21 @@ class Home extends Component {
             let name = form.optionName(classroom, this.state.classroomTemplate);
             let report = () => utils.redirect(this, "/report", { itemGroup: "classroom", itemid: classroom.id });
             let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: classroom.id });
-            let reportStatus = db.reportCheck("classroom", classroom.id);
 
-            reportStatus.then((status) => {
-                this.setState({
-                    name: name,
-                    classroom: {
-                        id: classroom.id,
-                        name: classroom.name,
-                        type: classroom.type,
-                        building: classroom.building,
-                        level: classroom.level,
-                        image: classroom.image,
-                        report: icon.get("Build", report),
-                        status: icon.reportStatus(reportList, status)
-                    },
-                    selected: classroom.id
-                }, () => this.loadDevices(id));
-            });
+            this.setState({
+                name: name,
+                classroom: {
+                    id: classroom.id,
+                    name: classroom.name,
+                    type: classroom.type,
+                    building: classroom.building,
+                    level: classroom.level,
+                    image: classroom.image,
+                    report: icon.get("Build", report),
+                    status: icon.reportStatus(reportList, classroom.working)
+                },
+                selected: classroom.id
+            }, () => this.loadDevices(id));
         } catch(err) {
             console.log(err);
         }
@@ -139,33 +131,10 @@ class Home extends Component {
         res.then((data) => {
             this.setState({
                 devices: data
-            }, () => this.getDevices());
-        });
-    }
-
-    getDevices() {
-        let selection = this.state.selection;
-
-        let deviceRows = this.state.devices.map(async (device) => {
-            let view = () => utils.redirect(this, "/device", {id: device.id});
-            let report = () => utils.redirect(this, "/report", { itemGroup: "device", itemid: device.id });
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "device", itemid: device.id });
-            let status = await db.reportCheck("device", device.id);
-            let actions = [
-                icon.reportStatus(reportList, status),
-                icon.get("Build", report),
-                icon.get("View", view)
-            ];
-
-            return table.deviceBody(device, selection, actions);
-        });
-
-        Promise.all(deviceRows).then((rows) => {
-            this.setState({
-                classroomDevicesTable: {
-                    body: rows
-                }
-            }, () => this.scroll());
+            }, () => {
+                this.devices.updateData(this.state.devices);
+                this.scroll();
+            });
         });
     }
 
@@ -256,23 +225,19 @@ class Home extends Component {
                             </div>
                         </div>
 
-                        { this.state.classroomDevicesTable.body.length > 0
+                        { this.state.devices.length > 0
                             ?
-                            <h3 className="center">{ `Antal utrustning: ${ this.state.classroomDevicesTable.body.length}` }</h3>
+                            <h3 className="center">{ `Antal utrustning: ${ this.state.devices.length }` }</h3>
                             :
                             null
                         }
 
-                        { this.state.classroomDevicesTable.body.length > 0
-                            ?
-                            <table className="results-card">
-                                <tbody>
-                                    { this.state.classroomDevicesTable.body }
-                                </tbody>
-                            </table>
-                            :
-                            null
-                        }
+                        <DeviceCards
+                            onRef={ref => (this.devices = ref)}
+                            devices={ this.state.devices }
+                            choice={ ["status", "report", "view"] }
+                            selection={ this.state.selection }
+                        />
                     </article>
                 </div>
             </main>

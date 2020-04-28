@@ -126,7 +126,7 @@ table.results-card tbody {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
     flex-wrap: wrap;
 }
 
@@ -134,13 +134,17 @@ table.results-card.single-card tbody {
     justify-content: center;
 }
 
+table.results-card .card-row {
+    display: flex;
+    height: 290px;
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+}
+
 table.results-card tr {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 1rem;
-    padding-left: 0.85rem;
-    padding-right: 0.85rem;
 }
 
 table.results-card td {

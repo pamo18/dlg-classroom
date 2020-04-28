@@ -31,8 +31,16 @@ class Report extends Component {
     }
 
     listHandler(itemGroup, itemid) {
-        this.list.loadReports(itemGroup, itemid);
-        this.item.getItem();
+        let data = ItemData(this.state.itemGroup, this.state.itemid);
+
+        data.then((itemData) => {
+            this.list.loadReports(itemGroup, itemid);
+            if (itemGroup === "classroom") {
+                this.item.classrooms.updateData([itemData]);
+            } else if (itemGroup === "device") {
+                this.item.devices.updateData([itemData]);
+            }
+        });
     }
 
     render() {

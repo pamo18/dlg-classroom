@@ -26,20 +26,46 @@ a:hover {
 }
 
 /* Controller Tooltip */
+.controller .tooltip {
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: all 0.5s ease;
+    will-change: transform;
+}
+
+.controller:hover .tooltip {
+    height: 28px;
+    visibility: visible;
+    transition: all 0.5s 2s ease;
+    will-change: transform;
+}
+
 .controller .tooltip .tooltip-text {
-    opacity: 0;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding: 0;
+    margin-top: 10px;
     font-weight: bold;
 }
 
-.controller:hover .tooltip .tooltip-text {
-    opacity: 1;
+/* Table Tooltip */
+.card-row .tooltip {
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: all 0.5s ease;
+    will-change: transform;
 }
 
-/* Tooltip Placeholder */
-.tooltip-placeholder {
-    visibility: hidden;
+.card-row tr:hover .tooltip {
+    height: 28px;
+    visibility: visible;
+    transition: all 0.5s 2s ease;
+    will-change: transform;
+}
+
+.card-row .tooltip .tooltip-text {
+    margin-top: 10px;
+    font-weight: bold;
 }
 
 .dropdown {

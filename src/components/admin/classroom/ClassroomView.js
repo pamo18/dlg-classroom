@@ -3,11 +3,10 @@
 import React, { Component } from 'react';
 import  { withRouter } from 'react-router-dom';
 import db from '../../../models/db.js';
-import utils from '../../../models/utils.js';
-import table from '../../../models/table.js';
 import icon from '../../../models/icon.js';
 import '../Admin.css';
 import Categories from '../../filter/Categories.js';
+import ClassroomCards from '../../classroom/ClassroomCards.js';
 
 class ClassroomView extends Component {
     constructor(props) {
@@ -18,10 +17,6 @@ class ClassroomView extends Component {
             title: "Visa Klassrum",
             toggle: window.innerWidth <= 900 ? "close" : "open",
             data: [],
-            classroomTable: {
-                head: [],
-                body: []
-            },
             filter: {},
             selection: [
                 ["name-caption-large", null],
@@ -51,35 +46,7 @@ class ClassroomView extends Component {
             this.setState({
                 data: data,
                 filter: filter
-            }, () => this.getClassrooms());
-        });
-    }
-
-    getClassrooms() {
-        let selection = this.state.selection;
-
-        let classroomRows = this.state.data.map(async classroom => {
-            let view = () => utils.redirect(this, "/classroom", {id: classroom.id});
-            let edit = () => utils.redirect(this, `/admin/classroom/edit/${ classroom.id }`);
-            let del = () => utils.redirect(this, `/admin/classroom/delete/${ classroom.id }`);
-            let reportList = () => utils.redirect(this, "/report/list", { itemGroup: "classroom", itemid: classroom.id });
-            let reportStatus = await db.reportCheck("classroom", classroom.id);
-            let actions = [
-                icon.reportStatus(reportList, reportStatus),
-                icon.get("View", view),
-                icon.get("Edit", edit),
-                icon.get("Delete", del)
-            ];
-
-            return table.classroomBody(classroom, selection, actions);
-        });
-
-        Promise.all(classroomRows).then((rows) => {
-            this.setState({
-                classroomTable: {
-                    body: rows
-                }
-            });
+            }, () => this.classrooms.updateData(data));
         });
     }
 
@@ -127,11 +94,12 @@ class ClassroomView extends Component {
                     />
                 </div>
 
-                <table className="results-card">
-                    <tbody>
-                        { this.state.classroomTable.body }
-                    </tbody>
-                </table>
+                <ClassroomCards
+                    onRef={ref => (this.classrooms = ref)}
+                    classrooms={ this.state.data }
+                    choice={ ["status", "view", "edit", "delete"] }
+                    selection={ this.state.selection }
+                />
             </article>
         );
     }
