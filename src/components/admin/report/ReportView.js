@@ -3,9 +3,6 @@
 import React, { Component } from 'react';
 import ReportFilterList from '../../report/components/ReportFilterList.js';
 import  { withRouter } from 'react-router-dom';
-import db from '../../../models/db.js';
-import utils from '../../../models/utils.js';
-import table from '../../../models/table.js';
 import icon from '../../../models/icon.js';
 import '../Admin.css';
 import Categories from '../../filter/Categories.js';
@@ -13,7 +10,6 @@ import Categories from '../../filter/Categories.js';
 class ReportView extends Component {
     constructor(props) {
         super(props);
-        this.getReports = this.getReports.bind(this);
         this.filter = this.filter.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
         this.state = {
@@ -40,49 +36,12 @@ class ReportView extends Component {
         let state = this.props.restore("reportViewState");
 
         if (state) {
-            this.setState(state, () => this.loadReports(this.state.filter));
-        } else {
-            this.loadReports(this.state.filter);
+            this.setState(state);
         }
     }
 
     componentWillUnmount() {
         this.props.save("reportViewState", this.state);
-    }
-
-    loadReports(filter) {
-        let res = db.fetchAllManyWhere("report", filter);
-
-        res.then((data) => {
-            this.setState({
-                data: data,
-                filter: filter
-            }, () => this.getReports());
-        });
-    }
-
-    getReports() {
-        let selection = this.state.selection;
-
-        let reportRows = this.state.data.map((report) => {
-            let view = () => utils.redirect(this, "/report/page", { id: report.id, itemGroup: report.item_group, itemid: report.item_id });
-            let edit = () => utils.redirect(this, `/admin/report/edit/${ report.id }`, {});
-            let del = () => utils.redirect(this, `/admin/report/delete/${ report.id }`, {});
-            let actions = [
-                icon.get("View", view),
-                icon.get("Edit", edit),
-                icon.get("Delete", del)
-            ];
-
-            return table.reportBody(report, selection, this, actions);
-        });
-
-        this.setState({
-            reportsTable: {
-                head: table.reportHead(selection),
-                body: reportRows
-            }
-        });
     }
 
     filter(category, filter) {
@@ -135,6 +94,9 @@ class ReportView extends Component {
                     filter={ this.state.filter }
                     selection={ this.state.selection }
                     actions={ this.state.actions }
+                    stateName="reportFilterList"
+                    save={ this.props.save }
+                    restore={ this.props.restore }
                 />
             </article>
         );

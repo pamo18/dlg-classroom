@@ -20,7 +20,7 @@ class Me extends Component {
             },
             filter2 : {
                 person_id: JSON.parse(localStorage.getItem("person")).id,
-                solved: "Åtgärdat"
+                solved: "OK"
             },
             actions: ["view"],
             selection : [

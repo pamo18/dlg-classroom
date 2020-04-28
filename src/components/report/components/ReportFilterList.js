@@ -28,7 +28,19 @@ class ReportFilterList extends Component {
             this.props.onRef(this);
         }
 
-        this.loadReports();
+        let state = this.props.restore && this.props.restore(`${this.props.stateName}`);
+
+        if (state) {
+            this.setState({
+                filter: state.filter
+            }, () => this.loadReports());
+        } else {
+            this.loadReports();
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.save && this.props.save(`${this.props.stateName}`, this.state);
     }
 
     loadReports() {
@@ -82,25 +94,20 @@ class ReportFilterList extends Component {
     }
 
     render() {
-        return (
+        return this.state.data.length > 0 && (
             <div className="report-log">
                 <div className="column-heading table-heading">
                     <h2 className="center">{ this.state.title }: { this.state.table.body.length }st </h2>
                 </div>
 
-                { this.state.data.length > 0
-                    ?
-                    <table className="results large-rows">
-                        <thead>
-                            { this.state.table.head }
-                        </thead>
-                        <tbody>
-                            { this.state.table.body }
-                        </tbody>
-                    </table>
-                    :
-                    null
-                }
+                <table className="results large-rows">
+                    <thead>
+                        { this.state.table.head }
+                    </thead>
+                    <tbody>
+                        { this.state.table.body }
+                    </tbody>
+                </table>
             </div>
         );
     }

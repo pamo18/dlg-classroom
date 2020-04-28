@@ -131,7 +131,7 @@ class ReportItemList extends Component {
                         ?
                         <div>
                             <div className="column-heading table-heading">
-                                <h2 className="center">{ `Kvar att göra: ${this.state.unsolvedTable.body.length}st`} { icon.get("Reported") }</h2>
+                                <h2 className="center">{ `Kvar att göra: ${this.state.unsolvedTable.body.length}st`} { icon.get("Att göra") }</h2>
                             </div>
                             <table className="results large-rows">
                                 <thead>
@@ -151,7 +151,7 @@ class ReportItemList extends Component {
                     ?
                     <div>
                         <div className="column-heading table-heading">
-                            <h2 className="center">{ `Klar: ${this.state.solvedTable.body.length}st`} { icon.get("Report") }</h2>
+                            <h2 className="center">{ `Klar: ${this.state.solvedTable.body.length}st`} { icon.get("OK") }</h2>
                         </div>
                         <table className="results large-rows">
                             <thead>
