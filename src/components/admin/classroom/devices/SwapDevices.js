@@ -15,7 +15,7 @@ class SwapDevices extends Component {
         this.classroom1Handler = this.classroom1Handler.bind(this);
         this.classroom2Handler = this.classroom2Handler.bind(this);
         this.state = {
-            title: "Byta utrustning i ett klassrum",
+            title: "Byta utrustning mellan klassrum",
             classroomNameTemplate: "name",
             deviceNameTemplate: "brand,model,(serialnum)",
             classroomData: [],
@@ -120,17 +120,12 @@ class SwapDevices extends Component {
     swap(deviceid, direction) {
         let id1 = this.state.classroom1.id;
         let id2 = this.state.classroom2.id;
-        let classroomFrom = (direction === "up") ? id2 : id1;
         let classroomTo = (direction === "up") ? id1 : id2;
         let classroomDevice = {
             classroom_id: classroomTo
         };
 
-        let res = db.update(
-            "classroom/device",
-            `${classroomFrom}/${deviceid}`,
-            classroomDevice
-        );
+        let res = db.update("device", deviceid, classroomDevice);
 
         res.then(() => this.reload());
     }
@@ -169,7 +164,7 @@ class SwapDevices extends Component {
                         Object.entries(this.state.classroom1).length > 0
                         ?
                         <div>
-                            <h3 class="center">{ `Antal apparater: ${ this.state.classroom1Devices.length }` }</h3>
+                            <h3 class="center">{ `Antal utrustning: ${ this.state.classroom1Devices.length }` }</h3>
                             <DeviceCards
                                 onRef={ref => (this.classroom1Devices = ref)}
                                 devices={ this.state.classroom1Devices }
@@ -192,7 +187,7 @@ class SwapDevices extends Component {
                         Object.entries(this.state.classroom2).length > 0
                         ?
                         <div>
-                            <h3 class="center">{ `Antal apparater: ${ this.state.classroom2Devices.length }` }</h3>
+                            <h3 class="center">{ `Antal utrustning: ${ this.state.classroom2Devices.length }` }</h3>
                             <DeviceCards
                                 onRef={ref => (this.classroom2Devices = ref)}
                                 devices={ this.state.classroom2Devices }

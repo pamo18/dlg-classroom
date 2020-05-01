@@ -32,7 +32,7 @@ class Device extends Component {
 
     loadDevice() {
         let that = this;
-        let res = db.fetchWhere("device", "id", this.state.id);
+        let res = db.fetchWhere("device", "device.id", this.state.id);
 
         res.then(function(data) {
             that.setState({

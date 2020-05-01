@@ -11,22 +11,27 @@ function AdminRoute({
     save: save,
     restore: restore
     }) {
-    const { isAuth } = useAuth();
+    const { isAuth, isLoggedIn, setAuth } = useAuth();
     const { isAdmin } = useAdmin();
+    const loggedIn = isLoggedIn();
 
     if (isAuth === null || isAdmin === null) {
         return null;
     };
 
+    if (!loggedIn) {
+        setAuth(null, null);
+    };
+
     return (
         <Route exact path={ path } render={ (props) => (
-            isAuth && isAdmin
+            isAuth && isAdmin && loggedIn
                 ?
                 <ErrorBoundary key={path}>
                     <Component save={ save } restore={ restore } {...props} />
                 </ErrorBoundary>
                 :
-                <Redirect to="/" />
+                <Redirect to={isAuth && loggedIn ? "/" : "/login"} />
             )}
         />
     );

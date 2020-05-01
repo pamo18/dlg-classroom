@@ -11,15 +11,20 @@ function PrivateRoute({
     save: save,
     restore: restore
     }) {
-    const { isAuth } = useAuth();
+    const { isAuth, isLoggedIn, setAuth } = useAuth();
+    const loggedIn = isLoggedIn();
 
     if (isAuth === null) {
         return null;
     };
 
+    if (!loggedIn) {
+        setAuth(null, null);
+    };
+
     return (
         <Route exact path={ path } render={ props => (
-            isAuth
+            isAuth && loggedIn
                 ?
                 <ErrorBoundary key={path}>
                     <Component save={ save } restore={ restore } {...props} />

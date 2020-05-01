@@ -6,10 +6,10 @@ function ItemData(itemGroup, itemid) {
 
     switch(true) {
         case (itemGroup === "classroom"):
-            res = db.fetchAllWhere("classroom", "id", itemid);
+            res = db.fetchAllWhere("classroom", "classroom.id", itemid);
             break;
         case (itemGroup === "device"):
-            res = db.fetchAllWhere("device", "id", itemid);
+            res = db.fetchAllWhere("device", "device.id", itemid);
             break;
         default:
             return;

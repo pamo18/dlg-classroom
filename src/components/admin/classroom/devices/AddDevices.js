@@ -108,11 +108,10 @@ class AddDevice extends Component {
         let classroomid = data.get("classroomid");
         let deviceid = data.get("deviceid");
         let classroomDevice = {
-            classroom_id: classroomid,
-            device_id: deviceid
+            classroom_id: classroomid
         };
 
-        let res = db.insert("classroom/device", classroomDevice);
+        let res = db.update("device", deviceid, classroomDevice);
 
         res.then(() => {
             this.devices.updateData([]);
@@ -128,8 +127,10 @@ class AddDevice extends Component {
     }
 
     removeDevice(deviceid) {
-        let classroomid = this.state.classroom.id;
-        let res = db.delete("classroom/device", `${classroomid}/${deviceid}`);
+        let classroomDevice = {
+            classroom_id: null
+        };
+        let res = db.update("device", deviceid, classroomDevice);
 
         res.then(() => this.reload());
     }
@@ -193,7 +194,7 @@ class AddDevice extends Component {
                     { Object.entries(this.state.classroom).length > 0
                         ?
                         <div>
-                            <h3 class="center">{ `Antal apparater: ${ this.state.classroomDevices.length }` }</h3>
+                            <h3 class="center">{ `Antal utrustning: ${ this.state.classroomDevices.length }` }</h3>
                             <DeviceCards
                                 onRef={ref => (this.classroomDevices = ref)}
                                 devices={ this.state.classroomDevices }

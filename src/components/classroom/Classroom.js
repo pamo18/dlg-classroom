@@ -30,7 +30,7 @@ class Classroom extends Component {
 
     loadClassroom() {
         let that = this;
-        let res = db.fetchWhere("classroom", "id", this.state.id);
+        let res = db.fetchWhere("classroom", "classroom.id", this.state.id);
 
         res.then(function(data) {
             that.setState({

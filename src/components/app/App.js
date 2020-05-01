@@ -27,6 +27,7 @@ class App extends Component {
         super(props);
         this.authStatus = this.authStatus.bind(this);
         this.setAuth = this.setAuth.bind(this);
+        this.isLoggedIn = this.isLoggedIn.bind(this);
         this.state = {
             isAuth: null,
             isAdmin: null
@@ -63,13 +64,18 @@ class App extends Component {
         });
     };
 
+    isLoggedIn() {
+        return localStorage.getItem("person");
+    };
+
     render() {
         const { isAuth } = this.state;
         const { isAdmin } = this.state;
         const { setAuth } = this;
+        const { isLoggedIn } = this;
 
         return (
-            <AuthContext.Provider value={ { isAuth, setAuth } }>
+            <AuthContext.Provider value={ { isAuth, setAuth, isLoggedIn } }>
                 <AdminContext.Provider value={ { isAdmin } }>
                     <Router>
                         <div className="App">

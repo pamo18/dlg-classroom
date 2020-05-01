@@ -94,20 +94,22 @@ class ReportFilterList extends Component {
     }
 
     render() {
-        return this.state.data.length > 0 && (
+        return (
             <div className="report-log">
                 <div className="column-heading table-heading">
                     <h2 className="center">{ this.state.title }: { this.state.table.body.length }st </h2>
                 </div>
-
-                <table className="results large-rows">
-                    <thead>
-                        { this.state.table.head }
-                    </thead>
-                    <tbody>
-                        { this.state.table.body }
-                    </tbody>
-                </table>
+                {
+                    this.state.data.length > 0 &&
+                    <table className="results large-rows">
+                        <thead>
+                            { this.state.table.head }
+                        </thead>
+                        <tbody>
+                            { this.state.table.body }
+                        </tbody>
+                    </table>
+                }
             </div>
         );
     }

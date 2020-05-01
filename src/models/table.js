@@ -209,7 +209,12 @@ const table = {
                         { icon.get(report.device_category || "Build")}
                         <figcaption>
                             <span className="caption-text">
-                                { report.device_id ? `${report.device_brand } ${ report.device_model }` : report.classroom_name }
+                                { report.device_id
+                                    ?
+                                    <span>{ `${report.device_brand} ${report.device_model}` }<br/>{ report.classroom_name }</span>
+                                    :
+                                    <span>{ report.classroom_name }</span>
+                                }
                             </span>
                         </figcaption>
                     </figure>

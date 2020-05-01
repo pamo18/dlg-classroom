@@ -47,9 +47,7 @@ class Home extends Component {
             this.setState(state, () => {
                 if (this.state.classroom.hasOwnProperty("id")) {
                     // Reload classrooms and devices
-                    this.loadClassrooms();
-                    this.getClassroom(this.state.classroom.id);
-                    this.loadDevices(this.state.classroom.id);
+                    this.loadClassrooms(this.state.classroom.id);
                 }
             });
         } else {
@@ -76,7 +74,7 @@ class Home extends Component {
 
     }
 
-    loadClassrooms() {
+    loadClassrooms(classroomid = null) {
         let res = db.fetchAll("classroom");
         let filter = this.state.filter.building;
 
@@ -95,7 +93,7 @@ class Home extends Component {
             this.setState({
                 classroomData: classroomData,
                 classroomGroups: formGroups
-            });
+            }, () => classroomid && this.getClassroom(classroomid));
         });
     }
 
@@ -213,11 +211,11 @@ class Home extends Component {
                     <article>
                         <div>
                             <h2 className="center margin">
-                                DLG
                                 { this.state.name
                                     ?
-                                    <span className="classroom-name"> { this.state.name } { this.state.classroom.status } { this.state.classroom.report }</span>
-                                    : null
+                                    <span className="classroom-name">DLG { this.state.name } { this.state.classroom.status } { this.state.classroom.report }</span>
+                                    :
+                                    <span className="classroom-name">DLG</span>
                                 }
                             </h2>
                             <div className="home-image">
