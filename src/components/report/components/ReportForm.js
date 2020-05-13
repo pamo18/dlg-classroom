@@ -75,7 +75,7 @@ class ReportForm extends Component {
                 </h2>
 
                 <label className="form-label">Titel
-                    <input className="form-input" type="text" name="name" value={ this.state.name } onChange={ this.formHandler } required placeholder="Ett kort titel" />
+                    <input className="form-input" type="text" name="name" value={ this.state.name } onChange={ this.formHandler } required placeholder="En kort titel" />
                 </label>
 
                 <label className="form-label">Meddelande
