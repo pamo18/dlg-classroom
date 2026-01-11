@@ -10,7 +10,7 @@
     "react-dom": "^16.9.0",
     "react-markdown": "^4.2.2",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "3.1.1",
+    "react-scripts": "5.0.1",
     "rickshaw": "^1.6.6",
     "socket.io-client": "^2.3.0"
   },
@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.2",
-    "eslint": "^6.4.0",
+    "eslint": "^9.39.1",
     "eslint-plugin-react": "^7.14.3",
     "http-server": "^0.11.1",
     "javascript-style-guide": "^1.0.1",
